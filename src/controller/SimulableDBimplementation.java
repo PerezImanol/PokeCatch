@@ -32,5 +32,3 @@ public class SimulableDBimplementation implements Simulable  {
         // TODO Auto-generated method stub
         throw new UnsupportedOperationException("Unimplemented method 'updateTeam'");
     }
-
-}
