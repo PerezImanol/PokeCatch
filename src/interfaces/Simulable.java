@@ -14,4 +14,5 @@ public interface Simulable {
     public LinkedHashSet<Pokemon>  getTeamPokemons(Trainer entrenador); 
 
     public void updateTeam(Trainer trainer, LinkedHashSet<Pokemon> pokemons);
+    
 }
