@@ -1,5 +1,5 @@
 package controller;
 
-public class SimulableDBimplementation {
+public class SimulableDBimplementation{
 
 }
