@@ -2,27 +2,30 @@ package classes;
 
 public class Combat {
 
-    private Trainer trainer1;
-    private Trainer trainer2;
-    private int winner;
+    private int trainerID1;
+    private int trainerID2;
+    private int winnerTrainerID;
+
     
-    public Trainer getTrainer1() {
-        return trainer1;
+    public int getTrainerID1() {
+        return trainerID1;
     }
-    public void setTrainer1(Trainer trainer1) {
-        this.trainer1 = trainer1;
+    public void setTrainerID1(int trainerID1) {
+        this.trainerID1 = trainerID1;
     }
-    public Trainer getTrainer2() {
-        return trainer2;
+    public int getTrainerID2() {
+        return trainerID2;
     }
-    public void setTrainer2(Trainer trainer2) {
-        this.trainer2 = trainer2;
+    public void setTrainerID2(int trainerID2) {
+        this.trainerID2 = trainerID2;
     }
-    public int getWinner() {
-        return winner;
+    public int getWinnerTrainerID() {
+        return winnerTrainerID;
     }
-    public void setWinner(int winner) {
-        this.winner = winner;
+    public void setWinnerTrainerID(int winnerTrainerID) {
+        this.winnerTrainerID = winnerTrainerID;
     }
+    
+
 
 }

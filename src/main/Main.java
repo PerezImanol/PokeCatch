@@ -8,11 +8,7 @@ public class Main {
 
 	public static void main(String[] args) throws SQLException {
 		// TODO Auto-generated method stu
-		
-		LogeableDBimplementation pepe = new LogeableDBimplementation();
-		
-		pepe.isUser("Epeldex", "abcd");
-
+	
 	}
 
 }
