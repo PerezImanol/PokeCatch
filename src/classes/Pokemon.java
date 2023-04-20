@@ -59,4 +59,10 @@ public class Pokemon {
     public void setTeam(boolean team) {
         this.team = team;
     }
+    
+	@Override
+	public String toString() {
+		return "Pokemon [pokedexID=" + pokedexID + ", region=" + region + ", name=" + name + ", nickname=" + nickname
+				+ ", type1=" + type1 + ", type2=" + type2 + ", level=" + level + ", team=" + team + "]";
+	}
 }

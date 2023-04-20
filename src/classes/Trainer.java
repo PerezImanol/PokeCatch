@@ -62,5 +62,13 @@ public class Trainer {
     public void setCombatHistory(LinkedHashSet<Combat> combatHistory) {
         this.combatHistory = combatHistory;
     }
+	@Override
+	public String toString() {
+		return "Trainer [trainerID=" + trainerID + ", name=" + name + ", age=" + age + ", gender=" + gender
+				+ ", originCity=" + originCity + ", badges=" + badges + ", team=" + team + ", combatHistory="
+				+ combatHistory + "]";
+	}
+    
+    
 
 }

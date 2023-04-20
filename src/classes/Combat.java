@@ -2,20 +2,20 @@ package classes;
 
 public class Combat {
 
-    private Trainer trainer1;
-    private Trainer trainer2;
+    private int trainer1;
+    private int trainer2;
     private int winner;
     
-    public Trainer getTrainer1() {
+    public int getTrainer1() {
         return trainer1;
     }
-    public void setTrainer1(Trainer trainer1) {
+    public void setTrainer1(int trainer1) {
         this.trainer1 = trainer1;
     }
-    public Trainer getTrainer2() {
+    public int getTrainer2() {
         return trainer2;
     }
-    public void setTrainer2(Trainer trainer2) {
+    public void setTrainer2(int trainer2) {
         this.trainer2 = trainer2;
     }
     public int getWinner() {
@@ -24,5 +24,11 @@ public class Combat {
     public void setWinner(int winner) {
         this.winner = winner;
     }
+	@Override
+	public String toString() {
+		return "Combat [trainer1=" + trainer1 + ", trainer2=" + trainer2 + ", winner=" + winner + "]";
+	}
+    
+    
 
 }
