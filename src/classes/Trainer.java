@@ -1,5 +1,6 @@
 package classes;
 
+import java.sql.Date;
 import java.time.LocalDate;
 import java.util.LinkedHashSet;
 
@@ -7,7 +8,7 @@ public class Trainer {
 
     private int trainerID;
     private String name;
-    private LocalDate age;
+    private Date age;
     private String gender;
     private String originCity;
     private int badges;
@@ -26,10 +27,10 @@ public class Trainer {
     public void setName(String name) {
         this.name = name;
     }
-    public LocalDate getAge() {
+    public Date getAge() {
         return age;
     }
-    public void setAge(LocalDate age) {
+    public void setAge(Date age) {
         this.age = age;
     }
     public String getGender() {
