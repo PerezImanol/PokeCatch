@@ -29,6 +29,7 @@ public class SimulableDBimplementation implements Simulable {
         } else 
             teamOrPc = 1;
 
+            
         try {
             con = occ.openConnection();
             stmt = con.prepareStatement(queryCazar);
