@@ -20,7 +20,7 @@ public class LogeableDBimplementation implements Logeable {
 	private OpenCloseConnection occ = new OpenCloseConnection();
 	final String queryGetProfessor = "select trainer_id, trainer_name, age, gender, city, badges, pokeball, region from Trainer join professor on trainer_id=professor_id where trainer_id=?;";
 
-	public Trainer getPerson(String username, String password) throws SQLException {
+	public Trainer getPerson(String username, String password) throws SQLException{
 
 		Trainer t = null;
 		int id = isUser(username, password);
@@ -37,8 +37,7 @@ public class LogeableDBimplementation implements Logeable {
 		return t;
 	}
 
-	@Override
-	public Trainer getTrainer(int id) throws SQLException {
+	private Trainer getTrainer(int id) throws SQLException {
 
 		LinkedHashSet<Pokemon> aux = new LinkedHashSet<>();
 		LinkedHashSet<Combat> auxC = new LinkedHashSet<>();
@@ -104,14 +103,13 @@ public class LogeableDBimplementation implements Logeable {
 		return t;
 	}
 
-	@Override
-	public int isUser(String username, String password) throws SQLException {
+	private int isUser(String username, String password) throws SQLException {
 
 		final String queryUsers = "Select user_id from Login where username=? and passwd=?";
-		
+
 		ResultSet rs;
-		
-		int id=0;
+
+		int id = 0;
 
 		try {
 			con = occ.openConnection();
@@ -119,21 +117,19 @@ public class LogeableDBimplementation implements Logeable {
 			e.printStackTrace();
 		}
 
-
 		stmt = con.prepareStatement(queryUsers);
 		stmt.setString(1, username);
 		stmt.setString(2, password);
 		rs = stmt.executeQuery();
-		while(rs.next()) {
-		
+		while (rs.next()) {
+
 			id = rs.getInt("user_id");
 		}
 
 		return id;
 	}
 
-	@Override
-	public Professor getProfessor(int id) throws SQLException {
+	private Professor getProfessor(int id) throws SQLException {
 
 		ArrayList<Pokemon> aux = new ArrayList<>();
 		Professor p = new Professor();
@@ -151,40 +147,39 @@ public class LogeableDBimplementation implements Logeable {
 		stmt = con.prepareStatement(queryGetProfessor);
 		stmt.setInt(1, id);
 		rsgp = stmt.executeQuery();
-		
-		while(rsgp.next()) {
 
-		p.setTrainerID(rsgp.getInt("trainer_id"));
-		p.setName(rsgp.getString("trainer_name"));
-		p.setAge(rsgp.getDate("age"));
-		p.setGender(rsgp.getString("gender"));
-		p.setOriginCity(rsgp.getString("city"));
-		p.setBadges(rsgp.getInt("badges"));
-		p.setPokeball(rsgp.getInt("pokeball"));
-		p.setRegion(rsgp.getString("region"));
+		while (rsgp.next()) {
 
-		stmt = con.prepareStatement(queryPokePro);
-		stmt.setInt(1, id);
-		rspp = stmt.executeQuery();
+			p.setTrainerID(rsgp.getInt("trainer_id"));
+			p.setName(rsgp.getString("trainer_name"));
+			p.setAge(rsgp.getDate("age"));
+			p.setGender(rsgp.getString("gender"));
+			p.setOriginCity(rsgp.getString("city"));
+			p.setBadges(rsgp.getInt("badges"));
+			p.setPokeball(rsgp.getInt("pokeball"));
+			p.setRegion(rsgp.getString("region"));
 
-		while (rspp.next()) {
-			Pokemon po = new Pokemon();
-			po.setPokedexID(rspp.getInt("pokedex_id"));
-			po.setRegion(rspp.getString("region"));
-			po.setName(rspp.getString("pokemon_name"));
-			po.setNickname(rspp.getString("nickname"));
-			po.setType1(rspp.getString("type1"));
-			po.setType2(rspp.getString("type2"));
-			po.setLevel(rspp.getInt("pokemon_lvl"));
-			aux.add(po);
-		}
+			stmt = con.prepareStatement(queryPokePro);
+			stmt.setInt(1, id);
+			rspp = stmt.executeQuery();
+
+			while (rspp.next()) {
+				Pokemon po = new Pokemon();
+				po.setPokedexID(rspp.getInt("pokedex_id"));
+				po.setRegion(rspp.getString("region"));
+				po.setName(rspp.getString("pokemon_name"));
+				po.setNickname(rspp.getString("nickname"));
+				po.setType1(rspp.getString("type1"));
+				po.setType2(rspp.getString("type2"));
+				po.setLevel(rspp.getInt("pokemon_lvl"));
+				aux.add(po);
+			}
 		}
 		p.setInitialSelection(aux);
 		return p;
 	}
 
-	@Override
-	public boolean isProfessor(int id) throws SQLException {
+	private boolean isProfessor(int id) throws SQLException {
 		boolean pro = false;
 		ResultSet rsgp2;
 		try {
@@ -192,16 +187,15 @@ public class LogeableDBimplementation implements Logeable {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		
+
 		stmt = con.prepareStatement(queryGetProfessor);
 		stmt.setInt(1, id);
 		rsgp2 = stmt.executeQuery();
-		
-		
-		while(rsgp2.next()) {
-		if(!rsgp2.getString("region").equals(null)) {
-			pro=true;
-		}
+
+		while (rsgp2.next()) {
+			if (!rsgp2.getString("region").equals(null)) {
+				pro = true;
+			}
 		}
 
 		return pro;
