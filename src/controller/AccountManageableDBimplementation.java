@@ -5,7 +5,6 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
 
 import classes.Combat;
@@ -24,7 +23,7 @@ public class AccountManageableDBimplementation implements AccountManageable {
     @Override
     public void addTrainer(Trainer trainer) throws SQLException {
 
-        query = "call addTrainer(?, ?, ?, ?, ?)";
+        query = "insert into Trainer (trainer_name, age, gender, city, badges, pokeballs) values (?, ?, ?, ?, ?, ?)";
         try {
             con = occ.openConnection();
         } catch (Exception e) {
@@ -36,6 +35,7 @@ public class AccountManageableDBimplementation implements AccountManageable {
         stmt.setString(3, trainer.getGender());
         stmt.setString(4, trainer.getOriginCity());
         stmt.setInt(5, trainer.getBadges());
+        stmt.setInt(6, trainer.getPokeballs());
         stmt.executeUpdate();
 
         occ.closeConnection(stmt, con);
@@ -43,7 +43,7 @@ public class AccountManageableDBimplementation implements AccountManageable {
 
     @Override
     public void deleteTrainer(int trainerID) throws SQLException {
-        query = "call deleteTrainer(?)";
+        query = "delete from Trainer where trainer_id = ?";
 
         try {
             con = occ.openConnection();
