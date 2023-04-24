@@ -1,11 +1,12 @@
 package classes;
 
-import java.util.LinkedHashSet;
+import java.util.ArrayList;
 
 public class Professor extends Trainer {
 
-    private String region;
-    private LinkedHashSet <Pokemon> initialSelection;
+    
+	private String region;
+    private ArrayList <Pokemon> initialSelection;
     
     public String getRegion() {
         return region;
@@ -13,11 +14,15 @@ public class Professor extends Trainer {
     public void setRegion(String region) {
         this.region = region;
     }
-    public LinkedHashSet<Pokemon> getInitialSelection() {
+    public ArrayList<Pokemon> getInitialSelection() {
         return initialSelection;
     }
-    public void setInitialSelection(LinkedHashSet<Pokemon> initialSelection) {
+    public void setInitialSelection(ArrayList<Pokemon> initialSelection) {
         this.initialSelection = initialSelection;
     }
+    @Override
+	public String toString() {
+		return "Professor [region=" + region + ", initialSelection=" + initialSelection + "]";
+	}
 
 }

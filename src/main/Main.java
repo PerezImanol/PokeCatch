@@ -11,9 +11,9 @@ public class Main {
 		// TODO Auto-generated method stu
 		
 		LogeableDBimplementation pepe = new LogeableDBimplementation();
-		Trainer pepe2 = new Trainer();
+		Trainer pepe2= null;
 		
-		pepe2 = pepe.isUser("Epeldex", "abcd");
+		pepe2 = pepe.getPerson("Ash", "abcd*1234");
 		System.out.println(pepe2);
 		
 
