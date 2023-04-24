@@ -180,6 +180,8 @@ public class AccountManageableDBimplementation implements AccountManageable {
         stmt.setInt(4, aux.get(2).getPokedexID());
         stmt.executeUpdate();
 
+        occ.closeConnection(stmt, con);
+
     }
 
 }
