@@ -1,6 +1,10 @@
 package classes;
 
 import java.sql.Date;
+<<<<<<< HEAD
+=======
+import java.time.LocalDate;
+>>>>>>> 49836a401731a93e39efacaa0e3f12fdc019dccd
 import java.util.LinkedHashSet;
 
 public class Trainer {
@@ -30,8 +34,13 @@ public class Trainer {
     public Date getAge() {
         return age;
     }
+<<<<<<< HEAD
     public void setAge(Date date) {
         this.age = date;
+=======
+    public void setAge(Date age) {
+        this.age = age;
+>>>>>>> 49836a401731a93e39efacaa0e3f12fdc019dccd
     }
     public String getGender() {
         return gender;
