@@ -81,7 +81,7 @@ public class LogeableDBimplementation implements Logeable {
 					Combat c = new Combat();
 					c.setTrainer1(rtc.getInt("trainer_id1"));
 					c.setTrainer2(rtc.getInt("trainer_id1"));
-					c.setWinner(rtc.getInt("winner"));
+					c.setWinnerTrainerID(rtc.getInt("winner"));
 					auxC.add(c);
 				}
 				

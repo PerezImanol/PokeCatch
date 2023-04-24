@@ -12,6 +12,7 @@ public class Trainer {
     private String gender;
     private String originCity;
     private int badges;
+    private int pokeballs;
     private LinkedHashSet <Pokemon> team;
     private LinkedHashSet <Combat> combatHistory;
 
@@ -63,6 +64,13 @@ public class Trainer {
     public void setCombatHistory(LinkedHashSet<Combat> combatHistory) {
         this.combatHistory = combatHistory;
     }
+    public int getPokeballs() {
+        return pokeballs;
+    }
+    public void setPokeballs(int pokeballs) {
+        this.pokeballs = pokeballs;
+    }
+
 	@Override
 	public String toString() {
 		return "Trainer [trainerID=" + trainerID + ", name=" + name + ", age=" + age + ", gender=" + gender

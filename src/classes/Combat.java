@@ -26,6 +26,6 @@ public class Combat {
     }
 	@Override
 	public String toString() {
-		return "Combat [trainer1=" + trainer1 + ", trainer2=" + trainer2 + ", winner=" + winner + "]";
+		return "Combat [trainer1=" + trainer1 + ", trainer2=" + trainer2 + ", winner=" +  winnerTrainerID + "]";
 	}
 }
