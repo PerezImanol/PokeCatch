@@ -17,6 +17,6 @@ public interface Simulable {
     //move one pokemon between the computer and the team
     public void changePosition (Trainer trainer, Pokemon pokemons) throws SQLException;
     //switch positon of one pokemon in the team with one pokemon in the computer
-    public void switchPosition (Trainer trainer, Pokemon pokemons) throws SQLException;
+    public void switchPosition (Trainer trainer, Pokemon pokemon1, Pokemon pokemon2) throws SQLException;
     
 }

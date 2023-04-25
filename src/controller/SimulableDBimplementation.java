@@ -21,7 +21,7 @@ public class SimulableDBimplementation implements Simulable {
     @Override
     public void addCaughtPokemons(Pokemon pokemon, int trainerID) throws SQLException {
 
-        final String queryCazar = "INSERT INTO pokemon(pokemon_id, trainer_id, pokemon_lvl, nickname, location) VALUES( ?, ?, ?, ?, ?)";
+        final String queryCatch = "INSERT INTO pokemon(pokemon_id, trainer_id, pokemon_lvl, nickname, location) VALUES( ?, ?, ?, ?, ?)";
         int teamOrPc;
 
         if (pokemon.isTeam()){
@@ -32,7 +32,7 @@ public class SimulableDBimplementation implements Simulable {
             
         try {
             con = occ.openConnection();
-            stmt = con.prepareStatement(queryCazar);
+            stmt = con.prepareStatement(queryCatch);
 
             stmt.setInt(1, pokemon.getPokedexID());
             stmt.setInt(2, trainerID);
@@ -103,15 +103,27 @@ public class SimulableDBimplementation implements Simulable {
 
     @Override
     public void changePosition(Trainer trainer, Pokemon pokemon) throws SQLException {
-        final String queryActualizarEquipo = "UPDATE pokemon SET location = ?";
+        int teamOrPc;
+        
+        final String queryUpdateTeam = "UPDATE pokemon SET location = ? WHERE trainer_id = ? AND pokemon_id = ?";
 
+        if (pokemon.isTeam()){
+            teamOrPc = 1;
+        }else {
+            teamOrPc = 0;
+        }
         
         try {
             con = occ.openConnection();
-            stmt = con.prepareStatement(queryActualizarEquipo);
+            stmt = con.prepareStatement(queryUpdateTeam);
 
-            stmt.setInt(1, 0);
+            stmt.setInt(1, teamOrPc);
+            stmt.setInt(2, trainer.getTrainerID());
+            stmt.setInt(3, pokemon.getPokedexID());
 
+            stmt.executeUpdate();
+
+            con.close();
         } catch (SQLException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
@@ -124,8 +136,40 @@ public class SimulableDBimplementation implements Simulable {
     }
 
     @Override
-    public void switchPosition(Trainer trainer, Pokemon pokemons) {
+    public void switchPosition(Trainer trainer, Pokemon pokemon1, Pokemon pokemon2) {
+         int teamOrPc;
+
+        final String switchQuery = "UPDATE pokemon SET location = ? WHERE trainer_id = ? AND pokemon_id = ?";
         
-        
+       
+        if (pokemon1.isTeam()){
+            teamOrPc = 1;
+        }else {
+            teamOrPc = 0;
+        }
+
+        try {
+            con = occ.openConnection();
+            stmt = con.prepareStatement(switchQuery);
+
+            stmt.setInt(1, teamOrPc);
+            stmt.setInt(2, trainer.getTrainerID());
+            stmt.setInt(3, pokemon1.getPokedexID());
+
+            stmt.executeUpdate();
+
+            stmt = con.prepareStatement(switchQuery);
+
+            stmt.setInt(1, teamOrPc);
+            stmt.setInt(2, trainer.getTrainerID());
+            stmt.setInt(3, pokemon2.getPokedexID());
+
+            stmt.executeUpdate();
+            con.close();
+        } catch (Exception e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+
     }
 }
