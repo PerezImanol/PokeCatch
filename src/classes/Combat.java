@@ -23,12 +23,6 @@ public class Combat {
 	  }
     public void setWinnerTrainerID(int winnerTrainerID) {
 		this.winnerTrainerID = winnerTrainerID;
-	  }
-    public int getWinnerTrainerID() {
-        return winnerTrainerID;
-    }
-    public void setWinnerTrainerID(int winnerTrainerID) {
-        this.winnerTrainerID = winnerTrainerID;
     }
     
 	@Override
