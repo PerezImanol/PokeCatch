@@ -20,5 +20,9 @@ public class Professor extends Trainer {
     public void setInitialSelection(ArrayList <Pokemon> initialSelection) {
         this.initialSelection = initialSelection;
     }
-
+    
+    @Override
+	  public String toString() {
+		return "Professor [region=" + region + ", initialSelection=" + initialSelection + "]";
+	  }
 }

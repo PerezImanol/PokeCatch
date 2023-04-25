@@ -1,6 +1,7 @@
 package classes;
 
 import java.sql.Date;
+import java.time.LocalDate;
 import java.util.LinkedHashSet;
 
 public class Trainer {
@@ -11,8 +12,8 @@ public class Trainer {
     private String gender;
     private String originCity;
     private int badges;
-    private int pokeballs;
-    private LinkedHashSet <Pokemon> team;
+    private int pokeball;
+	  private LinkedHashSet <Pokemon> team;
     private LinkedHashSet <Combat> combatHistory;
 
     public int getTrainerID() {
@@ -30,8 +31,8 @@ public class Trainer {
     public Date getAge() {
         return age;
     }
-    public void setAge(Date age) {
-        this.age = age;
+    public void setAge(Date date) {
+        this.age = date;
     }
     public String getGender() {
         return gender;
@@ -76,7 +77,4 @@ public class Trainer {
 				+ ", originCity=" + originCity + ", badges=" + badges + ", team=" + team + ", combatHistory="
 				+ combatHistory + "]";
 	}
-    
-    
-
 }

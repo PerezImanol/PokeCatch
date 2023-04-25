@@ -1,6 +1,9 @@
 package controller;
 
 import java.sql.Connection;
+import java.sql.Date;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -57,7 +60,6 @@ public class AccountManageableDBimplementation implements AccountManageable {
         occ.closeConnection(stmt, con);
     }
 
-    @Override
     public LinkedHashSet<Trainer> getTrainers() throws SQLException {
         LinkedHashSet<Trainer> trainers = new LinkedHashSet<>();
         ResultSet rst;
@@ -155,7 +157,6 @@ public class AccountManageableDBimplementation implements AccountManageable {
         stmt.executeUpdate();
 
         occ.closeConnection(stmt, con);
-
     }
 
     @Override
@@ -181,7 +182,6 @@ public class AccountManageableDBimplementation implements AccountManageable {
         stmt.executeUpdate();
 
         occ.closeConnection(stmt, con);
-
     }
 
 }
