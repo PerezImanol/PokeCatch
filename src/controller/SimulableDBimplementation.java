@@ -21,7 +21,7 @@ public class SimulableDBimplementation implements Simulable {
     @Override
     public void addCaughtPokemons(Pokemon pokemon, int trainerID) throws SQLException {
 
-        final String queryCazar = "INSERT INTO propietario(pokemon_id, trainer_id, pokemon_lvl, nickname, location) VALUES( ?, ?, ?, ?, ?)";
+        final String queryCazar = "INSERT INTO pokemon(pokemon_id, trainer_id, pokemon_lvl, nickname, location) VALUES( ?, ?, ?, ?, ?)";
         int teamOrPc;
 
         if (pokemon.isTeam()){
@@ -102,8 +102,30 @@ public class SimulableDBimplementation implements Simulable {
     }
 
     @Override
-    public void updateTeam(Trainer trainer, LinkedHashSet<Pokemon> pokemons) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'updateTeam'");
+    public void changePosition(Trainer trainer, Pokemon pokemon) throws SQLException {
+        final String queryActualizarEquipo = "UPDATE pokemon SET location = ?";
+
+        
+        try {
+            con = occ.openConnection();
+            stmt = con.prepareStatement(queryActualizarEquipo);
+
+            stmt.setInt(1, 0);
+
+        } catch (SQLException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        } catch (Exception e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+
+        
+    }
+
+    @Override
+    public void switchPosition(Trainer trainer, Pokemon pokemons) {
+        
+        
     }
 }
