@@ -18,13 +18,27 @@ public class LogeableDBimplementation implements Logeable {
 	private Connection con;
 	private PreparedStatement stmt;
 	private OpenCloseConnection occ = new OpenCloseConnection();
+	/*
+	 * This statement must be used twice so I declare it here in order to write it
+	 * just once
+	 */
 	final String queryGetProfessor = "select trainer_id, trainer_name, age, gender, city, badges, pokeball, region from Trainer join professor on trainer_id=professor_id where trainer_id=?;";
 
+	/*
+	 * This method gets an username, password and manages the information. If it
+	 * recieves the username and password of someone identified as Trainer the
+	 * method will give the information related with that trainer and if its a
+	 * professor he will also give the information related with that professor
+	 */
 	public Trainer getPerson(String username, String password) throws SQLException {
-
+		/*
+		 * Here we declare a null trainer because we have to return it on the method an
+		 * it is the one that will get all the values so in order to be able to make it
+		 * a professor or just a trainer we give it null value
+		 */
 		Trainer t = null;
 		int id = isUser(username, password);
-
+		// If it is a User it starts identifying whether it is a professor or not
 		if (id != 0) {
 			boolean professor = isProfessor(id);
 			if (professor) {
@@ -34,8 +48,13 @@ public class LogeableDBimplementation implements Logeable {
 				t = getTrainer(id);
 			}
 		}
+		// Here if the username or password are incorrect or are not related the value
+		// will return ass null
 		return t;
 	}
+
+	// This is the method in charge of getting the id of the person that is loging
+	// in
 
 	private int isUser(String username, String password) throws SQLException {
 
@@ -59,10 +78,12 @@ public class LogeableDBimplementation implements Logeable {
 
 			id = rs.getInt("user_id");
 		}
-
+		occ.closeConnection(stmt, con);
 		return id;
 	}
 
+	// This method gives true in case that the user that was loged was a professor
+	// and false if its not
 	private boolean isProfessor(int id) throws SQLException {
 		boolean pro = false;
 		ResultSet rsgp2;
@@ -77,16 +98,25 @@ public class LogeableDBimplementation implements Logeable {
 		rsgp2 = stmt.executeQuery();
 
 		while (rsgp2.next()) {
+			/*
+			 * We use the region attribute to identify if the person is a professor because
+			 * just if you are a professor you will have that attribute
+			 */
 			if (!rsgp2.getString("region").equals(null)) {
 				pro = true;
 			}
 		}
-
+		occ.closeConnection(stmt, con);
 		return pro;
 	}
 
+	// This method gives all the information related with the id that it gets
 	private Trainer getTrainer(int id) throws SQLException {
 
+		/*
+		 * A trainer has different collections in it like the pokemon that it has and
+		 * its combat history show we declare auxiliar sets for it
+		 */
 		LinkedHashSet<Pokemon> aux = new LinkedHashSet<>();
 		LinkedHashSet<Combat> auxC = new LinkedHashSet<>();
 		Trainer t = new Trainer();
@@ -106,6 +136,7 @@ public class LogeableDBimplementation implements Logeable {
 		stmt.setInt(1, id);
 		rti = stmt.executeQuery();
 
+		// Here we give values to the trainer
 		while (rti.next()) {
 			t.setTrainerID(rti.getInt("trainer_id"));
 			t.setName(rti.getString("trainer_name"));
@@ -116,7 +147,7 @@ public class LogeableDBimplementation implements Logeable {
 			stmt = con.prepareStatement(queryTeam);
 			stmt.setInt(1, id);
 			rte = stmt.executeQuery();
-
+			// Here we give values to the set storaging the trainers pokemon
 			while (rte.next()) {
 				Pokemon p = new Pokemon();
 				p.setPokedexID(rte.getInt("pokedex_id"));
@@ -128,7 +159,7 @@ public class LogeableDBimplementation implements Logeable {
 				p.setLevel(rte.getInt("pokemon_lvl"));
 				aux.add(p);
 			}
-
+			// Here we give values to the set storaging the trainers combat history
 			final String queryCombat = "Select trainer_id1, trainer_id2, winner from combat where trainer_id1=? or trainer_id2=?";
 			stmt = con.prepareStatement(queryCombat);
 			stmt.setInt(1, id);
@@ -146,11 +177,17 @@ public class LogeableDBimplementation implements Logeable {
 			t.setTeam(aux);
 			t.setCombatHistory(auxC);
 		}
-			return t;
+		occ.closeConnection(stmt, con);
+		return t;
 	}
 
+	// This method does the same thing as the previous one but fore the professor
 	private Professor getProfessor(int id) throws SQLException {
 
+		/*
+		 * In this case the professors do not have any combats or team. However they do
+		 * have 3 pokemon as initial selection that we will have to add
+		 */
 		ArrayList<Pokemon> aux = new ArrayList<>();
 		Professor p = new Professor();
 		final String queryPokePro = "Select pokedex_id, region, pokemon_name, nickname, type1, type2, pokemon_lvl from Pokemon_static join Pokemon on pokemon_id=pokedex_id where trainer_id=?";
@@ -168,6 +205,7 @@ public class LogeableDBimplementation implements Logeable {
 		stmt.setInt(1, id);
 		rsgp = stmt.executeQuery();
 
+		// Here we give values to the professor
 		while (rsgp.next()) {
 
 			p.setTrainerID(rsgp.getInt("trainer_id"));
@@ -183,6 +221,7 @@ public class LogeableDBimplementation implements Logeable {
 			stmt.setInt(1, id);
 			rspp = stmt.executeQuery();
 
+			// Here we give values to the set storaging the professor pokemons initials
 			while (rspp.next()) {
 				Pokemon po = new Pokemon();
 				po.setPokedexID(rspp.getInt("pokedex_id"));
@@ -197,7 +236,7 @@ public class LogeableDBimplementation implements Logeable {
 			}
 		}
 		p.setInitialSelection(aux);
-
+		occ.closeConnection(stmt, con);
 		return p;
 	}
 
