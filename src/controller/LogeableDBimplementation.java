@@ -62,7 +62,7 @@ public class LogeableDBimplementation implements Logeable {
 
 		return id;
 	}
-	
+
 	private boolean isProfessor(int id) throws SQLException {
 		boolean pro = false;
 		ResultSet rsgp2;
@@ -117,14 +117,7 @@ public class LogeableDBimplementation implements Logeable {
 			stmt.setInt(1, id);
 			rte = stmt.executeQuery();
 
-			final String queryCombat = "Select trainer_id1, trainer_id2, winner from combat where trainer_id1=? or trainer_id2=?";
-			stmt = con.prepareStatement(queryCombat);
-			stmt.setInt(1, id);
-			stmt.setInt(2, id);
-			rtc = stmt.executeQuery();
-
 			while (rte.next()) {
-
 				Pokemon p = new Pokemon();
 				p.setPokedexID(rte.getInt("pokedex_id"));
 				p.setRegion(rte.getString("region"));
@@ -134,22 +127,27 @@ public class LogeableDBimplementation implements Logeable {
 				p.setType2(rte.getString("type2"));
 				p.setLevel(rte.getInt("pokemon_lvl"));
 				aux.add(p);
-      }
-			rti = stmt.executeQuery();
-        
-		  while (rtc.next()) {
-					Combat c = new Combat();
-					c.setTrainer1(rtc.getInt("trainer_id1"));
-					c.setTrainer2(rtc.getInt("trainer_id1"));
-					c.setWinnerTrainerID(rtc.getInt("winner"));
-					auxC.add(c);
-				}
-				
-				t.setTeam(aux);
-				t.setCombatHistory(auxC);
-		return t;
-	}
+			}
 
+			final String queryCombat = "Select trainer_id1, trainer_id2, winner from combat where trainer_id1=? or trainer_id2=?";
+			stmt = con.prepareStatement(queryCombat);
+			stmt.setInt(1, id);
+			stmt.setInt(2, id);
+			rtc = stmt.executeQuery();
+
+			while (rtc.next()) {
+				Combat c = new Combat();
+				c.setTrainer1(rtc.getInt("trainer_id1"));
+				c.setTrainer2(rtc.getInt("trainer_id1"));
+				c.setWinnerTrainerID(rtc.getInt("winner"));
+				auxC.add(c);
+			}
+
+			t.setTeam(aux);
+			t.setCombatHistory(auxC);
+		}
+			return t;
+	}
 
 	private Professor getProfessor(int id) throws SQLException {
 
@@ -199,7 +197,7 @@ public class LogeableDBimplementation implements Logeable {
 			}
 		}
 		p.setInitialSelection(aux);
-		
+
 		return p;
 	}
 

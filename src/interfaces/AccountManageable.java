@@ -3,7 +3,6 @@ package interfaces;
 import java.sql.SQLException;
 import java.util.LinkedHashSet;
 
-import classes.Combat;
 import classes.Professor;
 import classes.Trainer;
 

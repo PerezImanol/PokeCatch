@@ -2,7 +2,6 @@ package interfaces;
 
 import java.sql.SQLException;
 
-import classes.Professor;
 import classes.Trainer;
 
 public interface Logeable {
