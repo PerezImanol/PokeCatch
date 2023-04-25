@@ -51,9 +51,29 @@ public class SimulableDBimplementation implements Simulable {
     }
 
     @Override
-    public void updateCombatHistory(LinkedHashSet<Combat> combate) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'updateCombatHistory'");
+    public void updateCombatHistory(Combat combat) throws SQLException{
+         
+        final String insertBattleData ="INSERT VALUES INTO Combat(trainer_id1, trainer_id2, winner) VALUES (?, ?, ?)";7
+
+        try {
+            con = occ.openConnection();
+            stmt = con.prepareStatement(insertBattleData);
+
+            stmt.setInt(1, combat.getTrainer1());
+            stmt.setInt(2, combat.getTrainer2());
+            stmt.setInt(3, combat.getWinnerTrainerID());
+            stmt.executeUpdate();
+
+            con.close();
+        } catch (Exception e) {
+
+            e.printStackTrace();
+        }
+        occ.closeConnection(stmt, con);
+
+    }
+        
+
     }
 
     @Override
