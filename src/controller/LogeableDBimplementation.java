@@ -134,20 +134,19 @@ public class LogeableDBimplementation implements Logeable {
 				p.setType2(rte.getString("type2"));
 				p.setLevel(rte.getInt("pokemon_lvl"));
 				aux.add(p);
-			}
-			while (rtc.next()) {
-
-				Combat c = new Combat();
-				c.setTrainer1(rtc.getInt("trainer_id1"));
-				c.setTrainer2(rtc.getInt("trainer_id1"));
-				c.setWinnerTrainerID(rtc.getInt("winner"));
-				auxC.add(c);
-			}
-
-			t.setTeam(aux);
-			t.setCombatHistory(auxC);
-		}
-
+      }
+			rti = stmt.executeQuery();
+        
+		  while (rtc.next()) {
+					Combat c = new Combat();
+					c.setTrainer1(rtc.getInt("trainer_id1"));
+					c.setTrainer2(rtc.getInt("trainer_id1"));
+					c.setWinnerTrainerID(rtc.getInt("winner"));
+					auxC.add(c);
+				}
+				
+				t.setTeam(aux);
+				t.setCombatHistory(auxC);
 		return t;
 	}
 
