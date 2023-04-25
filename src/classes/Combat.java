@@ -18,30 +18,21 @@ public class Combat {
     public void setTrainer2(int trainer2) {
         this.trainer2 = trainer2;
     }
-<<<<<<< HEAD
-	public int getWinnerTrainerID() {
+	  public int getWinnerTrainerID() {
 		return winnerTrainerID;
-	}
-	public void setWinnerTrainerID(int winnerTrainerID) {
+	  }
+    public void setWinnerTrainerID(int winnerTrainerID) {
 		this.winnerTrainerID = winnerTrainerID;
-	}
-=======
+	  }
     public int getWinnerTrainerID() {
         return winnerTrainerID;
     }
     public void setWinnerTrainerID(int winnerTrainerID) {
         this.winnerTrainerID = winnerTrainerID;
     }
->>>>>>> 49836a401731a93e39efacaa0e3f12fdc019dccd
+    
 	@Override
 	public String toString() {
 		return "Combat [trainer1=" + trainer1 + ", trainer2=" + trainer2 + ", winnerTrainerID=" + winnerTrainerID + "]";
 	}
-<<<<<<< HEAD
-
-    
-    
-
-=======
->>>>>>> 49836a401731a93e39efacaa0e3f12fdc019dccd
 }

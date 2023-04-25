@@ -173,6 +173,47 @@ public class LogeableDBimplementation implements Logeable {
 				po.setType2(rspp.getString("type2"));
 				po.setLevel(rspp.getInt("pokemon_lvl"));
 				aux.add(po);
+			  rti = stmt.executeQuery();
+        
+			  while (rti.next()) {
+				  t.setName(rti.getString("trainer_name"));
+				  t.setGender(rti.getString("gender"));
+				  t.setOriginCity(rti.getString("city"));
+				  t.setBadges(rti.getInt("badges"));
+				  final String QueryTeam = "Select pokedex_id, region, pokemon_name, nickname, type1, type2, pokemon_lvl from Pokemon_static join Pokemon on pokemon_id=pokedex_id where trainer_id=?";
+				  stmt = con.prepareStatement(QueryTeam);
+				  stmt.setInt(1, id);
+				  rte = stmt.executeQuery();
+
+				  final String QueryCombat = "Select trainer_id1, trainer_id2, winner from combat where trainer_id1=? or trainer_id2=?";
+				  stmt = con.prepareStatement(QueryCombat);
+				  stmt.setInt(1, id);
+				  stmt.setInt(2, id);
+				  rtc = stmt.executeQuery();
+
+				  while (rte.next()) {
+					
+             Pokemon p = new Pokemon();
+            p.setPokedexID(rte.getInt("pokedex_id"));
+            p.setRegion(rte.getString("region"));
+            p.setName(rte.getString("pokemon_name"));
+            p.setNickname(rte.getString("nickname"));
+            p.setType1(rte.getString("type1"));
+            p.setType2(rte.getString("type2"));
+            p.setLevel(rte.getInt("pokemon_lvl"));
+            aux.add(p);
+				  }
+				  while (rtc.next()) {
+					
+            Combat c = new Combat();
+            c.setTrainer1(rtc.getInt("trainer_id1"));
+            c.setTrainer2(rtc.getInt("trainer_id1"));
+            c.setWinnerTrainerID(rtc.getInt("winner"));
+            auxC.add(c);
+          }
+				
+				  t.setTeam(aux);
+				  t.setCombatHistory(auxC);
 			}
 		}
 		p.setInitialSelection(aux);
