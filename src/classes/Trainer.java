@@ -12,7 +12,7 @@ public class Trainer {
     private String originCity;
     private int badges;
     private int pokeballs;
-	  private LinkedHashSet <Pokemon> team;
+	private LinkedHashSet <Pokemon> team;
     private LinkedHashSet <Combat> combatHistory;
 
     public int getTrainerID() {

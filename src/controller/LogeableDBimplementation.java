@@ -11,6 +11,7 @@ import classes.Combat;
 import classes.Pokemon;
 import classes.Professor;
 import classes.Trainer;
+import classes.MyException;
 import interfaces.Logeable;
 
 public class LogeableDBimplementation implements Logeable {
@@ -30,7 +31,7 @@ public class LogeableDBimplementation implements Logeable {
 	 * method will give the information related with that trainer and if its a
 	 * professor he will also give the information related with that professor
 	 */
-	public Trainer getPerson(String username, String password) throws SQLException {
+	public Trainer getPerson(String username, String password) throws MyException {
 		/*
 		 * Here we declare a null trainer because we have to return it on the method an
 		 * it is the one that will get all the values so in order to be able to make it
@@ -56,27 +57,24 @@ public class LogeableDBimplementation implements Logeable {
 	// This is the method in charge of getting the id of the person that is loging
 	// in
 
-	private int isUser(String username, String password) throws SQLException {
-
+	private int isUser(String username, String password) throws MyException {
 		final String queryUsers = "Select user_id from Login where username=? and passwd=?";
-
-		ResultSet rs;
-
 		int id = 0;
 
+		con = occ.openConnection();
 		try {
-			con = occ.openConnection();
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
+			stmt = con.prepareStatement(queryUsers);
+			stmt.setString(1, username);
+			stmt.setString(2, password);
+			ResultSet rs = stmt.executeQuery();
+			while (rs.next()) {
+				id = rs.getInt("user_id");
+			}
+		} catch (SQLException e) {
+			String error = "Error logging in";
+			MyException er = new MyException(error);
+			throw er;
 
-		stmt = con.prepareStatement(queryUsers);
-		stmt.setString(1, username);
-		stmt.setString(2, password);
-		rs = stmt.executeQuery();
-		while (rs.next()) {
-
-			id = rs.getInt("user_id");
 		}
 		occ.closeConnection(stmt, con);
 		return id;
@@ -84,35 +82,38 @@ public class LogeableDBimplementation implements Logeable {
 
 	// This method gives true in case that the user that was loged was a professor
 	// and false if its not
-	private boolean isProfessor(int id) throws SQLException {
+	private boolean isProfessor(int id) throws MyException {
 		boolean pro = false;
 		ResultSet rsgp2;
+
+		con = occ.openConnection();
 		try {
-			con = occ.openConnection();
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
+			stmt = con.prepareStatement(queryGetProfessor);
+			stmt.setInt(1, id);
+			rsgp2 = stmt.executeQuery();
 
-		stmt = con.prepareStatement(queryGetProfessor);
-		stmt.setInt(1, id);
-		rsgp2 = stmt.executeQuery();
-
-		while (rsgp2.next()) {
-			/*
-			 * We use the region attribute to identify if the person is a professor because
-			 * just if you are a professor you will have that attribute
-			 */
-			if (!rsgp2.getString("region").equals(null)) {
-				pro = true;
+			while (rsgp2.next()) {
+				/*
+				 * We use the region attribute to identify if the person is a professor because
+				 * just if you are a professor you will have that attribute
+				 */
+				if (!rsgp2.getString("region").equals(null)) {
+					pro = true;
+				}
 			}
+		} catch (SQLException e) {
+			String error = "Error checking for professor's existence";
+			MyException er = new MyException(error);
+			throw er;
 		}
 		occ.closeConnection(stmt, con);
+
 		return pro;
 	}
 
 	// This method gives all the information related with the id that it gets
-	private Trainer getTrainer(int id) throws SQLException {
-
+	private Trainer getTrainer(int id) throws MyException {
+		final String queryInfo = "Select trainer_id, trainer_name, age, gender, city, badges from Trainer where trainer_id = ?";
 		/*
 		 * A trainer has different collections in it like the pokemon that it has and
 		 * its combat history show we declare auxiliar sets for it
@@ -121,69 +122,79 @@ public class LogeableDBimplementation implements Logeable {
 		LinkedHashSet<Combat> auxC = new LinkedHashSet<>();
 		Trainer t = new Trainer();
 
-		ResultSet rti = null;
-		ResultSet rte = null;
-		ResultSet rtc = null;
-
+		con = occ.openConnection();
 		try {
-			con = occ.openConnection();
-		} catch (Exception e) {
-			e.printStackTrace();
+			stmt = con.prepareStatement(queryInfo);
+			stmt.setInt(1, id);
+			ResultSet rti = stmt.executeQuery();
+
+			// Here we give values to the trainer
+			while (rti.next()) {
+				t.setTrainerID(rti.getInt("trainer_id"));
+				t.setName(rti.getString("trainer_name"));
+				t.setGender(rti.getString("gender"));
+				t.setOriginCity(rti.getString("city"));
+				t.setBadges(rti.getInt("badges"));
+				final String queryTeam = "Select pokedex_id, region, pokemon_name, nickname, type1, type2, pokemon_lvl from Pokemon_static join Pokemon on pokemon_id=pokedex_id where trainer_id=? and location=0";
+				stmt = con.prepareStatement(queryTeam);
+				stmt.setInt(1, id);
+
+				try {
+					ResultSet rte = stmt.executeQuery();
+					// Here we give values to the set storaging the trainers pokemon
+					while (rte.next()) {
+						Pokemon p = new Pokemon();
+						p.setPokedexID(rte.getInt("pokedex_id"));
+						p.setRegion(rte.getString("region"));
+						p.setName(rte.getString("pokemon_name"));
+						p.setNickname(rte.getString("nickname"));
+						p.setType1(rte.getString("type1"));
+						p.setType2(rte.getString("type2"));
+						p.setLevel(rte.getInt("pokemon_lvl"));
+						aux.add(p);
+					}
+				} catch (SQLException e) {
+					String error = "Error getting the trainer's team";
+					MyException er = new MyException(error);
+					throw er;
+				}
+				// Here we give values to the set storaging the trainers combat history
+				final String queryCombat = "Select trainer_id1, trainer_id2, winner from combat where trainer_id1=? or trainer_id2=?";
+				stmt = con.prepareStatement(queryCombat);
+				stmt.setInt(1, id);
+				stmt.setInt(2, id);
+
+				try {
+					ResultSet rtc = stmt.executeQuery();
+
+					while (rtc.next()) {
+						Combat c = new Combat();
+						c.setTrainer1(rtc.getInt("trainer_id1"));
+						c.setTrainer2(rtc.getInt("trainer_id1"));
+						c.setWinnerTrainerID(rtc.getInt("winner"));
+						auxC.add(c);
+					}
+				} catch (SQLException e) {
+					String error = "Error getting the trainer's combat history";
+					MyException er = new MyException(error);
+					throw er;
+				}
+				t.setTeam(aux);
+				t.setCombatHistory(auxC);
+			}
+		} catch (SQLException e) {
+			String error = "Error getting trainer";
+			MyException er = new MyException(error);
+			throw er;
 		}
 
-		final String queryInfo = "Select trainer_id, trainer_name, age, gender, city, badges from Trainer where trainer_id = ?";
-		stmt = con.prepareStatement(queryInfo);
-		stmt.setInt(1, id);
-		rti = stmt.executeQuery();
-
-		// Here we give values to the trainer
-		while (rti.next()) {
-			t.setTrainerID(rti.getInt("trainer_id"));
-			t.setName(rti.getString("trainer_name"));
-			t.setGender(rti.getString("gender"));
-			t.setOriginCity(rti.getString("city"));
-			t.setBadges(rti.getInt("badges"));
-			final String queryTeam = "Select pokedex_id, region, pokemon_name, nickname, type1, type2, pokemon_lvl from Pokemon_static join Pokemon on pokemon_id=pokedex_id where trainer_id=? and location=0";
-			stmt = con.prepareStatement(queryTeam);
-			stmt.setInt(1, id);
-			rte = stmt.executeQuery();
-			// Here we give values to the set storaging the trainers pokemon
-			while (rte.next()) {
-				Pokemon p = new Pokemon();
-				p.setPokedexID(rte.getInt("pokedex_id"));
-				p.setRegion(rte.getString("region"));
-				p.setName(rte.getString("pokemon_name"));
-				p.setNickname(rte.getString("nickname"));
-				p.setType1(rte.getString("type1"));
-				p.setType2(rte.getString("type2"));
-				p.setLevel(rte.getInt("pokemon_lvl"));
-				aux.add(p);
-			}
-			// Here we give values to the set storaging the trainers combat history
-			final String queryCombat = "Select trainer_id1, trainer_id2, winner from combat where trainer_id1=? or trainer_id2=?";
-			stmt = con.prepareStatement(queryCombat);
-			stmt.setInt(1, id);
-			stmt.setInt(2, id);
-			rtc = stmt.executeQuery();
-
-			while (rtc.next()) {
-				Combat c = new Combat();
-				c.setTrainer1(rtc.getInt("trainer_id1"));
-				c.setTrainer2(rtc.getInt("trainer_id1"));
-				c.setWinnerTrainerID(rtc.getInt("winner"));
-				auxC.add(c);
-			}
-
-			t.setTeam(aux);
-			t.setCombatHistory(auxC);
-		}
 		occ.closeConnection(stmt, con);
+
 		return t;
 	}
 
 	// This method does the same thing as the previous one but fore the professor
-	private Professor getProfessor(int id) throws SQLException {
-
+	private Professor getProfessor(int id) throws MyException {
 		/*
 		 * In this case the professors do not have any combats or team. However they do
 		 * have 3 pokemon as initial selection that we will have to add
@@ -192,51 +203,57 @@ public class LogeableDBimplementation implements Logeable {
 		Professor p = new Professor();
 		final String queryPokePro = "Select pokedex_id, region, pokemon_name, nickname, type1, type2, pokemon_lvl from Pokemon_static join Pokemon on pokemon_id=pokedex_id where trainer_id=?";
 
-		ResultSet rsgp;
-		ResultSet rspp;
+		con = occ.openConnection();
 
 		try {
-			con = occ.openConnection();
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-
-		stmt = con.prepareStatement(queryGetProfessor);
-		stmt.setInt(1, id);
-		rsgp = stmt.executeQuery();
-
-		// Here we give values to the professor
-		while (rsgp.next()) {
-
-			p.setTrainerID(rsgp.getInt("trainer_id"));
-			p.setName(rsgp.getString("trainer_name"));
-			p.setAge(rsgp.getDate("age"));
-			p.setGender(rsgp.getString("gender"));
-			p.setOriginCity(rsgp.getString("city"));
-			p.setBadges(rsgp.getInt("badges"));
-			p.setPokeballs(rsgp.getInt("pokeball"));
-			p.setRegion(rsgp.getString("region"));
-
-			stmt = con.prepareStatement(queryPokePro);
+			stmt = con.prepareStatement(queryGetProfessor);
 			stmt.setInt(1, id);
-			rspp = stmt.executeQuery();
+			ResultSet rsgp = stmt.executeQuery();
 
-			// Here we give values to the set storaging the professor pokemons initials
-			while (rspp.next()) {
-				Pokemon po = new Pokemon();
-				po.setPokedexID(rspp.getInt("pokedex_id"));
-				po.setRegion(rspp.getString("region"));
-				po.setName(rspp.getString("pokemon_name"));
-				po.setNickname(rspp.getString("nickname"));
-				po.setType1(rspp.getString("type1"));
-				po.setType2(rspp.getString("type2"));
-				po.setLevel(rspp.getInt("pokemon_lvl"));
-				aux.add(po);
+			// Here we give values to the professor
+			while (rsgp.next()) {
 
+				p.setTrainerID(rsgp.getInt("trainer_id"));
+				p.setName(rsgp.getString("trainer_name"));
+				p.setAge(rsgp.getDate("age"));
+				p.setGender(rsgp.getString("gender"));
+				p.setOriginCity(rsgp.getString("city"));
+				p.setBadges(rsgp.getInt("badges"));
+				p.setPokeballs(rsgp.getInt("pokeball"));
+				p.setRegion(rsgp.getString("region"));
+
+				stmt = con.prepareStatement(queryPokePro);
+				stmt.setInt(1, id);
+				try {
+					ResultSet rspp = stmt.executeQuery();
+
+					// Here we give values to the set storaging the professor pokemons initials
+					while (rspp.next()) {
+						Pokemon po = new Pokemon();
+						po.setPokedexID(rspp.getInt("pokedex_id"));
+						po.setRegion(rspp.getString("region"));
+						po.setName(rspp.getString("pokemon_name"));
+						po.setNickname(rspp.getString("nickname"));
+						po.setType1(rspp.getString("type1"));
+						po.setType2(rspp.getString("type2"));
+						po.setLevel(rspp.getInt("pokemon_lvl"));
+						aux.add(po);
+					}
+				} catch (SQLException e) {
+					String error = "Error getting professor's initial selection";
+					MyException er = new MyException(error);
+					throw er;
+				}
 			}
+		} catch (SQLException e) {
+			String error = "Error getting professor";
+			MyException er = new MyException(error);
+			throw er;
 		}
+
 		p.setInitialSelection(aux);
 		occ.closeConnection(stmt, con);
+
 		return p;
 	}
 

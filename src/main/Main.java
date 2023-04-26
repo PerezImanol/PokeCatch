@@ -1,20 +1,23 @@
 package main;
 
-import java.sql.SQLException;
-
+import classes.MyException;
 import classes.Trainer;
 import controller.LogeableDBimplementation;
 
 public class Main {
 
-	public static void main(String[] args) throws SQLException {
-		
+	public static void main(String[] args) throws MyException {
+
 		LogeableDBimplementation pepe = new LogeableDBimplementation();
-		Trainer pepe2= null;
-		
-		pepe2 = pepe.getPerson("Ash", "abcd*1234");
+		Trainer pepe2 = null;
+
+		try {
+			pepe2 = pepe.getPerson("Ash", "abcd*1234");
+		} catch (MyException e) {
+
+		}
 		System.out.println(pepe2);
-		
+
 	}
 
 }
