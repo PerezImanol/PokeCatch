@@ -1,7 +1,6 @@
 package classes;
 
 import java.sql.Date;
-import java.time.LocalDate;
 import java.util.LinkedHashSet;
 
 public class Trainer {
@@ -13,7 +12,7 @@ public class Trainer {
     private String originCity;
     private int badges;
     private int pokeballs;
-	  private LinkedHashSet <Pokemon> team;
+	private LinkedHashSet <Pokemon> team;
     private LinkedHashSet <Combat> combatHistory;
 
     public int getTrainerID() {

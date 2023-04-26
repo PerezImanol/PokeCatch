@@ -1,18 +1,17 @@
 package interfaces;
 
-import java.sql.SQLException;
 import java.util.LinkedHashSet;
 
-import classes.Combat;
+import classes.MyException;
 import classes.Professor;
 import classes.Trainer;
 
 public interface AccountManageable {
 
-    public void addTrainer(Trainer trainer) throws SQLException;
-    public void modifyTrainer(Trainer trainer) throws SQLException;
-    public void deleteTrainer(int trainerID) throws SQLException;
-    public void upgradeToProfessor(Professor professor) throws SQLException;
-    public void givePokeballs(Trainer trainer) throws SQLException;
-    public LinkedHashSet<Trainer> getTrainers() throws SQLException;
+    public void addTrainer(Trainer trainer) throws MyException;
+    public void modifyTrainer(Trainer trainer) throws MyException;
+    public void deleteTrainer(int trainerID) throws MyException;
+    public void upgradeToProfessor(Professor professor) throws MyException;
+    public void givePokeballs(Trainer trainer) throws MyException;
+    public LinkedHashSet<Trainer> getTrainers() throws MyException;
 }
