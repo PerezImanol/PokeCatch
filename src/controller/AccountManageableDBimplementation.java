@@ -24,13 +24,13 @@ public class AccountManageableDBimplementation implements AccountManageable {
 	@Override
 	public void addTrainer(Trainer trainer) throws MyException {
 
-		query = "insert into Trainer (trainer_name, age, gender, city, badges, pokeballs) values (?, ?, ?, ?, ?, ?)";
+		query = "insert into Trainer (trainer_name, birthdate, gender, city, badges, pokeballs) values (?, ?, ?, ?, ?, ?)";
 		con = occ.openConnection();
 
 		try {
 			stmt = con.prepareStatement(query);
 			stmt.setString(1, trainer.getName());
-			stmt.setDate(2, trainer.getAge());
+			stmt.setDate(2, trainer.getBirthdate());
 			stmt.setString(3, trainer.getGender());
 			stmt.setString(4, trainer.getOriginCity());
 			stmt.setInt(5, trainer.getBadges());
@@ -83,7 +83,7 @@ public class AccountManageableDBimplementation implements AccountManageable {
 				t.setTrainerID(id);
 				t.setName(rst.getString("trainer_name"));
 				t.setGender(rst.getString("gender"));
-				t.setAge(rst.getDate("age"));
+				t.setBirthdate(rst.getDate("birthdate"));
 				t.setOriginCity(rst.getString("city"));
 				t.setBadges(rst.getInt("badges"));
 
@@ -165,14 +165,14 @@ public class AccountManageableDBimplementation implements AccountManageable {
 
 	@Override
 	public void modifyTrainer(Trainer trainer) throws MyException {
-		query = "UPDATE Trainer SET trainer_name = ?, age = ?, gender = ?, city = ?, badges = ?, pokeballs = ? WHERE trainer_id = ?";
+		query = "UPDATE Trainer SET trainer_name = ?, birthdate = ?, gender = ?, city = ?, badges = ?, pokeballs = ? WHERE trainer_id = ?";
 
 		con = occ.openConnection();
 
 		try {
 			stmt = con.prepareStatement(query);
 			stmt.setString(1, trainer.getName());
-			stmt.setDate(2, trainer.getAge());
+			stmt.setDate(2, trainer.getBirthdate());
 			stmt.setString(3, trainer.getGender());
 			stmt.setString(4, trainer.getOriginCity());
 			stmt.setInt(5, trainer.getBadges());

@@ -14,7 +14,6 @@ public class Main {
 		try {
 			pepe2 = pepe.getPerson("Ash", "abcd*1234");
 		} catch (MyException e) {
-
 		}
 		System.out.println(pepe2);
 

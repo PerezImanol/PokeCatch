@@ -7,7 +7,7 @@ public class Trainer {
 
     private int trainerID;
     private String name;
-    private Date age;
+    private Date birthdate;
     private String gender;
     private String originCity;
     private int badges;
@@ -27,11 +27,11 @@ public class Trainer {
     public void setName(String name) {
         this.name = name;
     }
-    public Date getAge() {
-        return age;
+    public Date getBirthdate() {
+        return birthdate;
     }
-    public void setAge(Date date) {
-        this.age = date;
+    public void setBirthdate(Date date) {
+        this.birthdate = date;
     }
     public String getGender() {
         return gender;
@@ -72,7 +72,7 @@ public class Trainer {
 
 	@Override
 	public String toString() {
-		return "Trainer [trainerID=" + trainerID + ", name=" + name + ", age=" + age + ", gender=" + gender
+		return "Trainer [trainerID=" + trainerID + ", name=" + name + ", birthdate=" + birthdate + ", gender=" + gender
 				+ ", originCity=" + originCity + ", badges=" + badges + ", team=" + team + ", combatHistory="
 				+ combatHistory + "]";
 	}

@@ -23,7 +23,7 @@ public class LogeableDBimplementation implements Logeable {
 	 * This statement must be used twice so I declare it here in order to write it
 	 * just once
 	 */
-	final String queryGetProfessor = "select trainer_id, trainer_name, age, gender, city, badges, pokeball, region from Trainer join professor on trainer_id=professor_id where trainer_id=?;";
+	final String queryGetProfessor = "select trainer_id, trainer_name, birthdate, gender, city, badges, pokeball, region from Trainer join professor on trainer_id=professor_id where trainer_id=?;";
 
 	/*
 	 * This method gets an username, password and manages the information. If it
@@ -113,7 +113,7 @@ public class LogeableDBimplementation implements Logeable {
 
 	// This method gives all the information related with the id that it gets
 	private Trainer getTrainer(int id) throws MyException {
-		final String queryInfo = "Select trainer_id, trainer_name, age, gender, city, badges from Trainer where trainer_id = ?";
+		final String queryInfo = "Select trainer_id, trainer_name, birthdate, gender, city, badges from Trainer where trainer_id = ?";
 		/*
 		 * A trainer has different collections in it like the pokemon that it has and
 		 * its combat history show we declare auxiliar sets for it
@@ -132,6 +132,7 @@ public class LogeableDBimplementation implements Logeable {
 			while (rti.next()) {
 				t.setTrainerID(rti.getInt("trainer_id"));
 				t.setName(rti.getString("trainer_name"));
+				t.setBirthdate(rti.getDate("birthdate"));
 				t.setGender(rti.getString("gender"));
 				t.setOriginCity(rti.getString("city"));
 				t.setBadges(rti.getInt("badges"));
@@ -215,7 +216,7 @@ public class LogeableDBimplementation implements Logeable {
 
 				p.setTrainerID(rsgp.getInt("trainer_id"));
 				p.setName(rsgp.getString("trainer_name"));
-				p.setAge(rsgp.getDate("age"));
+				p.setBirthdate(rsgp.getDate("age"));
 				p.setGender(rsgp.getString("gender"));
 				p.setOriginCity(rsgp.getString("city"));
 				p.setBadges(rsgp.getInt("badges"));
