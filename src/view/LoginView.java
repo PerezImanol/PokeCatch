@@ -1,7 +1,9 @@
 package view;
 
 import java.awt.EventQueue;
-import controller.LogeableDBimplementation;
+import factories.LogeableFactory;
+import interfaces.Logeable;
+
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
@@ -21,6 +23,11 @@ import javax.swing.JTextField;
 import javax.swing.JButton;
 import javax.swing.JPasswordField;
 import javax.swing.border.LineBorder;
+
+import classes.MyException;
+import classes.Professor;
+import classes.Trainer;
+
 import java.awt.SystemColor;
 
 public class LoginView extends JFrame implements ActionListener, FocusListener, KeyListener {
@@ -34,7 +41,8 @@ public class LoginView extends JFrame implements ActionListener, FocusListener, 
 	private JPasswordField passwordField;
 	private JButton goBackButton;
 	private JButton continueButton;
-	private LogeableDBimplementation control;
+	private JLabel errorMessage;
+	private Logeable logeable = LogeableFactory.getLogeable();
 
 	/**
 	 * Launch the application.
@@ -122,11 +130,12 @@ public class LoginView extends JFrame implements ActionListener, FocusListener, 
 		passwordLabel.setBounds(65, 308, 265, 28);
 		contentPane.add(passwordLabel);
 
-		JLabel errorMessage = new JLabel("The Username and the Password do not match");
+		errorMessage = new JLabel("Username or password do not belong to a trainer");
 		errorMessage.setForeground(new Color(255, 0, 0));
 		errorMessage.setFont(new Font("Tahoma", Font.PLAIN, 13));
 		errorMessage.setBounds(40, 386, 290, 35);
 		contentPane.add(errorMessage);
+		errorMessage.setVisible(false);
 		
 		JPanel panel = new JPanel();
 		panel.setBorder(new LineBorder(SystemColor.activeCaption));
@@ -134,11 +143,13 @@ public class LoginView extends JFrame implements ActionListener, FocusListener, 
 		panel.setBackground(new Color(255, 255, 255));
 		panel.setBounds(30, 168, 300, 344);
 		contentPane.add(panel);
-		errorMessage.setVisible(false);
+		
 	}
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
+		Trainer t=null;
+		
 		if (e.getSource().equals(goBackButton)) {
 			if (JOptionPane.showConfirmDialog(null, "Are you sure?", "WARNING",
 					JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION) {
@@ -149,6 +160,23 @@ public class LoginView extends JFrame implements ActionListener, FocusListener, 
 
 		}
 		if (e.getSource().equals(continueButton)) {
+			String password = new String(passwordField.getPassword());
+			try {
+				t=logeable.getPerson(usernameField.getText(), password);
+				if(t instanceof Professor ) {
+				System.out.println(t);
+				} else if (t instanceof Trainer ) {
+				System.out.println("Perro");
+				}
+				else if(t==null){
+					errorMessage.setVisible(true);
+					usernameField.setText("");
+					passwordField.setText("");
+				}
+			} catch (MyException e1) {
+
+				e1.printStackTrace();
+			}
 		}
 
 	}
@@ -166,8 +194,10 @@ public class LoginView extends JFrame implements ActionListener, FocusListener, 
 
 	@Override
 	public void keyTyped(KeyEvent e) {
+		
+		String password = new String(passwordField.getPassword());
 		if(e.getSource().equals(passwordField) && !usernameField.getText().isBlank() || 
-				e.getSource().equals(usernameField) && !passwordField.getText().isBlank()) {
+				e.getSource().equals(usernameField) && !password.equals("")) {
 			continueButton.setEnabled(true);
 		}
 

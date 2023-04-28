@@ -12,7 +12,7 @@ public class Main {
 		Trainer pepe2 = null;
 
 		try {
-			pepe2 = pepe.getPerson("Ash", "abcd*1234");
+			pepe2 = pepe.getPerson("Oak", "abcd*1234");
 		} catch (MyException e) {
 		}
 		System.out.println(pepe2);

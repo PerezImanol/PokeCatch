@@ -216,7 +216,7 @@ public class LogeableDBimplementation implements Logeable {
 
 				p.setTrainerID(rsgp.getInt("trainer_id"));
 				p.setName(rsgp.getString("trainer_name"));
-				p.setBirthdate(rsgp.getDate("age"));
+				p.setBirthdate(rsgp.getDate("birthdate"));
 				p.setGender(rsgp.getString("gender"));
 				p.setOriginCity(rsgp.getString("city"));
 				p.setBadges(rsgp.getInt("badges"));
