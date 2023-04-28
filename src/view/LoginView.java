@@ -164,9 +164,10 @@ public class LoginView extends JFrame implements ActionListener, FocusListener, 
 			try {
 				t=logeable.getPerson(usernameField.getText(), password);
 				if(t instanceof Professor ) {
-				System.out.println(t);
+				ProfessorView vProfessor = new ProfessorView(this, true);
+				vProfessor.setVisible(true);
 				} else if (t instanceof Trainer ) {
-				System.out.println("Perro");
+				System.out.println(t);
 				}
 				else if(t==null){
 					errorMessage.setVisible(true);
@@ -216,11 +217,10 @@ public class LoginView extends JFrame implements ActionListener, FocusListener, 
 					}
 				}
 			}
-	
 
 	@Override
 	public void keyReleased(KeyEvent e) {
-		// TODO Auto-generated method stub
-
+		
 	}
+	
 }
