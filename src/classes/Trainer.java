@@ -1,7 +1,6 @@
 package classes;
 
 import java.sql.Date;
-import java.time.LocalDate;
 import java.util.LinkedHashSet;
 
 public class Trainer {
@@ -12,7 +11,8 @@ public class Trainer {
     private String gender;
     private String originCity;
     private int badges;
-    private LinkedHashSet <Pokemon> team;
+    private int pokeballs;
+	private LinkedHashSet <Pokemon> team;
     private LinkedHashSet <Combat> combatHistory;
 
     public int getTrainerID() {
@@ -30,8 +30,8 @@ public class Trainer {
     public Date getAge() {
         return age;
     }
-    public void setAge(Date age) {
-        this.age = age;
+    public void setAge(Date date) {
+        this.age = date;
     }
     public String getGender() {
         return gender;
@@ -63,13 +63,17 @@ public class Trainer {
     public void setCombatHistory(LinkedHashSet<Combat> combatHistory) {
         this.combatHistory = combatHistory;
     }
+    public int getPokeballs() {
+        return pokeballs;
+    }
+    public void setPokeballs(int pokeballs) {
+        this.pokeballs = pokeballs;
+    }
+
 	@Override
 	public String toString() {
 		return "Trainer [trainerID=" + trainerID + ", name=" + name + ", age=" + age + ", gender=" + gender
 				+ ", originCity=" + originCity + ", badges=" + badges + ", team=" + team + ", combatHistory="
 				+ combatHistory + "]";
 	}
-    
-    
-
 }

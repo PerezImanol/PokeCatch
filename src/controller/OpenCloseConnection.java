@@ -6,6 +6,8 @@ import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.util.ResourceBundle;
 
+import classes.MyException;
+
 public class OpenCloseConnection {
     private ResourceBundle configFile;
     private String url;
@@ -20,25 +22,38 @@ public class OpenCloseConnection {
         pass = configFile.getString("PASSWORD");
     }
 
-    public Connection openConnection() throws Exception {
+    public Connection openConnection() throws MyException {
         Connection con = null;
         try {
             con = DriverManager.getConnection(url, user, pass);
+
         } catch (SQLException e) {
-            // System.out.println("Error al intentar abrir la BD");
-            // Gestión de la excepción
-            throw new Exception(e.getMessage());
+            String error = "Error connecting to the database";
+            MyException er = new MyException(error);
+            throw er;
+
         }
         return con;
     }
 
-    public void closeConnection(PreparedStatement stmt, Connection con) throws SQLException {
+    public void closeConnection(PreparedStatement stmt, Connection con) throws MyException {
         if (stmt != null) {
-            stmt.close();
+            try {
+                stmt.close();
+            } catch (SQLException e) {
+                String error = "Error closing statement";
+                MyException er = new MyException(error);
+                throw er;
+            }
         }
         if (con != null) {
-            con.close();
+            try {
+                con.close();
+            } catch (SQLException e) {
+                String error = "Error closing the flux to the database";
+                MyException er = new MyException(error);
+                throw er;
+            }
         }
     }
 }
-
