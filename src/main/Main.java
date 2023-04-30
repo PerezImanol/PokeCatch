@@ -1,18 +1,20 @@
 package main;
 
+import java.util.LinkedHashSet;
+
 import classes.MyException;
 import classes.Trainer;
-import controller.LogeableDBimplementation;
+import controller.AccountManageableDBimplementation;
 
 public class Main {
 
 	public static void main(String[] args) throws MyException {
 
-		LogeableDBimplementation pepe = new LogeableDBimplementation();
-		Trainer pepe2 = null;
+		AccountManageableDBimplementation pepe = new AccountManageableDBimplementation();
+		LinkedHashSet<Trainer> pepe2 = null;
 
 		try {
-			pepe2 = pepe.getPerson("Oak", "abcd*1234");
+			pepe2 = pepe.getTrainers();
 		} catch (MyException e) {
 		}
 		System.out.println(pepe2);

@@ -113,7 +113,7 @@ public class LogeableDBimplementation implements Logeable {
 
 	// This method gives all the information related with the id that it gets
 	private Trainer getTrainer(int id) throws MyException {
-		final String queryInfo = "Select trainer_id, trainer_name, birthdate, gender, city, badges from Trainer where trainer_id = ?";
+		final String queryInfo = "Select trainer_id, trainer_name, birthdate, gender, city, badges, pokeball from Trainer where trainer_id = ?";
 		/*
 		 * A trainer has different collections in it like the pokemon that it has and
 		 * its combat history show we declare auxiliar sets for it
@@ -136,7 +136,8 @@ public class LogeableDBimplementation implements Logeable {
 				t.setGender(rti.getString("gender"));
 				t.setOriginCity(rti.getString("city"));
 				t.setBadges(rti.getInt("badges"));
-				final String queryTeam = "Select pokedex_id, region, pokemon_name, nickname, type1, type2, pokemon_lvl from Pokemon_static join Pokemon on pokemon_id=pokedex_id where trainer_id=? and location=0";
+				t.setPokeballs(rti.getInt("pokeball"));
+				final String queryTeam = "Select pokedex_id, region, pokemon_name, nickname, type1, type2, pokemon_lvl, location from Pokemon_static join Pokemon on pokemon_id=pokedex_id where trainer_id=?";
 				stmt = con.prepareStatement(queryTeam);
 				stmt.setInt(1, id);
 
@@ -152,6 +153,7 @@ public class LogeableDBimplementation implements Logeable {
 						p.setType1(rte.getString("type1"));
 						p.setType2(rte.getString("type2"));
 						p.setLevel(rte.getInt("pokemon_lvl"));
+						p.setTeam(rte.getBoolean("location"));
 						aux.add(p);
 					}
 				} catch (SQLException e) {
@@ -257,5 +259,32 @@ public class LogeableDBimplementation implements Logeable {
 
 		return p;
 	}
+	
+	public LinkedHashSet<Trainer> getTrainers() throws MyException {
+    	LinkedHashSet<Trainer> trainers = new LinkedHashSet<>();
+    	Trainer t= new Trainer();
+    	final String queryAllTrainers = "select * from trainer where trainer_id not in(select trainer_id from trainer join professor on professor_id =trainer_id )";
+    	 ResultSet rs;
+
+         con = occ.openConnection();
+         try {
+             stmt = con.prepareStatement(queryAllTrainers);
+             rs = stmt.executeQuery();
+
+             while (rs.next()) {
+            	 
+                 t=getTrainer(rs.getInt("trainer_id"));
+                 trainers.add(t);
+             }
+         } catch (SQLException e) {
+             String error = "Error getting combat history";
+             MyException er = new MyException(error);
+             throw er;
+         }
+         occ.closeConnection(stmt, con);
+
+		return trainers;
+    	
+    }
 
 }

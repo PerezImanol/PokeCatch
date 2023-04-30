@@ -14,10 +14,16 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
+import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 
 import com.toedter.calendar.JDateChooser;
+
+import classes.MyException;
+import classes.Trainer;
+import factories.AccountManageableFactory;
+import interfaces.AccountManageable;
 
 public class ProfessorView extends JDialog implements ActionListener {
 	/**
@@ -32,12 +38,14 @@ public class ProfessorView extends JDialog implements ActionListener {
 	private JTextField txtAddPokeballs;
 	private JTextField txtRegion;
 	private JTextField txttrainnernameHasBeen;
-	private JTextField resulttextField;
-	private JTextField textField_1;
+	private JTextArea resulttextField;
+	private JTextField deleteTrainerTextField;
 	private JButton teamButton;
 	private JButton combatHistoryButton;
 	private JButton informationButton;
 	private JComboBox<String> Trainers;
+	private AccountManageable manageable = AccountManageableFactory.getAccountManageable();
+	private Trainer t;
 
 	public ProfessorView(LoginView loginView, boolean b) {
 
@@ -71,9 +79,16 @@ public class ProfessorView extends JDialog implements ActionListener {
 		Trainers.setForeground(new Color(0, 0, 0));
 		Trainers.setBackground(SystemColor.control);
 		Trainers.addItem("");
-		Trainers.addItem("Entrenador 1");
-		Trainers.addItem("Entrenador 2");
-		Trainers.setBounds(175, 76, 237, 53);
+		
+		try {
+			for (Trainer element : manageable.getTrainers()) {
+				Trainers.addItem(element.getName());
+			}
+		} catch (MyException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+		Trainers.setBounds(175, 61, 237, 53);
 		panelBattle.add(Trainers);
 		Trainers.addActionListener(this);
 
@@ -102,11 +117,12 @@ public class ProfessorView extends JDialog implements ActionListener {
 		panelBattle.add(selectTrainerLabel);
 
 		// Creamos un campo de texto y lo agregamos al panel
-		resulttextField = new JTextField();
+		resulttextField = new JTextArea(2, 30);
 		resulttextField.setBackground(new Color(200, 243, 249));
 		resulttextField.setEditable(false);
-		resulttextField.setBounds(10, 363, 643, 132);
+		resulttextField.setBounds(22, 324, 448, 212);
 		panelBattle.add(resulttextField);
+	
 
 		// Deshabilitamos los botones por defecto
 		informationButton.setEnabled(false);
@@ -116,7 +132,7 @@ public class ProfessorView extends JDialog implements ActionListener {
 		JLabel professorImageLabel = new JLabel("");
 		professorImageLabel
 				.setIcon(new ImageIcon(ProfessorView.class.getResource("/resources/For_best_wishes_oak.jpg")));
-		professorImageLabel.setBounds(447, 11, 188, 341);
+		professorImageLabel.setBounds(444, 100, 188, 341);
 		panelBattle.add(professorImageLabel);
 
 		JLabel welcomeProfessorLabel = new JLabel("Welcome Professor !!");
@@ -137,23 +153,23 @@ public class ProfessorView extends JDialog implements ActionListener {
 		lblNewLabel_1.setBounds(46, 76, 105, 17);
 		paneDelete.add(lblNewLabel_1);
 
-		JComboBox<String> comboBox_1 = new JComboBox<String>();
-		comboBox_1.addItem("");
-		comboBox_1.addItem("Entrenador 1");
-		comboBox_1.addItem("Entrenador 2");
-		comboBox_1.setBounds(162, 71, 222, 31);
-		paneDelete.add(comboBox_1);
+		JComboBox<String> trainerDelete = new JComboBox<String>();
+		trainerDelete.addItem("");
+		trainerDelete.addItem("Entrenador 1");
+		trainerDelete.addItem("Entrenador 2");
+		trainerDelete.setBounds(162, 71, 222, 31);
+		paneDelete.add(trainerDelete);
 
-		JButton btnNewButton_2 = new JButton("CHECK");
-		btnNewButton_2.addActionListener(new ActionListener() {
+		JButton checkButton = new JButton("CHECK");
+		checkButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 			}
 		});
-		btnNewButton_2.setBounds(429, 71, 124, 31);
-		paneDelete.add(btnNewButton_2);
+		checkButton.setBounds(429, 71, 124, 31);
+		paneDelete.add(checkButton);
 
-		JButton btnNewButton_2_1 = new JButton("DELETE");
-		btnNewButton_2_1.addActionListener(new ActionListener() {
+		JButton deleteButton = new JButton("DELETE");
+		deleteButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				JOptionPane.showOptionDialog(panelBattle, "Are you suere you want to delete this trainner?",
 						"Confirm delete", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE, null,
@@ -161,25 +177,25 @@ public class ProfessorView extends JDialog implements ActionListener {
 			}
 		});
 
-		comboBox_1.addActionListener(new ActionListener() {
+		trainerDelete.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				btnNewButton_2.setEnabled(true);
-				btnNewButton_2_1.setEnabled(true);
+				checkButton.setEnabled(true);
+				deleteButton.setEnabled(true);
 			}
 		});
 
 		// Deshabilitamos los botones por defecto
-		btnNewButton_2.setEnabled(false);
-		btnNewButton_2_1.setEnabled(false);
+		checkButton.setEnabled(false);
+		deleteButton.setEnabled(false);
 
-		btnNewButton_2_1.setBounds(354, 349, 124, 31);
-		paneDelete.add(btnNewButton_2_1);
+		deleteButton.setBounds(354, 349, 124, 31);
+		paneDelete.add(deleteButton);
 
 		// Pestaña3
-		textField_1 = new JTextField();
-		textField_1.setBounds(10, 189, 237, 351);
-		paneDelete.add(textField_1);
-		textField_1.setColumns(10);
+		deleteTrainerTextField = new JTextField();
+		deleteTrainerTextField.setBounds(55, 165, 237, 351);
+		paneDelete.add(deleteTrainerTextField);
+		deleteTrainerTextField.setColumns(10);
 		pestanas.addTab("ADD/MODIFY", panelModify);
 		panelModify.setLayout(null);
 
@@ -222,9 +238,9 @@ public class ProfessorView extends JDialog implements ActionListener {
 		txtBadges.setBounds(40, 228, 101, 20);
 		panelModify.add(txtBadges);
 
-		JComboBox comboBox_2 = new JComboBox();
-		comboBox_2.setBounds(40, 259, 101, 22);
-		panelModify.add(comboBox_2);
+		JComboBox initialComboBox = new JComboBox();
+		initialComboBox.setBounds(40, 259, 101, 22);
+		panelModify.add(initialComboBox);
 
 		txtPokeballs = new JTextField();
 		txtPokeballs.setHorizontalAlignment(SwingConstants.CENTER);
@@ -296,7 +312,7 @@ public class ProfessorView extends JDialog implements ActionListener {
 		txtGender.setEnabled(false);
 		txtOriginCity.setEnabled(false);
 		txtBadges.setEnabled(false);
-		comboBox_2.setEnabled(false);
+		initialComboBox.setEnabled(false);
 		txtPokeballs.setEnabled(false);
 		txtAddPokeballs.setEnabled(false);
 		btnNewButton_4.setEnabled(false);
@@ -310,7 +326,7 @@ public class ProfessorView extends JDialog implements ActionListener {
 				txtGender.setEnabled(true);
 				txtOriginCity.setEnabled(true);
 				txtBadges.setEnabled(true);
-				comboBox_2.setEnabled(true);
+				initialComboBox.setEnabled(true);
 				txtPokeballs.setEnabled(true);
 				txtAddPokeballs.setEnabled(true);
 				btnNewButton_4.setEnabled(true);
@@ -343,12 +359,12 @@ public class ProfessorView extends JDialog implements ActionListener {
 		lblNewLabel_4.setBounds(243, 58, 147, 14);
 		panelAscend.add(lblNewLabel_4);
 
-		JComboBox comboBox_1_1 = new JComboBox();
-		comboBox_1_1.addItem("");
-		comboBox_1_1.addItem("Trainner 1");
-		comboBox_1_1.addItem("Trainner 2");
-		comboBox_1_1.setBounds(10, 52, 222, 31);
-		panelAscend.add(comboBox_1_1);
+		JComboBox ascentTrainer = new JComboBox();
+		ascentTrainer.addItem("");
+		ascentTrainer.addItem("Trainner 1");
+		ascentTrainer.addItem("Trainner 2");
+		ascentTrainer.setBounds(10, 52, 222, 31);
+		panelAscend.add(ascentTrainer);
 
 		txtRegion = new JTextField();
 		txtRegion.setHorizontalAlignment(SwingConstants.CENTER);
@@ -399,9 +415,9 @@ public class ProfessorView extends JDialog implements ActionListener {
 		btnNewButton_5.setEnabled(false);
 
 		// Habilitar elementos cuando se seleccione una opción en comboBox_1_1
-		comboBox_1_1.addActionListener(new ActionListener() {
+		ascentTrainer.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				String selectedOption = (String) comboBox_1_1.getSelectedItem();
+				String selectedOption = (String) ascentTrainer.getSelectedItem();
 				if (!selectedOption.equals("")) {
 					txtRegion.setEnabled(true);
 					comboBox_3.setEnabled(true);
@@ -417,16 +433,53 @@ public class ProfessorView extends JDialog implements ActionListener {
 
 		// Configuramos la ventana
 		setSize(682, 614);
-		setVisible(true);
 	}
+
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		if (e.getSource().equals(Trainers)) {
+			resulttextField.setText("");
 			informationButton.setEnabled(true);
 			teamButton.setEnabled(true);
 			combatHistoryButton.setEnabled(true);
+			String selectedTrainer = (String)Trainers.getSelectedItem();
+			try {
+				for (Trainer element : manageable.getTrainers()) {
+					if(element.getName().equals(selectedTrainer)) {
+						t=element;
+						
+
+				
+					}
+				}
+			} catch (MyException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
+
 
 		}
+		if(e.getSource().equals(informationButton)) {
+			if(t.getName().equals(Trainers.getSelectedItem())) {
+				resulttextField.setText(null);
+				resulttextField.setText(t.getTrainerInfo());
+				
+			}
+		}
+		if(e.getSource().equals(combatHistoryButton)) {
+			if(t.getName().equals(Trainers.getSelectedItem())) {
+				resulttextField.setText(null);
+				resulttextField.setText(t.getCombats());
+				
+			}
+		}
+			if(e.getSource().equals(teamButton)) {
+				if(t.getName().equals(Trainers.getSelectedItem())) {
+					resulttextField.setText(null);
+					resulttextField.setText(t.getTeamMembers());
+					
+				}
+			}
+		}
 	}
-}

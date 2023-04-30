@@ -8,5 +8,4 @@ public interface Logeable {
 
 	public Trainer getPerson(String username, String password) throws MyException;
 
-
 }

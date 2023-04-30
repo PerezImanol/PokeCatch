@@ -70,10 +70,35 @@ public class Trainer {
         this.pokeballs = pokeballs;
     }
 
+	public String getTrainerInfo() {
+		String trainerInfo="---------------------------------Trainer Info--------------------------------------\n"
+				+ "This trainers ID is " + trainerID + " and his/her name is " + name + " \n"
+				+ " Was born on the  " + birthdate + " is a " + gender +" \n"
+				+ " from " + originCity + " and has " + badges + " badges.";
+			return trainerInfo;
+	}
+	public String getTeamMembers() {
+		String teamMembers ="------------------------------------Team Info------------------------------------\n";
+		for(Pokemon element : team){
+			if(element.isTeam()==true) {
+			  teamMembers=teamMembers+element.toString();
+			}
+		}
+		return teamMembers;
+	}
+	
+	public String getCombats() {
+		String combats="------------------------------------Combat History-----------------------------------\n";
+		for(Combat element : combatHistory){
+			combats=combats+element.toString();
+		}
+		
+		return combats;
+	}
 	@Override
 	public String toString() {
 		return "Trainer [trainerID=" + trainerID + ", name=" + name + ", birthdate=" + birthdate + ", gender=" + gender
-				+ ", originCity=" + originCity + ", badges=" + badges + ", team=" + team + ", combatHistory="
-				+ combatHistory + "]";
+				+ ", originCity=" + originCity + ", badges=" + badges + ", pokeballs=" + pokeballs + ", team=" + team
+				+ ", combatHistory=" + combatHistory + "]";
 	}
 }
