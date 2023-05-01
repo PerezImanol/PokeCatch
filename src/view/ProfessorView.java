@@ -21,6 +21,7 @@ import javax.swing.SwingConstants;
 import com.toedter.calendar.JDateChooser;
 
 import classes.MyException;
+import classes.Pokemon;
 import classes.Trainer;
 import factories.AccountManageableFactory;
 import interfaces.AccountManageable;
@@ -39,13 +40,25 @@ public class ProfessorView extends JDialog implements ActionListener {
 	private JTextField txtRegion;
 	private JTextField txttrainnernameHasBeen;
 	private JTextArea resulttextField;
-	private JTextField deleteTrainerTextField;
+	private JTextArea deleteTrainerTextArea;
 	private JButton teamButton;
 	private JButton combatHistoryButton;
 	private JButton informationButton;
+	private JButton checkButton;
+	private JButton deleteButton;
 	private JComboBox<String> Trainers;
+	private JComboBox<Pokemon> initialComboBox;
+	private JComboBox<String> ascentTrainer;
+	private JComboBox<String> waterComboBox;
+	private JComboBox<String> fireComboBox;
+	private JComboBox<String> grassComboBox;
+	private JComboBox<String> trainerDelete;
 	private AccountManageable manageable = AccountManageableFactory.getAccountManageable();
 	private Trainer t;
+	private JPanel panelBattle;
+	private JPanel paneDelete;
+	private JPanel panelModify;
+	private JPanel panelAscend;
 
 	public ProfessorView(LoginView loginView, boolean b) {
 
@@ -56,10 +69,10 @@ public class ProfessorView extends JDialog implements ActionListener {
 		setTitle("Professor View");
 		setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
 
-		JPanel panelBattle = new JPanel();
-		JPanel paneDelete = new JPanel();
-		JPanel panelModify = new JPanel();
-		JPanel panelAscend = new JPanel();
+		panelBattle = new JPanel();
+		paneDelete = new JPanel();
+		panelModify = new JPanel();
+		panelAscend = new JPanel();
 
 		// Creamos el objeto JTabbedPane y le agregamos las pestañas
 		JTabbedPane pestanas = new JTabbedPane();
@@ -79,7 +92,7 @@ public class ProfessorView extends JDialog implements ActionListener {
 		Trainers.setForeground(new Color(0, 0, 0));
 		Trainers.setBackground(SystemColor.control);
 		Trainers.addItem("");
-		
+
 		try {
 			for (Trainer element : manageable.getTrainers()) {
 				Trainers.addItem(element.getName());
@@ -122,7 +135,6 @@ public class ProfessorView extends JDialog implements ActionListener {
 		resulttextField.setEditable(false);
 		resulttextField.setBounds(22, 324, 448, 212);
 		panelBattle.add(resulttextField);
-	
 
 		// Deshabilitamos los botones por defecto
 		informationButton.setEnabled(false);
@@ -140,62 +152,57 @@ public class ProfessorView extends JDialog implements ActionListener {
 		welcomeProfessorLabel.setBounds(24, 30, 248, 28);
 		panelBattle.add(welcomeProfessorLabel);
 
-		
-		
-		
 		// Pestaña2
-		
+
 		pestanas.addTab("DELETE", paneDelete);
 		paneDelete.setLayout(null);
 
-		JLabel lblNewLabel_1 = new JLabel("Select Trainner");
-		lblNewLabel_1.setFont(new Font("Tahoma", Font.PLAIN, 14));
-		lblNewLabel_1.setBounds(46, 76, 105, 17);
+		JLabel lblNewLabel_1 = new JLabel("Which trainer do you want to delete?");
+		lblNewLabel_1.setFont(new Font("Yu Gothic UI Light", Font.BOLD | Font.ITALIC, 18));
+		lblNewLabel_1.setBounds(27, 26, 337, 17);
 		paneDelete.add(lblNewLabel_1);
 
-		JComboBox<String> trainerDelete = new JComboBox<String>();
+		trainerDelete = new JComboBox<String>();
 		trainerDelete.addItem("");
-		trainerDelete.addItem("Entrenador 1");
-		trainerDelete.addItem("Entrenador 2");
-		trainerDelete.setBounds(162, 71, 222, 31);
+		try {
+			for (Trainer element : manageable.getTrainers()) {
+				trainerDelete.addItem(element.getName());
+			}
+		} catch (MyException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+		trainerDelete.setBounds(37, 63, 222, 47);
 		paneDelete.add(trainerDelete);
+		trainerDelete.addActionListener(this);
 
-		JButton checkButton = new JButton("CHECK");
-		checkButton.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-			}
-		});
-		checkButton.setBounds(429, 71, 124, 31);
+		checkButton = new JButton("CHECK");
+		checkButton.setBounds(37, 136, 173, 47);
 		paneDelete.add(checkButton);
+		checkButton.addActionListener(this);
+		
 
-		JButton deleteButton = new JButton("DELETE");
-		deleteButton.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				JOptionPane.showOptionDialog(panelBattle, "Are you suere you want to delete this trainner?",
-						"Confirm delete", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE, null,
-						new Object[] { "YES", "NO" }, JOptionPane.YES_OPTION);
-			}
-		});
-
-		trainerDelete.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				checkButton.setEnabled(true);
-				deleteButton.setEnabled(true);
-			}
-		});
+		deleteButton = new JButton("DELETE");
+		deleteButton.addActionListener(this);
 
 		// Deshabilitamos los botones por defecto
 		checkButton.setEnabled(false);
 		deleteButton.setEnabled(false);
 
-		deleteButton.setBounds(354, 349, 124, 31);
+		deleteButton.setBounds(37, 201, 173, 47);
 		paneDelete.add(deleteButton);
 
 		// Pestaña3
-		deleteTrainerTextField = new JTextField();
-		deleteTrainerTextField.setBounds(55, 165, 237, 351);
-		paneDelete.add(deleteTrainerTextField);
-		deleteTrainerTextField.setColumns(10);
+		deleteTrainerTextArea = new JTextArea();
+		deleteTrainerTextArea.setBackground(SystemColor.inactiveCaption);
+		deleteTrainerTextArea.setBounds(37, 259, 285, 239);
+		paneDelete.add(deleteTrainerTextArea);
+		deleteTrainerTextArea.setColumns(10);
+
+		JLabel lblNewLabel = new JLabel("");
+		lblNewLabel.setIcon(new ImageIcon(ProfessorView.class.getResource("/resources/Ash_Ketchum_Journeys.png")));
+		lblNewLabel.setBounds(415, 26, 216, 472);
+		paneDelete.add(lblNewLabel);
 		pestanas.addTab("ADD/MODIFY", panelModify);
 		panelModify.setLayout(null);
 
@@ -238,7 +245,7 @@ public class ProfessorView extends JDialog implements ActionListener {
 		txtBadges.setBounds(40, 228, 101, 20);
 		panelModify.add(txtBadges);
 
-		JComboBox initialComboBox = new JComboBox();
+		initialComboBox = new JComboBox<Pokemon>();
 		initialComboBox.setBounds(40, 259, 101, 22);
 		panelModify.add(initialComboBox);
 
@@ -338,7 +345,7 @@ public class ProfessorView extends JDialog implements ActionListener {
 		pestanas.addTab("ASCEND", panelAscend);
 		panelAscend.setLayout(null);
 
-		JLabel lblNewLabel_5_1_1 = new JLabel("LEAF INITIAL");
+		JLabel lblNewLabel_5_1_1 = new JLabel("GRASS INITIAL");
 		lblNewLabel_5_1_1.setHorizontalAlignment(SwingConstants.CENTER);
 		lblNewLabel_5_1_1.setBounds(27, 232, 139, 14);
 		panelAscend.add(lblNewLabel_5_1_1);
@@ -359,7 +366,7 @@ public class ProfessorView extends JDialog implements ActionListener {
 		lblNewLabel_4.setBounds(243, 58, 147, 14);
 		panelAscend.add(lblNewLabel_4);
 
-		JComboBox ascentTrainer = new JComboBox();
+		ascentTrainer = new JComboBox<String>();
 		ascentTrainer.addItem("");
 		ascentTrainer.addItem("Trainner 1");
 		ascentTrainer.addItem("Trainner 2");
@@ -374,31 +381,31 @@ public class ProfessorView extends JDialog implements ActionListener {
 		txtRegion.setColumns(10);
 		txtRegion.setEnabled(false);
 
-		JComboBox comboBox_3 = new JComboBox();
-		comboBox_3.setBounds(27, 162, 139, 22);
-		panelAscend.add(comboBox_3);
-		comboBox_3.setEnabled(false);
+		waterComboBox = new JComboBox<String>();
+		waterComboBox.setBounds(27, 162, 139, 22);
+		panelAscend.add(waterComboBox);
+		waterComboBox.setEnabled(false);
 
-		JComboBox comboBox_3_1 = new JComboBox();
-		comboBox_3_1.setBounds(27, 195, 139, 22);
-		panelAscend.add(comboBox_3_1);
-		comboBox_3_1.setEnabled(false);
+		fireComboBox = new JComboBox<String>();
+		fireComboBox.setBounds(27, 195, 139, 22);
+		panelAscend.add(fireComboBox);
+		fireComboBox.setEnabled(false);
 
-		JComboBox comboBox_3_2 = new JComboBox();
-		comboBox_3_2.setBounds(27, 228, 139, 22);
-		panelAscend.add(comboBox_3_2);
-		comboBox_3_2.setEnabled(false);
+		grassComboBox = new JComboBox<String>();
+		grassComboBox.setBounds(27, 228, 139, 22);
+		panelAscend.add(grassComboBox);
+		grassComboBox.setEnabled(false);
 
-		JButton btnNewButton_5 = new JButton("UPGRADE");
-		btnNewButton_5.addActionListener(new ActionListener() {
+		JButton upgradeButton = new JButton("UPGRADE");
+		upgradeButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				JOptionPane.showMessageDialog(panelAscend,
 						"(trainner_name) has been successfully upgraded to Professor");
 			}
 		});
-		btnNewButton_5.setBounds(203, 172, 122, 69);
-		panelAscend.add(btnNewButton_5);
-		btnNewButton_5.setEnabled(false);
+		upgradeButton.setBounds(203, 172, 122, 69);
+		panelAscend.add(upgradeButton);
+		upgradeButton.setEnabled(false);
 
 		txttrainnernameHasBeen = new JTextField();
 		txttrainnernameHasBeen.setEditable(false);
@@ -409,10 +416,10 @@ public class ProfessorView extends JDialog implements ActionListener {
 
 		// Deshabilitar elementos al principio
 		txtRegion.setEnabled(false);
-		comboBox_3.setEnabled(false);
-		comboBox_3_1.setEnabled(false);
-		comboBox_3_2.setEnabled(false);
-		btnNewButton_5.setEnabled(false);
+		waterComboBox.setEnabled(false);
+		fireComboBox.setEnabled(false);
+		grassComboBox.setEnabled(false);
+		upgradeButton.setEnabled(false);
 
 		// Habilitar elementos cuando se seleccione una opción en comboBox_1_1
 		ascentTrainer.addActionListener(new ActionListener() {
@@ -420,10 +427,10 @@ public class ProfessorView extends JDialog implements ActionListener {
 				String selectedOption = (String) ascentTrainer.getSelectedItem();
 				if (!selectedOption.equals("")) {
 					txtRegion.setEnabled(true);
-					comboBox_3.setEnabled(true);
-					comboBox_3_1.setEnabled(true);
-					comboBox_3_2.setEnabled(true);
-					btnNewButton_5.setEnabled(true);
+					waterComboBox.setEnabled(true);
+					fireComboBox.setEnabled(true);
+					grassComboBox.setEnabled(true);
+					upgradeButton.setEnabled(true);
 				}
 			}
 		});
@@ -435,22 +442,20 @@ public class ProfessorView extends JDialog implements ActionListener {
 		setSize(682, 614);
 	}
 
-
 	@Override
 	public void actionPerformed(ActionEvent e) {
+		
 		if (e.getSource().equals(Trainers)) {
 			resulttextField.setText("");
 			informationButton.setEnabled(true);
 			teamButton.setEnabled(true);
 			combatHistoryButton.setEnabled(true);
-			String selectedTrainer = (String)Trainers.getSelectedItem();
+			String selectedTrainer = (String) Trainers.getSelectedItem();
 			try {
 				for (Trainer element : manageable.getTrainers()) {
-					if(element.getName().equals(selectedTrainer)) {
-						t=element;
-						
+					if (element.getName().equals(selectedTrainer)) {
+						t = element;
 
-				
 					}
 				}
 			} catch (MyException e1) {
@@ -458,28 +463,70 @@ public class ProfessorView extends JDialog implements ActionListener {
 				e1.printStackTrace();
 			}
 
-
 		}
-		if(e.getSource().equals(informationButton)) {
-			if(t.getName().equals(Trainers.getSelectedItem())) {
+		if (e.getSource().equals(informationButton)) {
+			if (t.getName().equals(Trainers.getSelectedItem())) {
 				resulttextField.setText(null);
 				resulttextField.setText(t.getTrainerInfo());
-				
+
 			}
 		}
-		if(e.getSource().equals(combatHistoryButton)) {
-			if(t.getName().equals(Trainers.getSelectedItem())) {
+		if (e.getSource().equals(combatHistoryButton)) {
+			if (t.getName().equals(Trainers.getSelectedItem())) {
 				resulttextField.setText(null);
 				resulttextField.setText(t.getCombats());
-				
+
 			}
 		}
-			if(e.getSource().equals(teamButton)) {
-				if(t.getName().equals(Trainers.getSelectedItem())) {
-					resulttextField.setText(null);
-					resulttextField.setText(t.getTeamMembers());
-					
-				}
+		if (e.getSource().equals(teamButton)) {
+			if (t.getName().equals(Trainers.getSelectedItem())) {
+				resulttextField.setText(null);
+				resulttextField.setText(t.getTeamMembers());
+
 			}
+		}
+		if(e.getSource().equals(trainerDelete)) {
+			deleteButton.setEnabled(true);
+			checkButton.setEnabled(true);
+			String selectedTrainer = (String) trainerDelete.getSelectedItem();
+			try {
+				for (Trainer element : manageable.getTrainers()) {
+					if (element.getName().equals(selectedTrainer)) {
+						t = element;
+
+					}
+				}
+			} catch (MyException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
+		}
+		if (e.getSource().equals(checkButton)) {
+			if (t.getName().equals(trainerDelete.getSelectedItem())) {
+				deleteTrainerTextArea.setText(null);
+				deleteTrainerTextArea.setText(t.getTrainerInfo());
+
+			}
+		}
+		if(e.getSource().equals(deleteButton)) {
+			if(JOptionPane.showOptionDialog(panelBattle, "Are you suere you want to delete this trainner?",
+					"Confirm delete", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE, null,
+					new Object[] { "YES", "NO" }, JOptionPane.YES_OPTION)==1) {
+				int id;
+				id=t.getTrainerID();
+				try {
+					manageable.deleteTrainer(id);
+				} catch (MyException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+				
+		}
+		
+			
+			
+		}
+		
 		}
 	}
+

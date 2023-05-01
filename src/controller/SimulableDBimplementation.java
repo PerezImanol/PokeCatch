@@ -74,7 +74,7 @@ public class SimulableDBimplementation implements Simulable {
     public LinkedHashSet<Pokemon> getTeamPokemons(Trainer trainer) throws MyException {
         ResultSet rs = null;
         LinkedHashSet<Pokemon> pokemons = new LinkedHashSet<>();
-        final String queryPokemons = "select * from pokemon where location = 0 and trainer_id = ?";
+        final String queryPokemons = "select * from pokemon where location = true and trainer_id = ?";
 
         con = occ.openConnection();
 
