@@ -1,6 +1,5 @@
 package view;
 
-import java.awt.EventQueue;
 import factories.LogeableFactory;
 import interfaces.Logeable;
 
@@ -23,7 +22,6 @@ import javax.swing.JTextField;
 import javax.swing.JButton;
 import javax.swing.JPasswordField;
 import javax.swing.border.LineBorder;
-
 import classes.MyException;
 import classes.Professor;
 import classes.Trainer;
@@ -44,25 +42,8 @@ public class LoginView extends JFrame implements ActionListener, FocusListener, 
 	private JLabel errorMessage;
 	private Logeable logeable = LogeableFactory.getLogeable();
 
-	/**
-	 * Launch the application.
-	 */
-	public static void main(String[] args) {
-		EventQueue.invokeLater(new Runnable() {
-			public void run() {
-				try {
-					LoginView frame = new LoginView();
-					frame.setVisible(true);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-		});
-	}
-
-	/**
-	 * Create the frame.
-	 */
+	/*Here is the main View's structure.
+	 * Because of that this View is a JFrame and the program always has to start on this page*/
 	public LoginView() {
 
 		setTitle("Log in to PokeCatch");
@@ -167,7 +148,9 @@ public class LoginView extends JFrame implements ActionListener, FocusListener, 
 				ProfessorView vProfessor = new ProfessorView(this, true);
 				vProfessor.setVisible(true);
 				} else if (t instanceof Trainer ) {
-				System.out.println(t);
+					/*Here should be the declaration of the Trainer view but it is not done yet 
+					 * TrainerView vTrainer = new TrainerView(this, true);
+				vTrainer.setVisible(true);*/
 				}
 				else if(t==null){
 					errorMessage.setVisible(true);
@@ -176,7 +159,7 @@ public class LoginView extends JFrame implements ActionListener, FocusListener, 
 				}
 			} catch (MyException e1) {
 
-				e1.printStackTrace();
+				JOptionPane.showMessageDialog(null, e1.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
 			}
 		}
 

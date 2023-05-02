@@ -70,91 +70,90 @@ public class ProfessorView extends JDialog implements ActionListener {
 	private JScrollPane scrollPane2;
 	private JScrollPane scrollPane;
 
+	
 	public ProfessorView(LoginView loginView, boolean b) {
 
 		super(loginView, b);
 		setIconImage(Toolkit.getDefaultToolkit().getImage(ProfessorView.class.getResource("/resources/descarga.png")));
-		setType(Type.POPUP);
-		setModalityType(ModalityType.APPLICATION_MODAL);
 		setTitle("Professor View");
 		setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
 
+		//Here the different panels of the whole view are defined
 		panelBattle = new JPanel();
 		paneDelete = new JPanel();
 		panelModify = new JPanel();
 		panelAscend = new JPanel();
 
-		// Creamos el objeto JTabbedPane y le agregamos las pestañas
+		
 		JTabbedPane pestanas = new JTabbedPane();
 
-		// Pestaña1
-		// Creamos un panel y lo agregamos a la pestaña "BATTLES"
-
+		//1.Battles View
 		panelBattle.setBackground(new Color(255, 255, 255));
 		pestanas.addTab("BATTLES", panelBattle);
 
-		// Establecemos un layout nulo para el panel
+		
 		panelBattle.setLayout(null);
-
-		// Creamos una ComboBox y la agregamos al panel, con tres elementos
+		
+		//Here we specify the trainers the professor can choose from to make different actions 
 		trainers = new JComboBox<String>();
 		trainers.setMaximumRowCount(20);
 		trainers.setForeground(new Color(0, 0, 0));
 		trainers.setBackground(SystemColor.control);
 		trainers.addItem("");
 
+		//This is the method used to add every Trainer's name
 		try {
 			for (Trainer element : manageable.getTrainers()) {
 				trainers.addItem(element.getName());
 			}
 		} catch (MyException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
+			JOptionPane.showMessageDialog(null, e1.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+
 		}
 		trainers.setBounds(175, 61, 237, 53);
 		panelBattle.add(trainers);
 		trainers.addActionListener(this);
 
-		// Creamos un botón llamado "TEAM" y lo agregamos al panel
+		
 		teamButton = new JButton("TEAM");
 		teamButton.setBounds(10, 204, 142, 49);
 		panelBattle.add(teamButton);
 		teamButton.addActionListener(this);
 
-		// Creamos un botón llamado "INFORMATION" y lo agregamos al panel
+		
 		informationButton = new JButton("INFORMATION");
 		informationButton.setBounds(10, 138, 142, 55);
 		panelBattle.add(informationButton);
 		informationButton.addActionListener(this);
 
-		// Creamos un botón llamado "COMBAT HISTORY" y lo agregamos al panel
 		combatHistoryButton = new JButton("COMBAT HISTORY");
 		combatHistoryButton.setBounds(10, 264, 142, 49);
 		panelBattle.add(combatHistoryButton);
 		combatHistoryButton.addActionListener(this);
 
-		// Creamos una etiqueta y la agregamos al panel
 		JLabel selectTrainerLabel = new JLabel("Select Trainner:");
 		selectTrainerLabel.setFont(new Font("Yu Gothic UI Semibold", Font.PLAIN, 17));
 		selectTrainerLabel.setBounds(23, 73, 142, 53);
 		panelBattle.add(selectTrainerLabel);
 
-		// Creamos un campo de texto y lo agregamos al panel
+		
+		/*This one is the TextArean where the trainers info is going to be shown it is an area and not a normal text field because 
+		 * it has to show more than one line and a label can not handle it */
 		resulttextField = new JTextArea(2, 30);
 		resulttextField.setBackground(new Color(200, 243, 249));
 		resulttextField.setEditable(false);
-		resulttextField.setBounds(162, 161, 260, 82);
+		resulttextField.setBounds(162, 171, 280, 82);
 		panelBattle.add(resulttextField);
 
-		// Deshabilitamos los botones por defecto
 		informationButton.setEnabled(false);
 		teamButton.setEnabled(false);
 		combatHistoryButton.setEnabled(false);
 
+		//The JLabel under this comment has no text because the picture of Oak is on this Label
 		JLabel professorImageLabel = new JLabel("");
 		professorImageLabel
 				.setIcon(new ImageIcon(ProfessorView.class.getResource("/resources/For_best_wishes_oak.jpg")));
-		professorImageLabel.setBounds(444, 100, 188, 341);
+		professorImageLabel.setBounds(463, 97, 188, 341);
 		panelBattle.add(professorImageLabel);
 
 		JLabel welcomeProfessorLabel = new JLabel("Welcome Professor !!");
@@ -162,6 +161,10 @@ public class ProfessorView extends JDialog implements ActionListener {
 		welcomeProfessorLabel.setBounds(24, 30, 248, 28);
 		panelBattle.add(welcomeProfessorLabel);
 
+		
+		/*Here we define two different tables to show the information of the Pokemon team and the combat History
+		 * The one Responsible for the Pokemon team is the scrollPane, tableModel and table.
+		 * the same unes but with the number 2 are the ones fore Combat history*/ 
 		scrollPane = new JScrollPane();
 		scrollPane.setBounds(10, 350, 432, 118);
 		panelBattle.add(scrollPane);
@@ -188,12 +191,15 @@ public class ProfessorView extends JDialog implements ActionListener {
 		table2 = new JTable(tableModel2);
 		table2.setEnabled(false);
 
+		/*As you can tell both tables have the same position and thats because they are shown in the same places 
+		 * and the ActionListener is the one responsible of managing if one of the is visible or not not*/
 		table2.setBackground(new Color(239, 205, 124));
 		scrollPane2.setViewportView(table2);
 		table2.setVisible(false);
 		scrollPane2.setVisible(false);
 
-		// Pestaña2
+		
+		//2.Delete View
 
 		pestanas.addTab("DELETE", paneDelete);
 		paneDelete.setLayout(null);
@@ -203,6 +209,8 @@ public class ProfessorView extends JDialog implements ActionListener {
 		lblNewLabel_1.setBounds(27, 26, 337, 17);
 		paneDelete.add(lblNewLabel_1);
 
+		
+		//Here we do the same thing as we do above for the trainersComboBox
 		trainerDelete = new JComboBox<String>();
 		trainerDelete.addItem("");
 		try {
@@ -210,13 +218,14 @@ public class ProfessorView extends JDialog implements ActionListener {
 				trainerDelete.addItem(element.getName());
 			}
 		} catch (MyException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
+			JOptionPane.showMessageDialog(null, e1.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+
 		}
 		trainerDelete.setBounds(37, 63, 222, 47);
 		paneDelete.add(trainerDelete);
 		trainerDelete.addActionListener(this);
 
+		//And here are the two different buttons used in the second view
 		checkButton = new JButton("CHECK");
 		checkButton.setBounds(37, 136, 173, 47);
 		paneDelete.add(checkButton);
@@ -225,20 +234,20 @@ public class ProfessorView extends JDialog implements ActionListener {
 		deleteButton = new JButton("DELETE");
 		deleteButton.addActionListener(this);
 
-		// Deshabilitamos los botones por defecto
 		checkButton.setEnabled(false);
 		deleteButton.setEnabled(false);
 
 		deleteButton.setBounds(37, 201, 173, 47);
 		paneDelete.add(deleteButton);
 
-		// Pestaña3
+		//As the previous page here we have the TextArea where the trainer info is shown
 		deleteTrainerTextArea = new JTextArea();
 		deleteTrainerTextArea.setBackground(SystemColor.inactiveCaption);
-		deleteTrainerTextArea.setBounds(37, 259, 285, 239);
+		deleteTrainerTextArea.setBounds(79, 270, 285, 82);
 		paneDelete.add(deleteTrainerTextArea);
 		deleteTrainerTextArea.setColumns(10);
-
+		
+		// Pestaña3
 		JLabel lblNewLabel = new JLabel("");
 		lblNewLabel.setIcon(new ImageIcon(ProfessorView.class.getResource("/resources/Ash_Ketchum_Journeys.png")));
 		lblNewLabel.setBounds(415, 26, 216, 472);
@@ -315,8 +324,6 @@ public class ProfessorView extends JDialog implements ActionListener {
 					// Sumar valores y establecer resultado en txtPokeballs
 					txtPokeballs.setText(Integer.toString(pokeballs + addPokeballs));
 				} catch (NumberFormatException ex) {
-					// Manejar error si los valores no son números enteros
-					System.out.println("Error: los valores ingresados no son números enteros");
 				}
 			}
 		});
@@ -485,6 +492,8 @@ public class ProfessorView extends JDialog implements ActionListener {
 	@Override
 	public void actionPerformed(ActionEvent e) {
 
+		/*This first if control if something has been chosen on the trainers conboBox and 
+		 * by using the name identifies the trainer and sets it to the t variable   */
 		if (e.getSource().equals(trainers)) {
 			resulttextField.setText("");
 			informationButton.setEnabled(true);
@@ -499,8 +508,8 @@ public class ProfessorView extends JDialog implements ActionListener {
 					}
 				}
 			} catch (MyException e1) {
-				// TODO Auto-generated catch block
-				e1.printStackTrace();
+				JOptionPane.showMessageDialog(null, e1.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+
 			}
 
 		}
@@ -509,6 +518,40 @@ public class ProfessorView extends JDialog implements ActionListener {
 				resulttextField.setText(null);
 				resulttextField.setText(t.getTrainerInfo());
 
+			}
+		}
+		//Here are the two methods to show and hide the tables stated before
+		if (e.getSource().equals(teamButton)) {
+			if (t.getName().equals(trainers.getSelectedItem())) {
+				scrollPane.setVisible(true);
+				scrollPane2.setVisible(false);
+				table.setVisible(true);
+				table2.setVisible(false);
+				tableModel.setRowCount(0);
+				try {
+					for (Trainer element : manageable.getTrainers()) {
+						if (element.getName().equals(trainers)) {
+							t = element;
+
+						}
+					}
+				} catch (MyException e1) {
+					JOptionPane.showMessageDialog(null, e1.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+
+				}
+
+				for (Pokemon element : t.getTeam()) {
+					Object[] row = new Object[7];
+					row[0] = element.getPokedexID();
+					row[1] = element.getName();
+					row[2] = element.getNickname();
+					row[3] = element.getRegion();
+					row[4] = element.getType1();
+					row[5] = element.getType2();
+					row[6] = element.getLevel();
+					tableModel.addRow(row);
+				}
+table.setVisible(true);
 			}
 		}
 		if (e.getSource().equals(combatHistoryButton)) {
@@ -526,8 +569,8 @@ public class ProfessorView extends JDialog implements ActionListener {
 						}
 					}
 				} catch (MyException e1) {
-					// TODO Auto-generated catch block
-					e1.printStackTrace();
+					JOptionPane.showMessageDialog(null, e1.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+
 				}
 
 				for (Combat element : t.getCombatHistory()) {
@@ -541,39 +584,7 @@ public class ProfessorView extends JDialog implements ActionListener {
 
 			}
 		}
-		if (e.getSource().equals(teamButton)) {
-			if (t.getName().equals(trainers.getSelectedItem())) {
-				scrollPane.setVisible(true);
-				scrollPane2.setVisible(false);
-				table.setVisible(true);
-				table2.setVisible(false);
-				tableModel.setRowCount(0);
-				try {
-					for (Trainer element : manageable.getTrainers()) {
-						if (element.getName().equals(trainers)) {
-							t = element;
-
-						}
-					}
-				} catch (MyException e1) {
-					// TODO Auto-generated catch block
-					e1.printStackTrace();
-				}
-
-				for (Pokemon element : t.getTeam()) {
-					Object[] row = new Object[7];
-					row[0] = element.getPokedexID();
-					row[1] = element.getName();
-					row[2] = element.getNickname();
-					row[3] = element.getRegion();
-					row[4] = element.getType1();
-					row[5] = element.getType2();
-					row[6] = element.getLevel();
-					tableModel.addRow(row);
-				}
-table.setVisible(true);
-			}
-		}
+	
 		if (e.getSource().equals(trainerDelete)) {
 			
 			deleteButton.setEnabled(true);
@@ -587,8 +598,7 @@ table.setVisible(true);
 					}
 				}
 			} catch (MyException e1) {
-				// TODO Auto-generated catch block
-				e1.printStackTrace();
+				JOptionPane.showMessageDialog(null, e1.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
 			}
 		}
 		if (e.getSource().equals(checkButton)) {
@@ -617,8 +627,7 @@ table.setVisible(true);
 						}
 					}
 				} catch (MyException e1) {
-					// TODO Auto-generated catch block
-					e1.printStackTrace();
+					JOptionPane.showMessageDialog(null, e1.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
 				}
 
 			}

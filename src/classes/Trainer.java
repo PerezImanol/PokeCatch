@@ -3,7 +3,7 @@ package classes;
 import java.sql.Date;
 import java.util.LinkedHashSet;
 /**
- * This class defines the object Trainer which has a set of Pokemon and Combats of the Pokemon that are from this trainner
+ * This class defines the object Trainer which has a set of Pokemon and Combats of the Pokemon that are from this trainer
  * and the commbats he/she took part in
  * @author DaniD
  * @version 3
@@ -82,23 +82,5 @@ public class Trainer {
 				+ " Was born on the  " + birthdate + " is a " + gender +" \n"
 				+ " from " + originCity + " and has " + badges + " badges.";
 			return trainerInfo;
-	}
-	public String getTeamMembers() {
-		String teamMembers ="------------------------------------Team Info------------------------------------\n";
-		for(Pokemon element : team){
-			if(element.isTeam()==true) {
-			  teamMembers=teamMembers+element.toString();
-			}
-		}
-		return teamMembers;
-	}
-	
-	public String getCombats() {
-		String combats="------------------------------------Combat History-----------------------------------\n";
-		for(Combat element : combatHistory){
-			combats=combats+element.toString();
-		}
-		
-		return combats;
 	}
 }
