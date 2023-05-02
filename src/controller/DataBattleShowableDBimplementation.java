@@ -21,7 +21,7 @@ public class DataBattleShowableDBimplementation implements DataBattleShowable {
     @Override
     public LinkedHashSet<PokemonExtra> getPokemons() throws MyException {
         LinkedHashSet<PokemonExtra> pokemons = new LinkedHashSet<>();
-        query = "select * from pokemon_static";
+        query = "select * from Pokemon_static";
 
         con = occ.openConnection();
 
@@ -49,7 +49,7 @@ public class DataBattleShowableDBimplementation implements DataBattleShowable {
     @Override
     public LinkedHashSet<Combat> getTrainerCombatHistory(Integer trainerID) throws MyException {
         LinkedHashSet<Combat> combat = new LinkedHashSet<>();
-        query = "select * from combat where trainer_id1 =  ? or trainerid2 = ?";
+        query = "select * from Combat where trainer_id1 =  ? or trainerid2 = ?";
         ResultSet rs;
 
         con = occ.openConnection();

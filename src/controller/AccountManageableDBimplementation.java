@@ -24,7 +24,7 @@ public class AccountManageableDBimplementation implements AccountManageable {
 	@Override
 	public void addTrainer(Trainer trainer) throws MyException {
 
-		query = "insert into Trainer (trainer_name, birthdate, gender, city, badges, pokeballs) values (?, ?, ?, ?, ?, ?)";
+		query = "insert into Trainer (trainer_name, birthdate, gender, city, badges, pokeball) values (?, ?, ?, ?, ?, ?)";
 		con = occ.openConnection();
 
 		try {
@@ -118,7 +118,7 @@ public class AccountManageableDBimplementation implements AccountManageable {
 					throw er;
 				}
 				try {
-					query = "Select trainer_id1, trainer_id2, winner from combat where trainer_id1=? or trainer_id2=?";
+					query = "Select trainer_id1, trainer_id2, winner from Combat where trainer_id1=? or trainer_id2=?";
 					stmt = con.prepareStatement(query);
 					stmt.setInt(1, id);
 					stmt.setInt(2, id);

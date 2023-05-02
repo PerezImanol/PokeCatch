@@ -64,10 +64,9 @@ public class ProfessorView extends JDialog implements ActionListener {
 
 		super(loginView, b);
 		setIconImage(Toolkit.getDefaultToolkit().getImage(ProfessorView.class.getResource("/resources/descarga.png")));
-		setType(Type.POPUP);
-		setModalityType(ModalityType.APPLICATION_MODAL);
 		setTitle("Professor View");
 		setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
+		loginView.dispose();
 
 		panelBattle = new JPanel();
 		paneDelete = new JPanel();

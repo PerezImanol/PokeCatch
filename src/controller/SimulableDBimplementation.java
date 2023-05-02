@@ -20,7 +20,7 @@ public class SimulableDBimplementation implements Simulable {
 
     @Override
     public void addCaughtPokemons(Pokemon pokemon, int trainerID) throws MyException {
-        final String queryCatch = "INSERT INTO pokemon(pokemon_id, trainer_id, pokemon_lvl, nickname, location) VALUES( ?, ?, ?, ?, ?)";
+        final String queryCatch = "INSERT INTO Pokemon(pokemon_id, trainer_id, pokemon_lvl, nickname, location) VALUES( ?, ?, ?, ?, ?)";
         int teamOrPc;
 
         if (pokemon.isTeam()) {
@@ -74,7 +74,7 @@ public class SimulableDBimplementation implements Simulable {
     public LinkedHashSet<Pokemon> getTeamPokemons(Trainer trainer) throws MyException {
         ResultSet rs = null;
         LinkedHashSet<Pokemon> pokemons = new LinkedHashSet<>();
-        final String queryPokemons = "select * from pokemon where location = true and trainer_id = ?";
+        final String queryPokemons = "select * from Pokemon where location = true and trainer_id = ?";
 
         con = occ.openConnection();
 
@@ -108,7 +108,7 @@ public class SimulableDBimplementation implements Simulable {
     public void changePosition(Trainer trainer, Pokemon pokemon) throws MyException {
         int teamOrPc;
 
-        final String queryUpdateTeam = "UPDATE pokemon SET location = ? WHERE trainer_id = ? AND pokemon_id = ?";
+        final String queryUpdateTeam = "UPDATE Pokemon SET location = ? WHERE trainer_id = ? AND pokemon_id = ?";
 
         if (pokemon.isTeam())
             teamOrPc = 1;
@@ -135,7 +135,7 @@ public class SimulableDBimplementation implements Simulable {
 
     @Override
     public void switchPosition(Trainer trainer, Pokemon pokemon1, Pokemon pokemon2) throws MyException {
-        final String switchQuery = "UPDATE pokemon SET location = ? WHERE trainer_id = ? AND pokemon_id = ?";
+        final String switchQuery = "UPDATE Pokemon SET location = ? WHERE trainer_id = ? AND pokemon_id = ?";
         int pos1;
         int pos2;
 

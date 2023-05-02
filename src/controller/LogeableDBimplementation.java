@@ -23,7 +23,7 @@ public class LogeableDBimplementation implements Logeable {
 	 * This statement must be used twice so I declare it here in order to write it
 	 * just once
 	 */
-	final String queryGetProfessor = "select trainer_id, trainer_name, birthdate, gender, city, badges, pokeball, region from Trainer join professor on trainer_id=professor_id where trainer_id=?;";
+	final String queryGetProfessor = "select trainer_id, trainer_name, birthdate, gender, city, badges, pokeball, region from Trainer join Professor on trainer_id=professor_id where trainer_id=?;";
 
 	/*
 	 * This method gets an username, password and manages the information. If it
@@ -58,7 +58,7 @@ public class LogeableDBimplementation implements Logeable {
 	// in
 
 	private int isUser(String username, String password) throws MyException {
-		final String queryUsers = "Select user_id from Login where username=? and passwd=?";
+		final String queryUsers = "select user_id from Login where username=? and passwd=?";
 		int id = 0;
 
 		con = occ.openConnection();
@@ -162,7 +162,7 @@ public class LogeableDBimplementation implements Logeable {
 					throw er;
 				}
 				// Here we give values to the set storaging the trainers combat history
-				final String queryCombat = "Select trainer_id1, trainer_id2, winner from combat where trainer_id1=? or trainer_id2=?";
+				final String queryCombat = "Select trainer_id1, trainer_id2, winner from Combat where trainer_id1=? or trainer_id2=?";
 				stmt = con.prepareStatement(queryCombat);
 				stmt.setInt(1, id);
 				stmt.setInt(2, id);
@@ -263,7 +263,7 @@ public class LogeableDBimplementation implements Logeable {
 	public LinkedHashSet<Trainer> getTrainers() throws MyException {
     	LinkedHashSet<Trainer> trainers = new LinkedHashSet<>();
     	Trainer t= new Trainer();
-    	final String queryAllTrainers = "select * from trainer where trainer_id not in(select trainer_id from trainer join professor on professor_id =trainer_id )";
+    	final String queryAllTrainers = "select * from Trainer where trainer_id not in(select trainer_id from Trainer join Professor on professor_id =trainer_id )";
     	 ResultSet rs;
 
          con = occ.openConnection();
