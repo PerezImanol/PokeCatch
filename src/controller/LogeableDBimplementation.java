@@ -137,7 +137,7 @@ public class LogeableDBimplementation implements Logeable {
 				t.setOriginCity(rti.getString("city"));
 				t.setBadges(rti.getInt("badges"));
 				t.setPokeballs(rti.getInt("pokeball"));
-				final String queryTeam = "Select pokedex_id, region, pokemon_name, nickname, type1, type2, pokemon_lvl, location from Pokemon_static join Pokemon on pokemon_id=pokedex_id where trainer_id=?";
+				final String queryTeam = "Select pokedex_id, region, pokemon_name, nickname, type1, type2, pokemon_lvl, location from Pokemon_static join Pokemon on pokemon_id=pokedex_id where trainer_id=? and location=true";
 				stmt = con.prepareStatement(queryTeam);
 				stmt.setInt(1, id);
 
@@ -259,32 +259,6 @@ public class LogeableDBimplementation implements Logeable {
 
 		return p;
 	}
-	
-	public LinkedHashSet<Trainer> getTrainers() throws MyException {
-    	LinkedHashSet<Trainer> trainers = new LinkedHashSet<>();
-    	Trainer t= new Trainer();
-    	final String queryAllTrainers = "select * from trainer where trainer_id not in(select trainer_id from trainer join professor on professor_id =trainer_id )";
-    	 ResultSet rs;
 
-         con = occ.openConnection();
-         try {
-             stmt = con.prepareStatement(queryAllTrainers);
-             rs = stmt.executeQuery();
-
-             while (rs.next()) {
-            	 
-                 t=getTrainer(rs.getInt("trainer_id"));
-                 trainers.add(t);
-             }
-         } catch (SQLException e) {
-             String error = "Error getting combat history";
-             MyException er = new MyException(error);
-             throw er;
-         }
-         occ.closeConnection(stmt, con);
-
-		return trainers;
-    	
-    }
 
 }

@@ -20,11 +20,15 @@ import javax.swing.SwingConstants;
 
 import com.toedter.calendar.JDateChooser;
 
+import classes.Combat;
 import classes.MyException;
 import classes.Pokemon;
 import classes.Trainer;
 import factories.AccountManageableFactory;
 import interfaces.AccountManageable;
+import javax.swing.JTable;
+import javax.swing.table.DefaultTableModel;
+import javax.swing.JScrollPane;
 
 public class ProfessorView extends JDialog implements ActionListener {
 	/**
@@ -46,7 +50,7 @@ public class ProfessorView extends JDialog implements ActionListener {
 	private JButton informationButton;
 	private JButton checkButton;
 	private JButton deleteButton;
-	private JComboBox<String> Trainers;
+	private JComboBox<String> trainers;
 	private JComboBox<Pokemon> initialComboBox;
 	private JComboBox<String> ascentTrainer;
 	private JComboBox<String> waterComboBox;
@@ -59,6 +63,12 @@ public class ProfessorView extends JDialog implements ActionListener {
 	private JPanel paneDelete;
 	private JPanel panelModify;
 	private JPanel panelAscend;
+	private JTable table;
+	private JTable table2;
+	private DefaultTableModel tableModel;
+	private DefaultTableModel tableModel2;
+	private JScrollPane scrollPane2;
+	private JScrollPane scrollPane;
 
 	public ProfessorView(LoginView loginView, boolean b) {
 
@@ -87,39 +97,39 @@ public class ProfessorView extends JDialog implements ActionListener {
 		panelBattle.setLayout(null);
 
 		// Creamos una ComboBox y la agregamos al panel, con tres elementos
-		Trainers = new JComboBox<String>();
-		Trainers.setMaximumRowCount(20);
-		Trainers.setForeground(new Color(0, 0, 0));
-		Trainers.setBackground(SystemColor.control);
-		Trainers.addItem("");
+		trainers = new JComboBox<String>();
+		trainers.setMaximumRowCount(20);
+		trainers.setForeground(new Color(0, 0, 0));
+		trainers.setBackground(SystemColor.control);
+		trainers.addItem("");
 
 		try {
 			for (Trainer element : manageable.getTrainers()) {
-				Trainers.addItem(element.getName());
+				trainers.addItem(element.getName());
 			}
 		} catch (MyException e1) {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
 		}
-		Trainers.setBounds(175, 61, 237, 53);
-		panelBattle.add(Trainers);
-		Trainers.addActionListener(this);
+		trainers.setBounds(175, 61, 237, 53);
+		panelBattle.add(trainers);
+		trainers.addActionListener(this);
 
 		// Creamos un botón llamado "TEAM" y lo agregamos al panel
 		teamButton = new JButton("TEAM");
-		teamButton.setBounds(23, 204, 142, 49);
+		teamButton.setBounds(10, 204, 142, 49);
 		panelBattle.add(teamButton);
 		teamButton.addActionListener(this);
 
 		// Creamos un botón llamado "INFORMATION" y lo agregamos al panel
 		informationButton = new JButton("INFORMATION");
-		informationButton.setBounds(23, 138, 142, 55);
+		informationButton.setBounds(10, 138, 142, 55);
 		panelBattle.add(informationButton);
 		informationButton.addActionListener(this);
 
 		// Creamos un botón llamado "COMBAT HISTORY" y lo agregamos al panel
 		combatHistoryButton = new JButton("COMBAT HISTORY");
-		combatHistoryButton.setBounds(23, 264, 142, 49);
+		combatHistoryButton.setBounds(10, 264, 142, 49);
 		panelBattle.add(combatHistoryButton);
 		combatHistoryButton.addActionListener(this);
 
@@ -133,7 +143,7 @@ public class ProfessorView extends JDialog implements ActionListener {
 		resulttextField = new JTextArea(2, 30);
 		resulttextField.setBackground(new Color(200, 243, 249));
 		resulttextField.setEditable(false);
-		resulttextField.setBounds(22, 324, 448, 212);
+		resulttextField.setBounds(162, 161, 260, 82);
 		panelBattle.add(resulttextField);
 
 		// Deshabilitamos los botones por defecto
@@ -151,6 +161,37 @@ public class ProfessorView extends JDialog implements ActionListener {
 		welcomeProfessorLabel.setFont(new Font("Yu Gothic", Font.BOLD | Font.ITALIC, 17));
 		welcomeProfessorLabel.setBounds(24, 30, 248, 28);
 		panelBattle.add(welcomeProfessorLabel);
+
+		scrollPane = new JScrollPane();
+		scrollPane.setBounds(10, 350, 432, 118);
+		panelBattle.add(scrollPane);
+
+		tableModel = new DefaultTableModel();
+		String[] tableHeaders = { "PokedexID", "Region", "Name", "Nickname", "type1", "type2", "level" };
+		tableModel.setColumnIdentifiers(tableHeaders);
+		table = new JTable(tableModel);
+		table.setEnabled(false);
+
+		table.setBackground(new Color(239, 205, 124));
+		scrollPane.setViewportView(table);
+		table.setVisible(false);
+		scrollPane.setVisible(false);
+
+		
+		scrollPane2 = new JScrollPane();
+		scrollPane2.setBounds(10, 350, 432, 118);
+		panelBattle.add(scrollPane2);
+
+		tableModel2 = new DefaultTableModel();
+		String[] tableHeaders2 = { "TrainerID1","TrainerID2","WinnerID" };
+		tableModel2.setColumnIdentifiers(tableHeaders2);
+		table2 = new JTable(tableModel2);
+		table2.setEnabled(false);
+
+		table2.setBackground(new Color(239, 205, 124));
+		scrollPane2.setViewportView(table2);
+		table2.setVisible(false);
+		scrollPane2.setVisible(false);
 
 		// Pestaña2
 
@@ -180,7 +221,6 @@ public class ProfessorView extends JDialog implements ActionListener {
 		checkButton.setBounds(37, 136, 173, 47);
 		paneDelete.add(checkButton);
 		checkButton.addActionListener(this);
-		
 
 		deleteButton = new JButton("DELETE");
 		deleteButton.addActionListener(this);
@@ -444,13 +484,13 @@ public class ProfessorView extends JDialog implements ActionListener {
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
-		
-		if (e.getSource().equals(Trainers)) {
+
+		if (e.getSource().equals(trainers)) {
 			resulttextField.setText("");
 			informationButton.setEnabled(true);
 			teamButton.setEnabled(true);
 			combatHistoryButton.setEnabled(true);
-			String selectedTrainer = (String) Trainers.getSelectedItem();
+			String selectedTrainer = (String) trainers.getSelectedItem();
 			try {
 				for (Trainer element : manageable.getTrainers()) {
 					if (element.getName().equals(selectedTrainer)) {
@@ -465,27 +505,77 @@ public class ProfessorView extends JDialog implements ActionListener {
 
 		}
 		if (e.getSource().equals(informationButton)) {
-			if (t.getName().equals(Trainers.getSelectedItem())) {
+			if (t.getName().equals(trainers.getSelectedItem())) {
 				resulttextField.setText(null);
 				resulttextField.setText(t.getTrainerInfo());
 
 			}
 		}
 		if (e.getSource().equals(combatHistoryButton)) {
-			if (t.getName().equals(Trainers.getSelectedItem())) {
-				resulttextField.setText(null);
-				resulttextField.setText(t.getCombats());
+			if (t.getName().equals(trainers.getSelectedItem())) {
+				scrollPane.setVisible(false);
+				scrollPane2.setVisible(true);
+				table.setVisible(false);
+				table2.setVisible(true);
+				tableModel2.setRowCount(0);
+				try {
+					for (Trainer element : manageable.getTrainers()) {
+						if (element.getName().equals(trainers)) {
+							t = element;
+
+						}
+					}
+				} catch (MyException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+
+				for (Combat element : t.getCombatHistory()) {
+					Object[] row = new Object[3];
+					row[0] = element.getTrainer1();
+					row[1] = element.getTrainer2();
+					row[2] = element.getWinnerTrainerID();
+
+					tableModel2.addRow(row);
+				}
 
 			}
 		}
 		if (e.getSource().equals(teamButton)) {
-			if (t.getName().equals(Trainers.getSelectedItem())) {
-				resulttextField.setText(null);
-				resulttextField.setText(t.getTeamMembers());
+			if (t.getName().equals(trainers.getSelectedItem())) {
+				scrollPane.setVisible(true);
+				scrollPane2.setVisible(false);
+				table.setVisible(true);
+				table2.setVisible(false);
+				tableModel.setRowCount(0);
+				try {
+					for (Trainer element : manageable.getTrainers()) {
+						if (element.getName().equals(trainers)) {
+							t = element;
 
+						}
+					}
+				} catch (MyException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+
+				for (Pokemon element : t.getTeam()) {
+					Object[] row = new Object[7];
+					row[0] = element.getPokedexID();
+					row[1] = element.getName();
+					row[2] = element.getNickname();
+					row[3] = element.getRegion();
+					row[4] = element.getType1();
+					row[5] = element.getType2();
+					row[6] = element.getLevel();
+					tableModel.addRow(row);
+				}
+table.setVisible(true);
 			}
 		}
-		if(e.getSource().equals(trainerDelete)) {
+		if (e.getSource().equals(trainerDelete)) {
+			
 			deleteButton.setEnabled(true);
 			checkButton.setEnabled(true);
 			String selectedTrainer = (String) trainerDelete.getSelectedItem();
@@ -508,25 +598,32 @@ public class ProfessorView extends JDialog implements ActionListener {
 
 			}
 		}
-		if(e.getSource().equals(deleteButton)) {
-			if(JOptionPane.showOptionDialog(panelBattle, "Are you suere you want to delete this trainner?",
-					"Confirm delete", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE, null,
-					new Object[] { "YES", "NO" }, JOptionPane.YES_OPTION)==1) {
+		if (e.getSource().equals(deleteButton)) {
+			if (JOptionPane.showOptionDialog(panelBattle, "Do you want to delete this trainner?", "Confirm delete",
+					JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE, null, new Object[] { "YES", "NO" },
+					JOptionPane.YES_OPTION) == 0) {
 				int id;
-				id=t.getTrainerID();
+				id = t.getTrainerID();
 				try {
 					manageable.deleteTrainer(id);
+					JOptionPane.showMessageDialog(null, "The trainer has been sucssesfully deleted");
+					String elementToRemove = t.getName();
+					for (int i = 0; i < trainerDelete.getItemCount(); i++) {
+						String element = trainerDelete.getItemAt(i);
+						if (element.equals(elementToRemove)) {
+							trainerDelete.removeItemAt(i);
+							trainers.removeItemAt(i);// remove element from model
+							break;
+						}
+					}
 				} catch (MyException e1) {
 					// TODO Auto-generated catch block
 					e1.printStackTrace();
 				}
-				
-		}
-		
-			
-			
-		}
-		
-		}
-	}
 
+			}
+
+		}
+
+	}
+}

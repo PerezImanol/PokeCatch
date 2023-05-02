@@ -92,7 +92,7 @@ public class AccountManageableDBimplementation implements AccountManageable {
 				t.setPokeballs(rst.getInt("pokeball"));
 
 				try {
-					query = "Select pokedex_id, region, pokemon_name, nickname, type1, type2, pokemon_lvl, location from Pokemon_static join Pokemon on pokemon_id=pokedex_id where trainer_id=?";
+					query = "Select pokedex_id, region, pokemon_name, nickname, type1, type2, pokemon_lvl, location from Pokemon_static join Pokemon on pokemon_id=pokedex_id where trainer_id=? and location=true";
 					stmt = con.prepareStatement(query);
 					stmt.setInt(1, id);
 					rsp = stmt.executeQuery();

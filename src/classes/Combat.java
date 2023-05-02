@@ -1,5 +1,14 @@
 package classes;
-
+/**
+ * This is the Class combat where the object combat's structure is defined.
+ * Here we can find 3 different attributes:
+ * trainer1 the trainerID of the trainer that asked for the match
+ * trainer2 the trainerIDof the other trainner
+ * winner the trainerID of the one that won
+ * @author DaniD
+ * @version 2
+ *
+ */
 public class Combat {
 
     private int trainer1;
