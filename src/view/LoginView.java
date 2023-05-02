@@ -46,7 +46,9 @@ public class LoginView extends JFrame implements ActionListener, FocusListener, 
 	 * Because of that this View is a JFrame and the program always has to start on this page*/
 	public LoginView() {
 
+		
 		setTitle("Log in to PokeCatch");
+		//This sets the little icon of the view
 		setIconImage(Toolkit.getDefaultToolkit().getImage(LoginView.class.getResource("/resources/descarga.png")));
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 854, 607);
@@ -57,6 +59,7 @@ public class LoginView extends JFrame implements ActionListener, FocusListener, 
 		setContentPane(contentPane);
 		contentPane.setLayout(null);
 
+		//This label sets the main image of the view
 		JLabel initials = new JLabel("");
 		initials.setIcon(new ImageIcon(LoginView.class.getResource("/resources/Captura.PNG")));
 		initials.setBounds(339, 164, 501, 371);
@@ -73,6 +76,7 @@ public class LoginView extends JFrame implements ActionListener, FocusListener, 
 		welcomeMenssage.setBounds(40, 139, 290, 115);
 		contentPane.add(welcomeMenssage);
 
+		//Here we have the two field where the user will write
 		usernameField = new JTextField();
 		usernameField.setForeground(new Color(0, 0, 0));
 		usernameField.setBackground(new Color(196, 255, 255));
@@ -81,7 +85,16 @@ public class LoginView extends JFrame implements ActionListener, FocusListener, 
 		usernameField.setColumns(10);
 		usernameField.addFocusListener(this);
 		usernameField.addKeyListener(this);
+		
+		passwordField = new JPasswordField();
+		passwordField.setBackground(new Color(196, 255, 255));
+		passwordField.setBounds(60, 347, 211, 28);
+		contentPane.add(passwordField);
+		passwordField.addFocusListener(this);
+		passwordField.addKeyListener(this);
 
+		
+		//This are the two buttons one that continues and the other that disposes the view
 		continueButton = new JButton("CONTINUE");
 		continueButton.setFont(new Font("Tahoma", Font.BOLD, 11));
 		continueButton.setBounds(52, 432, 112, 48);
@@ -89,6 +102,7 @@ public class LoginView extends JFrame implements ActionListener, FocusListener, 
 		continueButton.setEnabled(false);
 		continueButton.addActionListener(this);
 
+		
 		goBackButton = new JButton("GO BACK");
 		goBackButton.setBounds(174, 432, 120, 48);
 		contentPane.add(goBackButton);
@@ -99,18 +113,15 @@ public class LoginView extends JFrame implements ActionListener, FocusListener, 
 		usernameLabel.setBounds(65, 235, 265, 28);
 		contentPane.add(usernameLabel);
 
-		passwordField = new JPasswordField();
-		passwordField.setBackground(new Color(196, 255, 255));
-		passwordField.setBounds(60, 347, 211, 28);
-		contentPane.add(passwordField);
-		passwordField.addFocusListener(this);
-		passwordField.addKeyListener(this);
+		
 
 		JLabel passwordLabel = new JLabel("PASSWORD");
 		passwordLabel.setFont(new Font("Yu Gothic Light", Font.BOLD, 17));
 		passwordLabel.setBounds(65, 308, 265, 28);
 		contentPane.add(passwordLabel);
 
+		
+		//This text is hidden but it will appear if the parameters added are not correct
 		errorMessage = new JLabel("Username or password do not belong to a trainer");
 		errorMessage.setForeground(new Color(255, 0, 0));
 		errorMessage.setFont(new Font("Tahoma", Font.PLAIN, 13));
@@ -132,6 +143,7 @@ public class LoginView extends JFrame implements ActionListener, FocusListener, 
 		Trainer t=null;
 		
 		if (e.getSource().equals(goBackButton)) {
+			//Confirm option when the GO BACK button is pressed
 			if (JOptionPane.showConfirmDialog(null, "Are you sure?", "WARNING",
 					JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION) {
 				this.dispose();
@@ -141,6 +153,8 @@ public class LoginView extends JFrame implements ActionListener, FocusListener, 
 
 		}
 		if (e.getSource().equals(continueButton)) {
+			/*When the continue button is pressed it check if the 
+			 * Object is a trainer of a professor and shows a different view*/ 
 			String password = new String(passwordField.getPassword());
 			try {
 				t=logeable.getPerson(usernameField.getText(), password);
@@ -178,7 +192,7 @@ public class LoginView extends JFrame implements ActionListener, FocusListener, 
 
 	@Override
 	public void keyTyped(KeyEvent e) {
-		
+		//The content of a password field must me got like that cause getText() is deprecated
 		String password = new String(passwordField.getPassword());
 		if(e.getSource().equals(passwordField) && !usernameField.getText().isBlank() || 
 				e.getSource().equals(usernameField) && !password.equals("")) {
@@ -189,6 +203,7 @@ public class LoginView extends JFrame implements ActionListener, FocusListener, 
 
 	@Override
 	public void keyPressed(KeyEvent e) {
+		//Here me manage that the user is able to move over the view a little bit using the enter button
 		if (e.getSource().equals(usernameField)) {
 			if (e.getKeyCode() == KeyEvent.VK_ENTER) {
 				passwordField.requestFocus();
