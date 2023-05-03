@@ -623,6 +623,11 @@ table.setVisible(true);
 						if (element.equals(elementToRemove)) {
 							trainerDelete.removeItemAt(i);
 							trainers.removeItemAt(i);// remove element from model
+							trainers.setSelectedIndex(-1);
+							trainerDelete.setSelectedIndex(-1);
+							deleteTrainerTextArea.setText("");
+							resulttextField.setText("");
+							
 							break;
 						}
 					}
