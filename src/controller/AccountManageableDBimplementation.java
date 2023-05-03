@@ -35,7 +35,14 @@ public class AccountManageableDBimplementation implements AccountManageable {
 			stmt.setString(4, trainer.getOriginCity());
 			stmt.setInt(5, trainer.getBadges());
 			stmt.setInt(6, trainer.getPokeballs());
-			stmt.executeUpdate();
+			int id = stmt.executeUpdate();
+			if (id == 0) {
+				MyException er = new MyException("Nothing added");
+				throw er;
+			} else if (id == 1) {
+				MyException success = new MyException("Trainer added successfully");
+				throw success;
+			} 
 		} catch (SQLException e) {
 			String error = "Error inserting data to the database";
 			MyException er = new MyException(error);
@@ -176,7 +183,7 @@ public class AccountManageableDBimplementation implements AccountManageable {
 
 	@Override
 	public void modifyTrainer(Trainer trainer) throws MyException {
-		query = "UPDATE Trainer SET trainer_name = ?, birthdate = ?, gender = ?, city = ?, badges = ?, pokeballs = ? WHERE trainer_id = ?";
+		query = "update Trainer set trainer_name = ?, birthdate = ?, gender = ?, city = ?, badges = ?, pokeball = ? WHERE trainer_id = ?";
 
 		con = occ.openConnection();
 
@@ -189,15 +196,24 @@ public class AccountManageableDBimplementation implements AccountManageable {
 			stmt.setInt(5, trainer.getBadges());
 			stmt.setInt(6, trainer.getPokeballs());
 			stmt.setInt(7, trainer.getTrainerID());
-			stmt.executeUpdate();
-		} catch (SQLException e) {
 
-			String error = "Error updating trainer";
+			int id = stmt.executeUpdate();
+			if (id == 0) {
+				MyException er = new MyException("Nothing updated");
+				throw er;
+			} else if (id == 1) {
+				MyException success = new MyException("Trainer updated successfully");
+				throw success;
+			} 
+		}catch (SQLException e) {
+
+			String error = "Error modifying trainer's data";
 			MyException er = new MyException(error);
 			throw er;
 		}
 
 		occ.closeConnection(stmt, con);
+	
 	}
 
 	@Override

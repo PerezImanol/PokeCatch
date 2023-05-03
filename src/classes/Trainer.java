@@ -70,6 +70,11 @@ public class Trainer {
         this.pokeballs = pokeballs;
     }
 
+    public void setInitial(Pokemon p){
+        team = new LinkedHashSet<>();
+        team.add(p);
+    }
+
 	public String getTrainerInfo() {
 		String trainerInfo="---------------------------------Trainer Info--------------------------------------\n"
 				+ "This trainers ID is " + trainerID + " and his/her name is " + name + " \n"

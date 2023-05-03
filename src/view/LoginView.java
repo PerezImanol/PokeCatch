@@ -71,7 +71,8 @@ public class LoginView extends JFrame implements ActionListener, FocusListener, 
 		setBounds(100, 100, 854, 607);
 		contentPane = new JPanel();
 		contentPane.setBackground(new Color(255, 255, 255));
-		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
+		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));	
+
 
 		setContentPane(contentPane);
 		contentPane.setLayout(null);
@@ -136,20 +137,20 @@ public class LoginView extends JFrame implements ActionListener, FocusListener, 
 		errorMessage.setBounds(40, 386, 290, 35);
 		contentPane.add(errorMessage);
 		errorMessage.setVisible(false);
-		
+
 		JPanel panel = new JPanel();
 		panel.setBorder(new LineBorder(SystemColor.activeCaption));
 		panel.setForeground(new Color(0, 0, 0));
 		panel.setBackground(new Color(255, 255, 255));
 		panel.setBounds(30, 168, 300, 344);
 		contentPane.add(panel);
-		
+
 	}
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
-		Trainer t=null;
-		
+		Trainer t = null;
+
 		if (e.getSource().equals(goBackButton)) {
 			if (JOptionPane.showConfirmDialog(null, "Are you sure?", "WARNING",
 					JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION) {
@@ -162,14 +163,14 @@ public class LoginView extends JFrame implements ActionListener, FocusListener, 
 		if (e.getSource().equals(continueButton)) {
 			String password = new String(passwordField.getPassword());
 			try {
-				t=logeable.getPerson(usernameField.getText(), password);
-				if(t instanceof Professor ) {
-				ProfessorView vProfessor = new ProfessorView(this, true);
-				vProfessor.setVisible(true);
-				} else if (t instanceof Trainer ) {
-				System.out.println(t);
-				}
-				else if(t==null){
+				t = logeable.getPerson(usernameField.getText(), password);
+				if (t instanceof Professor) {
+					Professor p = (Professor) t;
+					ProfessorView vProfessor = new ProfessorView(this, true, p);
+					vProfessor.setVisible(true);
+				} else if (t instanceof Trainer) {
+					System.out.println(t);
+				} else if (t == null) {
 					errorMessage.setVisible(true);
 					usernameField.setText("");
 					passwordField.setText("");
@@ -184,21 +185,21 @@ public class LoginView extends JFrame implements ActionListener, FocusListener, 
 
 	@Override
 	public void focusGained(FocusEvent e) {
-		if(e.getSource().equals(usernameField)){
+		if (e.getSource().equals(usernameField)) {
 			passwordField.setEnabled(true);
 		}
 	}
 
 	public void focusLost(FocusEvent e) {
-	
+
 	}
 
 	@Override
 	public void keyTyped(KeyEvent e) {
-		
+
 		String password = new String(passwordField.getPassword());
-		if(e.getSource().equals(passwordField) && !usernameField.getText().isBlank() || 
-				e.getSource().equals(usernameField) && !password.equals("")) {
+		if (e.getSource().equals(passwordField) && !usernameField.getText().isBlank()
+				|| e.getSource().equals(usernameField) && !password.equals("")) {
 			continueButton.setEnabled(true);
 		}
 
@@ -211,16 +212,16 @@ public class LoginView extends JFrame implements ActionListener, FocusListener, 
 				passwordField.requestFocus();
 			}
 		}
-				if (e.getSource().equals(passwordField)) {
-					if (e.getKeyCode() == KeyEvent.VK_ENTER) {
-						continueButton.requestFocus();
-					}
-				}
+		if (e.getSource().equals(passwordField)) {
+			if (e.getKeyCode() == KeyEvent.VK_ENTER) {
+				continueButton.requestFocus();
 			}
+		}
+	}
 
 	@Override
 	public void keyReleased(KeyEvent e) {
-		
+
 	}
-	
+
 }

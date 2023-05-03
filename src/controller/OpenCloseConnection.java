@@ -16,7 +16,7 @@ public class OpenCloseConnection {
 
     // CONSTRUCTOR
     public OpenCloseConnection() {
-        configFile = ResourceBundle.getBundle("resources.config");
+        configFile = ResourceBundle.getBundle("resources.Config");
         url = configFile.getString("URL");
         user = configFile.getString("USER");
         pass = configFile.getString("PASSWORD");

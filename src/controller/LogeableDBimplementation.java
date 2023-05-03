@@ -259,32 +259,32 @@ public class LogeableDBimplementation implements Logeable {
 
 		return p;
 	}
-	
+
 	public LinkedHashSet<Trainer> getTrainers() throws MyException {
-    	LinkedHashSet<Trainer> trainers = new LinkedHashSet<>();
-    	Trainer t= new Trainer();
-    	final String queryAllTrainers = "select * from Trainer where trainer_id not in(select trainer_id from Trainer join Professor on professor_id =trainer_id )";
-    	 ResultSet rs;
+		LinkedHashSet<Trainer> trainers = new LinkedHashSet<>();
+		Trainer t = new Trainer();
+		final String queryAllTrainers = "select * from Trainer where trainer_id not in(select trainer_id from Trainer join Professor on professor_id =trainer_id )";
+		ResultSet rs;
 
-         con = occ.openConnection();
-         try {
-             stmt = con.prepareStatement(queryAllTrainers);
-             rs = stmt.executeQuery();
+		con = occ.openConnection();
+		try {
+			stmt = con.prepareStatement(queryAllTrainers);
+			rs = stmt.executeQuery();
 
-             while (rs.next()) {
-            	 
-                 t=getTrainer(rs.getInt("trainer_id"));
-                 trainers.add(t);
-             }
-         } catch (SQLException e) {
-             String error = "Error getting combat history";
-             MyException er = new MyException(error);
-             throw er;
-         }
-         occ.closeConnection(stmt, con);
+			while (rs.next()) {
+
+				t = getTrainer(rs.getInt("trainer_id"));
+				trainers.add(t);
+			}
+		} catch (SQLException e) {
+			String error = "Error getting combat history";
+			MyException er = new MyException(error);
+			throw er;
+		}
+		occ.closeConnection(stmt, con);
 
 		return trainers;
-    	
-    }
+
+	}
 
 }

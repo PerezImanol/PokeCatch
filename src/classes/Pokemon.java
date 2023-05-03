@@ -59,6 +59,7 @@ public class Pokemon {
     public void setTeam(boolean team) {
         this.team = team;
     }
+
     
 	@Override
 	public String toString() {

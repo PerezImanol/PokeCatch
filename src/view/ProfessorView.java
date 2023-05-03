@@ -6,6 +6,12 @@ import java.awt.SystemColor;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.LinkedHashSet;
+import java.util.Set;
+import java.util.function.BiConsumer;
+
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
@@ -22,6 +28,7 @@ import com.toedter.calendar.JDateChooser;
 
 import classes.MyException;
 import classes.Pokemon;
+import classes.Professor;
 import classes.Trainer;
 import factories.AccountManageableFactory;
 import interfaces.AccountManageable;
@@ -31,14 +38,15 @@ public class ProfessorView extends JDialog implements ActionListener {
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-	private JTextField txtNameAndSurname;
-	private JTextField txtGender;
-	private JTextField txtOriginCity;
-	private JTextField txtBadges;
-	private JTextField txtPokeballs;
-	private JTextField txtAddPokeballs;
+	private JTextField addCheckField;
+	private JTextField addGenderField;
+	private JTextField addCityField;
+	private JTextField addBadgesField;
+	private JTextField addPokeballsField;
+	private JTextField pokeballAdderField;
 	private JTextField txtRegion;
 	private JTextField txttrainnernameHasBeen;
+	private JTextArea infotoaddField;
 	private JTextArea resulttextField;
 	private JTextArea deleteTrainerTextArea;
 	private JButton teamButton;
@@ -46,8 +54,13 @@ public class ProfessorView extends JDialog implements ActionListener {
 	private JButton informationButton;
 	private JButton checkButton;
 	private JButton deleteButton;
+	private JButton addCheckBtn;
+	private JButton pokeballAdderBtn;
+	private JButton addTrainerButton;
+	private JButton addValidateBtn;
+	private JDateChooser addCalender;
 	private JComboBox<String> Trainers;
-	private JComboBox<Pokemon> initialComboBox;
+	private JComboBox<String> addInitalsComboBox;
 	private JComboBox<String> ascentTrainer;
 	private JComboBox<String> waterComboBox;
 	private JComboBox<String> fireComboBox;
@@ -59,10 +72,12 @@ public class ProfessorView extends JDialog implements ActionListener {
 	private JPanel paneDelete;
 	private JPanel panelModify;
 	private JPanel panelAscend;
+	private Professor prof;
+	private LinkedHashSet<Trainer> trainers;
 
-	public ProfessorView(LoginView loginView, boolean b) {
-
+	public ProfessorView(LoginView loginView, boolean b, Professor loggedProf) {
 		super(loginView, b);
+		prof = loggedProf;
 		setIconImage(Toolkit.getDefaultToolkit().getImage(ProfessorView.class.getResource("/resources/descarga.png")));
 		setTitle("Professor View");
 		setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
@@ -86,23 +101,7 @@ public class ProfessorView extends JDialog implements ActionListener {
 		panelBattle.setLayout(null);
 
 		// Creamos una ComboBox y la agregamos al panel, con tres elementos
-		Trainers = new JComboBox<String>();
-		Trainers.setMaximumRowCount(20);
-		Trainers.setForeground(new Color(0, 0, 0));
-		Trainers.setBackground(SystemColor.control);
-		Trainers.addItem("");
 
-		try {
-			for (Trainer element : manageable.getTrainers()) {
-				Trainers.addItem(element.getName());
-			}
-		} catch (MyException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
-		}
-		Trainers.setBounds(175, 61, 237, 53);
-		panelBattle.add(Trainers);
-		Trainers.addActionListener(this);
 
 		// Creamos un botón llamado "TEAM" y lo agregamos al panel
 		teamButton = new JButton("TEAM");
@@ -161,25 +160,11 @@ public class ProfessorView extends JDialog implements ActionListener {
 		lblNewLabel_1.setBounds(27, 26, 337, 17);
 		paneDelete.add(lblNewLabel_1);
 
-		trainerDelete = new JComboBox<String>();
-		trainerDelete.addItem("");
-		try {
-			for (Trainer element : manageable.getTrainers()) {
-				trainerDelete.addItem(element.getName());
-			}
-		} catch (MyException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
-		}
-		trainerDelete.setBounds(37, 63, 222, 47);
-		paneDelete.add(trainerDelete);
-		trainerDelete.addActionListener(this);
 
 		checkButton = new JButton("CHECK");
 		checkButton.setBounds(37, 136, 173, 47);
 		paneDelete.add(checkButton);
 		checkButton.addActionListener(this);
-		
 
 		deleteButton = new JButton("DELETE");
 		deleteButton.addActionListener(this);
@@ -205,140 +190,122 @@ public class ProfessorView extends JDialog implements ActionListener {
 		pestanas.addTab("ADD/MODIFY", panelModify);
 		panelModify.setLayout(null);
 
-		JLabel lblNewLabel_3_1 = new JLabel("SET INITIAL");
-		lblNewLabel_3_1.setHorizontalAlignment(SwingConstants.LEFT);
-		lblNewLabel_3_1.setBounds(151, 263, 86, 14);
-		panelModify.add(lblNewLabel_3_1);
+		JLabel intitalsLbl = new JLabel("SET INITIAL");
+		intitalsLbl.setHorizontalAlignment(SwingConstants.LEFT);
+		intitalsLbl.setBounds(151, 263, 86, 14);
+		panelModify.add(intitalsLbl);
 
-		JButton btnNewButton_3 = new JButton("CHECK");
-		btnNewButton_3.setBounds(293, 54, 89, 23);
-		panelModify.add(btnNewButton_3);
+		addCheckBtn = new JButton("CHECK");
+		addCheckBtn.setBounds(293, 54, 89, 23);
+		panelModify.add(addCheckBtn);
 
-		txtNameAndSurname = new JTextField();
-		txtNameAndSurname.setHorizontalAlignment(SwingConstants.CENTER);
-		txtNameAndSurname.setText("NAME AND SURNAME");
-		txtNameAndSurname.setBounds(40, 55, 193, 20);
-		panelModify.add(txtNameAndSurname);
-		txtNameAndSurname.setColumns(10);
+		addCheckField = new JTextField();
+		addCheckField.setHorizontalAlignment(SwingConstants.CENTER);
+		addCheckField.setBounds(40, 55, 193, 20);
+		panelModify.add(addCheckField);
+		addCheckField.setColumns(10);
 
-		JDateChooser dateChooser = new JDateChooser();
-		dateChooser.setDateFormatString("yyyy-MM-dd");
-		dateChooser.setBounds(40, 137, 101, 20);
-		panelModify.add(dateChooser);
+		addCalender = new JDateChooser();
+		addCalender.setDateFormatString("yyyy-MM-dd");
+		addCalender.setBounds(40, 137, 101, 20);
+		panelModify.add(addCalender);
 
-		txtGender = new JTextField();
-		txtGender.setHorizontalAlignment(SwingConstants.CENTER);
-		txtGender.setBounds(40, 166, 101, 20);
-		panelModify.add(txtGender);
-		txtGender.setColumns(10);
+		addGenderField = new JTextField();
+		addGenderField.setHorizontalAlignment(SwingConstants.CENTER);
+		addGenderField.setBounds(40, 166, 101, 20);
+		panelModify.add(addGenderField);
+		addGenderField.setColumns(10);
 
-		txtOriginCity = new JTextField();
-		txtOriginCity.setHorizontalAlignment(SwingConstants.CENTER);
-		txtOriginCity.setColumns(10);
-		txtOriginCity.setBounds(40, 197, 101, 20);
-		panelModify.add(txtOriginCity);
+		addCityField = new JTextField();
+		addCityField.setHorizontalAlignment(SwingConstants.CENTER);
+		addCityField.setColumns(10);
+		addCityField.setBounds(40, 197, 101, 20);
+		panelModify.add(addCityField);
 
-		txtBadges = new JTextField();
-		txtBadges.setHorizontalAlignment(SwingConstants.CENTER);
-		txtBadges.setColumns(10);
-		txtBadges.setBounds(40, 228, 101, 20);
-		panelModify.add(txtBadges);
+		addBadgesField = new JTextField();
+		addBadgesField.setHorizontalAlignment(SwingConstants.CENTER);
+		addBadgesField.setColumns(10);
+		addBadgesField.setBounds(40, 228, 101, 20);
+		panelModify.add(addBadgesField);
 
-		initialComboBox = new JComboBox<Pokemon>();
-		initialComboBox.setBounds(40, 259, 101, 22);
-		panelModify.add(initialComboBox);
+		addInitalsComboBox = new JComboBox<String>();
+		addInitalsComboBox.setBounds(40, 259, 101, 22);
+		panelModify.add(addInitalsComboBox);
 
-		txtPokeballs = new JTextField();
-		txtPokeballs.setHorizontalAlignment(SwingConstants.CENTER);
-		txtPokeballs.setColumns(10);
-		txtPokeballs.setBounds(40, 290, 101, 20);
-		panelModify.add(txtPokeballs);
+		addPokeballsField = new JTextField();
+		addPokeballsField.setEditable(false);
+		addPokeballsField.setHorizontalAlignment(SwingConstants.CENTER);
+		addPokeballsField.setColumns(10);
+		addPokeballsField.setBounds(40, 290, 101, 20);
+		panelModify.add(addPokeballsField);
 
-		txtAddPokeballs = new JTextField();
-		txtAddPokeballs.setHorizontalAlignment(SwingConstants.CENTER);
-		txtAddPokeballs.setBounds(405, 290, 101, 20);
-		panelModify.add(txtAddPokeballs);
-		txtAddPokeballs.setColumns(10);
+		pokeballAdderField = new JTextField();
+		pokeballAdderField.setHorizontalAlignment(SwingConstants.CENTER);
+		pokeballAdderField.setBounds(255, 290, 52, 20);
+		panelModify.add(pokeballAdderField);
+		pokeballAdderField.setColumns(10);
 
-		JButton btnNewButton_4 = new JButton("ADD");
-		btnNewButton_4.setBounds(516, 288, 74, 23);
-		panelModify.add(btnNewButton_4);
+		pokeballAdderBtn = new JButton("ADD");
+		pokeballAdderBtn.setBounds(336, 288, 74, 23);
+		panelModify.add(pokeballAdderBtn);
 
-		btnNewButton_4.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				try {
-					// Obtener valores de txtPokeballs y txtAddPokeballs
-					int pokeballs = Integer.parseInt(txtPokeballs.getText());
-					int addPokeballs = Integer.parseInt(txtAddPokeballs.getText());
+		pokeballAdderBtn.addActionListener(this);
 
-					// Sumar valores y establecer resultado en txtPokeballs
-					txtPokeballs.setText(Integer.toString(pokeballs + addPokeballs));
-				} catch (NumberFormatException ex) {
-					// Manejar error si los valores no son números enteros
-					System.out.println("Error: los valores ingresados no son números enteros");
-				}
-			}
-		});
+		addValidateBtn = new JButton("VALIDATE");
+		addValidateBtn.addActionListener(this);
+		addValidateBtn.setBounds(151, 362, 86, 23);
+		panelModify.add(addValidateBtn);
 
-		JButton btnNewButton_4_1 = new JButton("");
-		btnNewButton_4_1.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-			}
-		});
-		btnNewButton_4_1.setBounds(261, 448, 74, 23);
-		panelModify.add(btnNewButton_4_1);
+		JLabel ageLbl = new JLabel("AGE");
+		ageLbl.setHorizontalAlignment(SwingConstants.LEFT);
+		ageLbl.setBounds(151, 137, 86, 14);
+		panelModify.add(ageLbl);
 
-		JLabel lblNewLabel_3 = new JLabel("AGE");
-		lblNewLabel_3.setHorizontalAlignment(SwingConstants.LEFT);
-		lblNewLabel_3.setBounds(151, 137, 86, 14);
-		panelModify.add(lblNewLabel_3);
+		JLabel genderLbl = new JLabel("GENDER");
+		genderLbl.setHorizontalAlignment(SwingConstants.LEFT);
+		genderLbl.setBounds(151, 168, 86, 14);
+		panelModify.add(genderLbl);
 
-		JLabel lblNewLabel_3_2 = new JLabel("GENDER");
-		lblNewLabel_3_2.setHorizontalAlignment(SwingConstants.LEFT);
-		lblNewLabel_3_2.setBounds(151, 168, 86, 14);
-		panelModify.add(lblNewLabel_3_2);
+		JLabel cityLbl = new JLabel("ORIGIN CITY");
+		cityLbl.setHorizontalAlignment(SwingConstants.LEFT);
+		cityLbl.setBounds(151, 199, 86, 14);
+		panelModify.add(cityLbl);
 
-		JLabel lblNewLabel_3_2_1 = new JLabel("ORIGIN CITY");
-		lblNewLabel_3_2_1.setHorizontalAlignment(SwingConstants.LEFT);
-		lblNewLabel_3_2_1.setBounds(151, 199, 86, 14);
-		panelModify.add(lblNewLabel_3_2_1);
+		JLabel badgesLbl = new JLabel("BADGES");
+		badgesLbl.setHorizontalAlignment(SwingConstants.LEFT);
+		badgesLbl.setBounds(151, 230, 86, 14);
+		panelModify.add(badgesLbl);
 
-		JLabel lblNewLabel_3_2_2 = new JLabel("BADGES");
-		lblNewLabel_3_2_2.setHorizontalAlignment(SwingConstants.LEFT);
-		lblNewLabel_3_2_2.setBounds(151, 230, 86, 14);
-		panelModify.add(lblNewLabel_3_2_2);
-
-		JLabel lblNewLabel_3_2_2_1 = new JLabel("POKEBALLS");
-		lblNewLabel_3_2_2_1.setHorizontalAlignment(SwingConstants.LEFT);
-		lblNewLabel_3_2_2_1.setBounds(151, 292, 86, 14);
-		panelModify.add(lblNewLabel_3_2_2_1);
+		JLabel pokeballLbl = new JLabel("POKEBALLS");
+		pokeballLbl.setHorizontalAlignment(SwingConstants.LEFT);
+		pokeballLbl.setBounds(151, 292, 86, 14);
+		panelModify.add(pokeballLbl);
 
 		// Desactivar los componentes relevantes
-		dateChooser.setEnabled(false);
-		txtGender.setEnabled(false);
-		txtOriginCity.setEnabled(false);
-		txtBadges.setEnabled(false);
-		initialComboBox.setEnabled(false);
-		txtPokeballs.setEnabled(false);
-		txtAddPokeballs.setEnabled(false);
-		btnNewButton_4.setEnabled(false);
-		btnNewButton_4_1.setEnabled(false);
+		addCalender.setEnabled(false);
+		addGenderField.setEnabled(false);
+		addCityField.setEnabled(false);
+		addBadgesField.setEnabled(false);
+		addInitalsComboBox.setEnabled(false);
+		addPokeballsField.setEnabled(false);
+		pokeballAdderField.setEnabled(false);
+		pokeballAdderBtn.setEnabled(false);
 
+		infotoaddField = new JTextArea();
+		infotoaddField.setEditable(false);
+		infotoaddField.setColumns(10);
+		infotoaddField.setBackground(Color.GRAY);
+		infotoaddField.setBounds(422, 107, 250, 220);
+		infotoaddField.setVisible(false);
+		panelModify.add(infotoaddField);
+
+		addTrainerButton = new JButton("ADD");
+		addTrainerButton.addActionListener(this);
+		addTrainerButton.setBounds(519, 362, 86, 23);
+		addTrainerButton.setVisible(false);
+		panelModify.add(addTrainerButton);
 		// Agregar ActionListener al botón btnNewButton_3
-		btnNewButton_3.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				// Activar los componentes relevantes
-				dateChooser.setEnabled(true);
-				txtGender.setEnabled(true);
-				txtOriginCity.setEnabled(true);
-				txtBadges.setEnabled(true);
-				initialComboBox.setEnabled(true);
-				txtPokeballs.setEnabled(true);
-				txtAddPokeballs.setEnabled(true);
-				btnNewButton_4.setEnabled(true);
-				btnNewButton_4_1.setEnabled(true);
-			}
-		});
+		addCheckBtn.addActionListener(this);
 
 		// Pestaña4
 		pestanas.addTab("ASCEND", panelAscend);
@@ -437,32 +404,26 @@ public class ProfessorView extends JDialog implements ActionListener {
 		// Agregamos el objeto JTabbedPane a la ventana
 		getContentPane().add(pestanas);
 
+		try {
+			trainers = getTrainersAndSetComboBoxes();
+		} catch (MyException er) {
+			JOptionPane.showMessageDialog(null, er.getMessage(), "WARNING", JOptionPane.ERROR_MESSAGE);
+		}
 		// Configuramos la ventana
 		setSize(682, 614);
 	}
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
-		
+
 		if (e.getSource().equals(Trainers)) {
-			resulttextField.setText("");
-			informationButton.setEnabled(true);
-			teamButton.setEnabled(true);
-			combatHistoryButton.setEnabled(true);
-			String selectedTrainer = (String) Trainers.getSelectedItem();
 			try {
-				for (Trainer element : manageable.getTrainers()) {
-					if (element.getName().equals(selectedTrainer)) {
-						t = element;
-
-					}
-				}
-			} catch (MyException e1) {
-				// TODO Auto-generated catch block
-				e1.printStackTrace();
+				getTrainers();
+			} catch (MyException ex) {
+				ex.getMessage();
 			}
-
 		}
+
 		if (e.getSource().equals(informationButton)) {
 			if (t.getName().equals(Trainers.getSelectedItem())) {
 				resulttextField.setText(null);
@@ -484,7 +445,7 @@ public class ProfessorView extends JDialog implements ActionListener {
 
 			}
 		}
-		if(e.getSource().equals(trainerDelete)) {
+		if (e.getSource().equals(trainerDelete)) {
 			deleteButton.setEnabled(true);
 			checkButton.setEnabled(true);
 			String selectedTrainer = (String) trainerDelete.getSelectedItem();
@@ -507,25 +468,179 @@ public class ProfessorView extends JDialog implements ActionListener {
 
 			}
 		}
-		if(e.getSource().equals(deleteButton)) {
-			if(JOptionPane.showOptionDialog(panelBattle, "Are you suere you want to delete this trainner?",
+		if (e.getSource().equals(deleteButton)) {
+			if (JOptionPane.showOptionDialog(panelBattle, "Are you suere you want to delete this trainner?",
 					"Confirm delete", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE, null,
-					new Object[] { "YES", "NO" }, JOptionPane.YES_OPTION)==1) {
+					new Object[] { "YES", "NO" }, JOptionPane.YES_OPTION) == 1) {
 				int id;
-				id=t.getTrainerID();
+				id = t.getTrainerID();
 				try {
 					manageable.deleteTrainer(id);
 				} catch (MyException e1) {
 					// TODO Auto-generated catch block
 					e1.printStackTrace();
 				}
-				
+			}
 		}
-		
-			
-			
+
+		if (e.getSource().equals(addCheckBtn)) {
+			ArrayList<Pokemon> initialSelection = prof.getInitialSelection();
+			Trainer aux = new Trainer();
+			try {
+				aux = trainerExists(addCheckField.getText());
+				if (aux != null) {
+					addCalender.setDate(aux.getBirthdate());
+					addGenderField.setText(aux.getGender());
+					addCityField.setText(aux.getOriginCity());
+					addBadgesField.setText(String.valueOf(aux.getBadges()));
+					addPokeballsField.setText(String.valueOf(aux.getPokeballs()));
+					addTrainerButton.setText("MODIFY");
+				} else {
+					setAddEnabled();
+					addInitalsComboBox.setEnabled(true);
+					for (Pokemon p : initialSelection) {
+						addInitalsComboBox.addItem(p.getName());
+					}
+				}
+			} catch (MyException ex) {
+				JOptionPane.showMessageDialog(null, ex.getMessage(), "WARNING", JOptionPane.INFORMATION_MESSAGE);
+			}
 		}
-		
+		if (e.getSource().equals(pokeballAdderBtn)) {
+			// Obtener valores de txtPokeballs y txtAddPokeballs
+			int pokeballs;
+			try {
+				pokeballs = Integer.parseInt(addPokeballsField.getText());
+				try {
+					int addPokeballs = Integer.parseInt(pokeballAdderField.getText());
+					addPokeballsField.setText(Integer.toString(pokeballs + addPokeballs));
+				} catch (NumberFormatException er) {
+					JOptionPane.showMessageDialog(null, "Only integers allowed", "WARNING",
+							JOptionPane.INFORMATION_MESSAGE);
+				}
+			} catch (NumberFormatException e1) {
+				addPokeballsField.setText(Integer.toString(0));
+			}
+			// Sumar valores y establecer resultado en txtPokeballs
+		}
+		if (e.getSource().equals(addValidateBtn)) {
+			Trainer aux = buildTrainer();
+
+			showTrainerInfo(aux);
+		}
+		if (e.getSource().equals(addTrainerButton)) {
+			t = buildTrainer();
+			try {
+				if (addTrainerButton.getText().equals("ADD")) {
+					manageable.addTrainer(t);
+				} else {
+					manageable.modifyTrainer(t);
+				}
+			} catch (MyException er) {
+				JOptionPane.showMessageDialog(null, er.getMessage(), "Message", JOptionPane.INFORMATION_MESSAGE);
+			} finally {
+				try {
+					trainers = getTrainersAndSetComboBoxes();
+				} catch (MyException er2) {
+					JOptionPane.showMessageDialog(null, er2.getMessage(), "WARNING", JOptionPane.ERROR_MESSAGE);
+				}
+			}
 		}
 	}
 
+	private LinkedHashSet<Trainer> getTrainersAndSetComboBoxes() throws MyException {
+		LinkedHashSet<Trainer> t = manageable.getTrainers();
+
+		trainerDelete = new JComboBox<String>();
+		trainerDelete.addItem("");
+		trainerDelete.setBounds(37, 63, 222, 47);
+		paneDelete.add(trainerDelete);
+		trainerDelete.addActionListener(this);
+
+		Trainers = new JComboBox<String>();
+		Trainers.setMaximumRowCount(20);
+		Trainers.setForeground(new Color(0, 0, 0));
+		Trainers.setBackground(SystemColor.control);
+		Trainers.addItem("");
+		Trainers.setBounds(175, 61, 237, 53);
+		panelBattle.add(Trainers);
+		Trainers.addActionListener(this);
+
+		for (Trainer element : t) {
+			trainerDelete.addItem(element.getName());
+			Trainers.addItem(element.getName());
+		}
+		return t;
+	}
+
+	private void getTrainers() throws MyException {
+		resulttextField.setText("");
+		informationButton.setEnabled(true);
+		teamButton.setEnabled(true);
+		combatHistoryButton.setEnabled(true);
+		String selectedTrainer = (String) Trainers.getSelectedItem();
+		for (Trainer element : manageable.getTrainers()) {
+			if (element.getName().equals(selectedTrainer)) {
+				t = element;
+			}
+		}
+	}
+
+	private Trainer trainerExists(String name) throws MyException {
+		trainers = manageable.getTrainers();
+		Iterator<Trainer> it = trainers.iterator();
+		boolean found = false;
+
+		while (it.hasNext() && !found) {
+			Trainer aux = it.next();
+			if (name.equalsIgnoreCase(aux.getName())) {
+				setAddEnabled();
+
+				t = aux;
+				found = true;
+			}
+		}
+		if (!found) {
+			JOptionPane.showMessageDialog(null, "Trainer not found, you may now add a new one", "WARNING",
+					JOptionPane.INFORMATION_MESSAGE);
+		}
+		return t;
+	}
+
+	private void setAddEnabled() {
+		addCalender.setEnabled(true);
+		addGenderField.setEnabled(true);
+		addCityField.setEnabled(true);
+		addBadgesField.setEnabled(true);
+		addPokeballsField.setEnabled(true);
+		pokeballAdderField.setEnabled(true);
+		pokeballAdderBtn.setEnabled(true);
+	}
+
+	private void showTrainerInfo(Trainer aux) {
+		infotoaddField.setVisible(true);
+		addTrainerButton.setVisible(true);
+
+		infotoaddField.setText(aux.getTrainerInfo());
+	}
+
+	private Trainer buildTrainer() {
+		Trainer aux = new Trainer();
+		java.sql.Date date = new java.sql.Date(addCalender.getDate().toInstant().toEpochMilli());
+		aux.setName(addCheckField.getText());
+
+		for (Trainer a : trainers) {
+			if (a.getName().equalsIgnoreCase(aux.getName()))
+				aux.setTrainerID(a.getTrainerID());
+		}
+		aux.setName(addCheckField.getText());
+		aux.setBirthdate(date);
+		aux.setGender(addGenderField.getText());
+		aux.setOriginCity(addCityField.getText());
+		aux.setBadges(Integer.parseInt(addBadgesField.getText()));
+		aux.setPokeballs(Integer.parseInt(addPokeballsField.getText()));
+		aux.setInitial(prof.getInitial((String) addInitalsComboBox.getSelectedItem()));
+
+		return aux;
+	}
+}

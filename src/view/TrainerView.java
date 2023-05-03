@@ -13,7 +13,6 @@ import javax.swing.SwingConstants;
 import javax.swing.JTextField;
 import javax.swing.*;
 
-
 import com.toedter.calendar.JDateChooser;
 
 import classes.MyException;
@@ -31,7 +30,7 @@ public class TrainerView extends JDialog implements ActionListener {
 	private JTextField textPSalv;
 	private JTextField textPKRiv;
 	private JPanel panelModify;
-	
+
 	public TrainerView() {
 		super();
 		setType(Type.POPUP);
@@ -118,7 +117,7 @@ public class TrainerView extends JDialog implements ActionListener {
 		JTextArea textAreaTrainInfo = new JTextArea();
 		textAreaTrainInfo.setBounds(429, 105, 197, 335);
 		panel1.add(textAreaTrainInfo);
-		
+
 		JLabel lblAge = new JLabel("AGE");
 		lblAge.setHorizontalAlignment(SwingConstants.LEFT);
 		lblAge.setFont(new Font("Tahoma", Font.PLAIN, 14));
@@ -282,14 +281,13 @@ public class TrainerView extends JDialog implements ActionListener {
 
 		// Agregar ActionListener a la JComboBox
 		comboBox.addActionListener(new ActionListener() {
-		    public void actionPerformed(ActionEvent e) {
-		        if (comboBox.getSelectedItem() != null) {
-		            btnAtacar.setEnabled(true); // Habilitar el botón "ATACAR"
-		            btnHuir_1.setEnabled(true); // Habilitar el botón "HUIR"
-		        }
-		    }
+			public void actionPerformed(ActionEvent e) {
+				if (comboBox.getSelectedItem() != null) {
+					btnAtacar.setEnabled(true); // Habilitar el botón "ATACAR"
+					btnHuir_1.setEnabled(true); // Habilitar el botón "HUIR"
+				}
+			}
 		});
-
 
 		// Agregamos el objeto JTabbedPane a la ventana
 		getContentPane().add(pestanas);
