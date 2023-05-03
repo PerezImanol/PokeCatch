@@ -250,7 +250,7 @@ public class ProfessorView extends JDialog implements ActionListener {
 		// Pestaña3
 		JLabel lblNewLabel = new JLabel("");
 		lblNewLabel.setIcon(new ImageIcon(ProfessorView.class.getResource("/resources/Ash_Ketchum_Journeys.png")));
-		lblNewLabel.setBounds(415, 26, 216, 472);
+		lblNewLabel.setBounds(410, 11, 216, 491);
 		paneDelete.add(lblNewLabel);
 		pestanas.addTab("ADD/MODIFY", panelModify);
 		panelModify.setLayout(null);

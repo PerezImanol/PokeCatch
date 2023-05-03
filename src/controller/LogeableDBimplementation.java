@@ -22,7 +22,7 @@ public class LogeableDBimplementation implements Logeable {
 	/*
 	 * This statement must be used twice so I declare it here in order to write it
 	 * just once
-	 */
+	 */ 
 	final String queryGetProfessor = "select trainer_id, trainer_name, birthdate, gender, city, badges, pokeball, region from Trainer join professor on trainer_id=professor_id where trainer_id=?;";
 
 	/*
@@ -54,9 +54,13 @@ public class LogeableDBimplementation implements Logeable {
 		return t;
 	}
 
-	// This is the method in charge of getting the id of the person that is loging
-	// in
-
+	/**
+	 *  This is the method in charge of getting the id of the person that is logging in 
+	 * @param username
+	 * @param password
+	 * @return 
+	 * @throws MyException
+	 */
 	private int isUser(String username, String password) throws MyException {
 		final String queryUsers = "Select user_id from Login where username=? and passwd=?";
 		int id = 0;
@@ -80,8 +84,12 @@ public class LogeableDBimplementation implements Logeable {
 		return id;
 	}
 
-	// This method gives true in case that the user that was loged was a professor
-	// and false if its not
+	/**
+	 *  This method is used to identify if the user is a professor or not
+	 * @param id
+	 * @return 
+	 * @throws MyException
+	 */
 	private boolean isProfessor(int id) throws MyException {
 		boolean pro = false;
 		ResultSet rsgp2;
@@ -111,7 +119,12 @@ public class LogeableDBimplementation implements Logeable {
 		return pro;
 	}
 
-	// This method gives all the information related with the id that it gets
+	/**
+	 *  This method gives all the information of the Trainer with the id that it gets
+	 * @param id
+	 * @return
+	 * @throws MyException
+	 */
 	private Trainer getTrainer(int id) throws MyException {
 		final String queryInfo = "Select trainer_id, trainer_name, birthdate, gender, city, badges, pokeball from Trainer where trainer_id = ?";
 		/*
@@ -196,7 +209,12 @@ public class LogeableDBimplementation implements Logeable {
 		return t;
 	}
 
-	// This method does the same thing as the previous one but fore the professor
+	/**
+	 *  This method does the same thing as getTrainer but for the professor
+	 * @param id
+	 * @return
+	 * @throws MyException
+	 */
 	private Professor getProfessor(int id) throws MyException {
 		/*
 		 * In this case the professors do not have any combats or team. However they do
