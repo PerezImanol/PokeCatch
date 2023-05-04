@@ -2,7 +2,13 @@ package classes;
 
 import java.sql.Date;
 import java.util.LinkedHashSet;
-
+/**
+ * This class defines the object Trainer which has a set of Pokemon and Combats of the Pokemon that are from this trainer
+ * and the commbats he/she took part in
+ * @author DaniD
+ * @version 3
+ *
+ */
 public class Trainer {
 
 	private int trainerID;

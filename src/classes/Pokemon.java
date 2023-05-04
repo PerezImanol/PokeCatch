@@ -1,5 +1,11 @@
 package classes;
-
+/**
+ * This class set the structure for the Pokemon object and it his
+ * worth mentioning that the team attribute is a boolean that tells if the 
+ * Pokemon is on the team or if it is stored in the PC 
+ * @author DaniD
+ *@version 3
+ */
 public class Pokemon {
 
 	private int pokedexID;

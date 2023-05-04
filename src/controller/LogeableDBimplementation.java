@@ -54,9 +54,13 @@ public class LogeableDBimplementation implements Logeable {
 		return t;
 	}
 
-	// This is the method in charge of getting the id of the person that is loging
-	// in
-
+	/**
+	 *  This is the method in charge of getting the id of the person that is logging in 
+	 * @param username
+	 * @param password
+	 * @return 
+	 * @throws MyException
+	 */
 	private int isUser(String username, String password) throws MyException {
 		final String queryUsers = "select user_id from Login where username=? and passwd=?";
 		int id = 0;
@@ -80,8 +84,12 @@ public class LogeableDBimplementation implements Logeable {
 		return id;
 	}
 
-	// This method gives true in case that the user that was loged was a professor
-	// and false if its not
+	/**
+	 *  This method is used to identify if the user is a professor or not
+	 * @param id
+	 * @return 
+	 * @throws MyException
+	 */
 	private boolean isProfessor(int id) throws MyException {
 		boolean pro = false;
 		ResultSet rsgp2;
@@ -111,7 +119,12 @@ public class LogeableDBimplementation implements Logeable {
 		return pro;
 	}
 
-	// This method gives all the information related with the id that it gets
+	/**
+	 *  This method gives all the information of the Trainer with the id that it gets
+	 * @param id
+	 * @return
+	 * @throws MyException
+	 */
 	private Trainer getTrainer(int id) throws MyException {
 		final String queryInfo = "Select trainer_id, trainer_name, birthdate, gender, city, badges, pokeball from Trainer where trainer_id = ?";
 		/*
@@ -137,7 +150,7 @@ public class LogeableDBimplementation implements Logeable {
 				t.setOriginCity(rti.getString("city"));
 				t.setBadges(rti.getInt("badges"));
 				t.setPokeballs(rti.getInt("pokeball"));
-				final String queryTeam = "Select pokedex_id, region, pokemon_name, nickname, type1, type2, pokemon_lvl, location from Pokemon_static join Pokemon on pokemon_id=pokedex_id where trainer_id=?";
+				final String queryTeam = "Select pokedex_id, region, pokemon_name, nickname, type1, type2, pokemon_lvl, location from Pokemon_static join Pokemon on pokemon_id=pokedex_id where trainer_id=? and location=true";
 				stmt = con.prepareStatement(queryTeam);
 				stmt.setInt(1, id);
 
@@ -196,7 +209,12 @@ public class LogeableDBimplementation implements Logeable {
 		return t;
 	}
 
-	// This method does the same thing as the previous one but fore the professor
+	/**
+	 *  This method does the same thing as getTrainer but for the professor
+	 * @param id
+	 * @return
+	 * @throws MyException
+	 */
 	private Professor getProfessor(int id) throws MyException {
 		/*
 		 * In this case the professors do not have any combats or team. However they do
@@ -259,32 +277,4 @@ public class LogeableDBimplementation implements Logeable {
 
 		return p;
 	}
-
-	public LinkedHashSet<Trainer> getTrainers() throws MyException {
-		LinkedHashSet<Trainer> trainers = new LinkedHashSet<>();
-		Trainer t = new Trainer();
-		final String queryAllTrainers = "select * from Trainer where trainer_id not in(select trainer_id from Trainer join Professor on professor_id =trainer_id )";
-		ResultSet rs;
-
-		con = occ.openConnection();
-		try {
-			stmt = con.prepareStatement(queryAllTrainers);
-			rs = stmt.executeQuery();
-
-			while (rs.next()) {
-
-				t = getTrainer(rs.getInt("trainer_id"));
-				trainers.add(t);
-			}
-		} catch (SQLException e) {
-			String error = "Error getting combat history";
-			MyException er = new MyException(error);
-			throw er;
-		}
-		occ.closeConnection(stmt, con);
-
-		return trainers;
-
-	}
-
 }
