@@ -9,4 +9,5 @@ public class LogeableFactory {
     public static Logeable getLogeable() {
         return obj;
     }
+    
 }

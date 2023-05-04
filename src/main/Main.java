@@ -1,23 +1,14 @@
 package main;
 
 import classes.MyException;
-import classes.Trainer;
-import controller.LogeableDBimplementation;
+import view.LoginView;
 
 public class Main {
 
 	public static void main(String[] args) throws MyException {
-
-		LogeableDBimplementation pepe = new LogeableDBimplementation();
-		Trainer pepe2 = null;
-
-		try {
-			pepe2 = pepe.getPerson("Ash", "abcd*1234");
-		} catch (MyException e) {
-
-		}
-		System.out.println(pepe2);
+	
+		LoginView frame = new LoginView();
+		frame.setVisible(true);
 
 	}
-
 }
