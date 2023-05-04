@@ -7,10 +7,9 @@ import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Iterator;
 import java.util.LinkedHashSet;
-import java.util.Set;
-import java.util.function.BiConsumer;
 
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
@@ -26,12 +25,16 @@ import javax.swing.SwingConstants;
 
 import com.toedter.calendar.JDateChooser;
 
+import classes.Login;
 import classes.MyException;
 import classes.Pokemon;
+import classes.PokemonExtra;
 import classes.Professor;
 import classes.Trainer;
 import factories.AccountManageableFactory;
+import factories.DataBattleFactory;
 import interfaces.AccountManageable;
+import interfaces.DataBattleShowable;
 
 public class ProfessorView extends JDialog implements ActionListener {
 	/**
@@ -44,8 +47,7 @@ public class ProfessorView extends JDialog implements ActionListener {
 	private JTextField addBadgesField;
 	private JTextField addPokeballsField;
 	private JTextField pokeballAdderField;
-	private JTextField txtRegion;
-	private JTextField txttrainnernameHasBeen;
+	private JTextField upgradeRegionField;
 	private JTextArea infotoaddField;
 	private JTextArea resulttextField;
 	private JTextArea deleteTrainerTextArea;
@@ -58,15 +60,17 @@ public class ProfessorView extends JDialog implements ActionListener {
 	private JButton pokeballAdderBtn;
 	private JButton addTrainerButton;
 	private JButton addValidateBtn;
+	private JButton upgradeButton;
 	private JDateChooser addCalender;
 	private JComboBox<String> Trainers;
 	private JComboBox<String> addInitalsComboBox;
-	private JComboBox<String> ascentTrainer;
+	private JComboBox<String> ascentTrainerCB;
 	private JComboBox<String> waterComboBox;
 	private JComboBox<String> fireComboBox;
 	private JComboBox<String> grassComboBox;
 	private JComboBox<String> trainerDelete;
 	private AccountManageable manageable = AccountManageableFactory.getAccountManageable();
+	private DataBattleShowable showable = DataBattleFactory.getDataBattleShowable();
 	private Trainer t;
 	private JPanel panelBattle;
 	private JPanel paneDelete;
@@ -74,15 +78,24 @@ public class ProfessorView extends JDialog implements ActionListener {
 	private JPanel panelAscend;
 	private Professor prof;
 	private LinkedHashSet<Trainer> trainers;
+	private LinkedHashSet<PokemonExtra> pokemons;
 
-	public ProfessorView(LoginView loginView, boolean b, Professor loggedProf) {
-		super(loginView, b);
+	public ProfessorView(LoginView loginView, Professor loggedProf) {
+		super(loginView);
+		requestFocus();
+		setResizable(false);
 		prof = loggedProf;
 		setIconImage(Toolkit.getDefaultToolkit().getImage(ProfessorView.class.getResource("/resources/descarga.png")));
 		setTitle("Professor View");
 		setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
+
 		loginView.dispose();
 
+		try {
+			pokemons = showable.getPokemons();
+		} catch (MyException er) {
+			JOptionPane.showMessageDialog(null, er.getMessage(), "WARNING", JOptionPane.ERROR_MESSAGE);
+		}
 		panelBattle = new JPanel();
 		paneDelete = new JPanel();
 		panelModify = new JPanel();
@@ -101,7 +114,6 @@ public class ProfessorView extends JDialog implements ActionListener {
 		panelBattle.setLayout(null);
 
 		// Creamos una ComboBox y la agregamos al panel, con tres elementos
-
 
 		// Creamos un botón llamado "TEAM" y lo agregamos al panel
 		teamButton = new JButton("TEAM");
@@ -159,7 +171,6 @@ public class ProfessorView extends JDialog implements ActionListener {
 		lblNewLabel_1.setFont(new Font("Yu Gothic UI Light", Font.BOLD | Font.ITALIC, 18));
 		lblNewLabel_1.setBounds(27, 26, 337, 17);
 		paneDelete.add(lblNewLabel_1);
-
 
 		checkButton = new JButton("CHECK");
 		checkButton.setBounds(37, 136, 173, 47);
@@ -311,20 +322,20 @@ public class ProfessorView extends JDialog implements ActionListener {
 		pestanas.addTab("ASCEND", panelAscend);
 		panelAscend.setLayout(null);
 
-		JLabel lblNewLabel_5_1_1 = new JLabel("GRASS INITIAL");
-		lblNewLabel_5_1_1.setHorizontalAlignment(SwingConstants.CENTER);
-		lblNewLabel_5_1_1.setBounds(27, 232, 139, 14);
-		panelAscend.add(lblNewLabel_5_1_1);
+		JLabel leafLbl = new JLabel("GRASS INITIAL");
+		leafLbl.setHorizontalAlignment(SwingConstants.CENTER);
+		leafLbl.setBounds(179, 232, 139, 14);
+		panelAscend.add(leafLbl);
 
-		JLabel lblNewLabel_5_1 = new JLabel("FIRE INITIAL");
-		lblNewLabel_5_1.setHorizontalAlignment(SwingConstants.CENTER);
-		lblNewLabel_5_1.setBounds(27, 199, 139, 14);
-		panelAscend.add(lblNewLabel_5_1);
+		JLabel fireLbl = new JLabel("FIRE INITIAL");
+		fireLbl.setHorizontalAlignment(SwingConstants.CENTER);
+		fireLbl.setBounds(179, 199, 139, 14);
+		panelAscend.add(fireLbl);
 
-		JLabel lblNewLabel_5 = new JLabel("WATER INITIAL");
-		lblNewLabel_5.setHorizontalAlignment(SwingConstants.CENTER);
-		lblNewLabel_5.setBounds(27, 166, 139, 14);
-		panelAscend.add(lblNewLabel_5);
+		JLabel waterLbl = new JLabel("WATER INITIAL");
+		waterLbl.setHorizontalAlignment(SwingConstants.CENTER);
+		waterLbl.setBounds(179, 166, 139, 14);
+		panelAscend.add(waterLbl);
 
 		JLabel lblNewLabel_4 = new JLabel("Select Trainner");
 		lblNewLabel_4.setFont(new Font("Tahoma", Font.PLAIN, 14));
@@ -332,74 +343,52 @@ public class ProfessorView extends JDialog implements ActionListener {
 		lblNewLabel_4.setBounds(243, 58, 147, 14);
 		panelAscend.add(lblNewLabel_4);
 
-		ascentTrainer = new JComboBox<String>();
-		ascentTrainer.addItem("");
-		ascentTrainer.addItem("Trainner 1");
-		ascentTrainer.addItem("Trainner 2");
-		ascentTrainer.setBounds(10, 52, 222, 31);
-		panelAscend.add(ascentTrainer);
-
-		txtRegion = new JTextField();
-		txtRegion.setHorizontalAlignment(SwingConstants.CENTER);
-		txtRegion.setText("REGION");
-		txtRegion.setBounds(27, 131, 139, 20);
-		panelAscend.add(txtRegion);
-		txtRegion.setColumns(10);
-		txtRegion.setEnabled(false);
+		upgradeRegionField = new JTextField();
+		upgradeRegionField.setHorizontalAlignment(SwingConstants.CENTER);
+		upgradeRegionField.setText("REGION");
+		upgradeRegionField.setBounds(27, 131, 139, 20);
+		panelAscend.add(upgradeRegionField);
+		upgradeRegionField.setColumns(10);
+		upgradeRegionField.setEnabled(false);
 
 		waterComboBox = new JComboBox<String>();
 		waterComboBox.setBounds(27, 162, 139, 22);
 		panelAscend.add(waterComboBox);
+		for (Pokemon p : getPokemonsForType("Water")) {
+			waterComboBox.addItem(p.getName());
+		}
 		waterComboBox.setEnabled(false);
 
 		fireComboBox = new JComboBox<String>();
 		fireComboBox.setBounds(27, 195, 139, 22);
 		panelAscend.add(fireComboBox);
+		for (Pokemon p : getPokemonsForType("Fire")) {
+			fireComboBox.addItem(p.getName());
+		}
 		fireComboBox.setEnabled(false);
 
 		grassComboBox = new JComboBox<String>();
 		grassComboBox.setBounds(27, 228, 139, 22);
 		panelAscend.add(grassComboBox);
+		for (Pokemon p : getPokemonsForType("Grass")) {
+			grassComboBox.addItem(p.getName());
+		}
 		grassComboBox.setEnabled(false);
 
-		JButton upgradeButton = new JButton("UPGRADE");
-		upgradeButton.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				JOptionPane.showMessageDialog(panelAscend,
-						"(trainner_name) has been successfully upgraded to Professor");
-			}
-		});
-		upgradeButton.setBounds(203, 172, 122, 69);
+		upgradeButton = new JButton("UPGRADE");
+		upgradeButton.addActionListener(this);
+		upgradeButton.setBounds(374, 144, 122, 69);
 		panelAscend.add(upgradeButton);
 		upgradeButton.setEnabled(false);
 
-		txttrainnernameHasBeen = new JTextField();
-		txttrainnernameHasBeen.setEditable(false);
-		txttrainnernameHasBeen.setText("(trainner_name) has been successfully upgraded to Professor");
-		txttrainnernameHasBeen.setBounds(335, 196, 316, 20);
-		panelAscend.add(txttrainnernameHasBeen);
-		txttrainnernameHasBeen.setColumns(10);
-
 		// Deshabilitar elementos al principio
-		txtRegion.setEnabled(false);
+		upgradeRegionField.setEnabled(false);
 		waterComboBox.setEnabled(false);
 		fireComboBox.setEnabled(false);
 		grassComboBox.setEnabled(false);
 		upgradeButton.setEnabled(false);
 
 		// Habilitar elementos cuando se seleccione una opción en comboBox_1_1
-		ascentTrainer.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				String selectedOption = (String) ascentTrainer.getSelectedItem();
-				if (!selectedOption.equals("")) {
-					txtRegion.setEnabled(true);
-					waterComboBox.setEnabled(true);
-					fireComboBox.setEnabled(true);
-					grassComboBox.setEnabled(true);
-					upgradeButton.setEnabled(true);
-				}
-			}
-		});
 
 		// Agregamos el objeto JTabbedPane a la ventana
 		getContentPane().add(pestanas);
@@ -409,7 +398,9 @@ public class ProfessorView extends JDialog implements ActionListener {
 		} catch (MyException er) {
 			JOptionPane.showMessageDialog(null, er.getMessage(), "WARNING", JOptionPane.ERROR_MESSAGE);
 		}
+
 		// Configuramos la ventana
+
 		setSize(682, 614);
 	}
 
@@ -532,7 +523,9 @@ public class ProfessorView extends JDialog implements ActionListener {
 			t = buildTrainer();
 			try {
 				if (addTrainerButton.getText().equals("ADD")) {
-					manageable.addTrainer(t);
+					SetLoginView setlogin = new SetLoginView(ProfessorView.this, true);
+					setlogin.setVisible(rootPaneCheckingEnabled);
+					setlogin.requestFocus();
 				} else {
 					manageable.modifyTrainer(t);
 				}
@@ -541,9 +534,46 @@ public class ProfessorView extends JDialog implements ActionListener {
 			} finally {
 				try {
 					trainers = getTrainersAndSetComboBoxes();
+
 				} catch (MyException er2) {
 					JOptionPane.showMessageDialog(null, er2.getMessage(), "WARNING", JOptionPane.ERROR_MESSAGE);
 				}
+			}
+		}
+		if (e.getSource().equals(ascentTrainerCB)) {
+			String selectedOption = (String) ascentTrainerCB.getSelectedItem();
+			if (!selectedOption.equals("")) {
+				upgradeRegionField.setEnabled(true);
+				waterComboBox.setEnabled(true);
+				fireComboBox.setEnabled(true);
+				grassComboBox.setEnabled(true);
+				upgradeButton.setEnabled(true);
+			}
+		}
+
+		if (e.getSource().equals(upgradeButton)) {
+			Professor prof = new Professor();
+			ArrayList<Pokemon> poks = new ArrayList<>();
+
+			for (Trainer t : trainers) {
+				if (t.getName().equals(ascentTrainerCB.getSelectedItem())) {
+					prof.completeProf(t, upgradeRegionField.getText());
+				}
+			}
+			for (PokemonExtra p : pokemons) {
+				if (p.getName().equals(fireComboBox.getSelectedItem()))
+					poks.add(p);
+				if (p.getName().equals(waterComboBox.getSelectedItem()))
+					poks.add(p);
+				if (p.getName().equals(grassComboBox.getSelectedItem()))
+					poks.add(p);
+			}
+			prof.setInitialSelection(poks);
+
+			try {
+				manageable.upgradeToProfessor(prof);
+			} catch (MyException er) {
+				JOptionPane.showMessageDialog(null, er.getMessage(), "WARNING", JOptionPane.ERROR_MESSAGE);
 			}
 		}
 	}
@@ -558,6 +588,7 @@ public class ProfessorView extends JDialog implements ActionListener {
 		trainerDelete.addActionListener(this);
 
 		Trainers = new JComboBox<String>();
+
 		Trainers.setMaximumRowCount(20);
 		Trainers.setForeground(new Color(0, 0, 0));
 		Trainers.setBackground(SystemColor.control);
@@ -566,9 +597,16 @@ public class ProfessorView extends JDialog implements ActionListener {
 		panelBattle.add(Trainers);
 		Trainers.addActionListener(this);
 
+		ascentTrainerCB = new JComboBox<String>();
+		ascentTrainerCB.addItem("");
+		ascentTrainerCB.setBounds(10, 52, 222, 31);
+		ascentTrainerCB.addActionListener(this);
+		panelAscend.add(ascentTrainerCB);
+
 		for (Trainer element : t) {
 			trainerDelete.addItem(element.getName());
 			Trainers.addItem(element.getName());
+			ascentTrainerCB.addItem(element.getName());
 		}
 		return t;
 	}
@@ -641,6 +679,30 @@ public class ProfessorView extends JDialog implements ActionListener {
 		aux.setPokeballs(Integer.parseInt(addPokeballsField.getText()));
 		aux.setInitial(prof.getInitial((String) addInitalsComboBox.getSelectedItem()));
 
+		return aux;
+	}
+
+	public void setLogin(Login log) {
+		Trainer trainer = buildTrainer();
+
+		try {
+			manageable.addTrainer(trainer);
+			manageable.setLogin(log);
+		} catch (MyException e) {
+			JOptionPane.showMessageDialog(null, e.getMessage(), "WARNING", JOptionPane.INFORMATION_MESSAGE);
+		}
+	}
+
+	private List<PokemonExtra> getPokemonsForType(String type) {
+		List<PokemonExtra> aux = new ArrayList<>();
+		Iterator<PokemonExtra> it = pokemons.iterator();
+
+		while (it.hasNext()) {
+			PokemonExtra p = it.next();
+			if (p.getType1().equals(type)) {
+				aux.add(p);
+			}
+		}
 		return aux;
 	}
 }

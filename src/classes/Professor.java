@@ -23,9 +23,20 @@ public class Professor extends Trainer {
 		this.initialSelection = initialSelection;
 	}
 
-public Pokemon getInitial(String name) {
-	return initialSelection.stream().filter(p -> p.getName().equals(name)).findFirst().orElse(null);
-} 
+	public Pokemon getInitial(String name) {
+		return initialSelection.stream().filter(p -> p.getName().equals(name)).findFirst().orElse(null);
+	}
+
+	public void completeProf(Trainer t, String r) {
+		this.setTrainerID(t.getTrainerID());
+		this.setName(t.getName());
+		this.setBirthdate(t.getBirthdate());
+		this.setGender(t.getGender());
+		this.setOriginCity(t.getOriginCity());
+		this.setBadges(t.getBadges());
+		this.setPokeballs(t.getPokeballs());
+		this.setRegion(r);
+	}
 
 	@Override
 	public String toString() {

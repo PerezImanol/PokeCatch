@@ -8,10 +8,11 @@ import java.util.ArrayList;
 import java.util.LinkedHashSet;
 
 import classes.Combat;
+import classes.Login;
+import classes.MyException;
 import classes.Pokemon;
 import classes.Professor;
 import classes.Trainer;
-import classes.MyException;
 import interfaces.AccountManageable;
 
 public class AccountManageableDBimplementation implements AccountManageable {
@@ -35,14 +36,8 @@ public class AccountManageableDBimplementation implements AccountManageable {
 			stmt.setString(4, trainer.getOriginCity());
 			stmt.setInt(5, trainer.getBadges());
 			stmt.setInt(6, trainer.getPokeballs());
-			int id = stmt.executeUpdate();
-			if (id == 0) {
-				MyException er = new MyException("Nothing added");
-				throw er;
-			} else if (id == 1) {
-				MyException success = new MyException("Trainer added successfully");
-				throw success;
-			} 
+			stmt.executeUpdate();
+
 		} catch (SQLException e) {
 			String error = "Error inserting data to the database";
 			MyException er = new MyException(error);
@@ -70,9 +65,9 @@ public class AccountManageableDBimplementation implements AccountManageable {
 	}
 
 	public LinkedHashSet<Trainer> getTrainers() throws MyException {
-		
+
 		LinkedHashSet<Trainer> trainers = new LinkedHashSet<>();
-		
+
 		ResultSet rst;
 		ResultSet rsp;
 		ResultSet rsc;
@@ -87,8 +82,8 @@ public class AccountManageableDBimplementation implements AccountManageable {
 			while (rst.next()) {
 				LinkedHashSet<Pokemon> pok = new LinkedHashSet<>();
 				LinkedHashSet<Combat> com = new LinkedHashSet<>();
-				int id=0;
-				t= new Trainer();
+				int id = 0;
+				t = new Trainer();
 				id = rst.getInt("trainer_id");
 				t.setTrainerID(id);
 				t.setName(rst.getString("trainer_name"));
@@ -104,7 +99,7 @@ public class AccountManageableDBimplementation implements AccountManageable {
 					stmt.setInt(1, id);
 					rsp = stmt.executeQuery();
 					while (rsp.next()) {
-						
+
 						Pokemon p = null;
 						p = new Pokemon();
 						p.setPokedexID(rsp.getInt("pokedex_id"));
@@ -116,7 +111,7 @@ public class AccountManageableDBimplementation implements AccountManageable {
 						p.setLevel(rsp.getInt("pokemon_lvl"));
 						p.setTeam(rsp.getBoolean("location"));
 						pok.add(p);
-					
+
 					}
 					t.setTeam(pok);
 				} catch (SQLException e) {
@@ -137,7 +132,7 @@ public class AccountManageableDBimplementation implements AccountManageable {
 						c.setTrainer2(rsc.getInt("trainer_id2"));
 						c.setWinnerTrainerID(rsc.getInt("winner"));
 						com.add(c);
-						
+
 					}
 					t.setCombatHistory(com);
 					trainers.add(t);
@@ -153,7 +148,6 @@ public class AccountManageableDBimplementation implements AccountManageable {
 			MyException er = new MyException(error);
 			throw er;
 		}
-		
 
 		occ.closeConnection(stmt, con);
 		return trainers;
@@ -204,8 +198,8 @@ public class AccountManageableDBimplementation implements AccountManageable {
 			} else if (id == 1) {
 				MyException success = new MyException("Trainer updated successfully");
 				throw success;
-			} 
-		}catch (SQLException e) {
+			}
+		} catch (SQLException e) {
 
 			String error = "Error modifying trainer's data";
 			MyException er = new MyException(error);
@@ -213,7 +207,7 @@ public class AccountManageableDBimplementation implements AccountManageable {
 		}
 
 		occ.closeConnection(stmt, con);
-	
+
 	}
 
 	@Override
@@ -235,13 +229,18 @@ public class AccountManageableDBimplementation implements AccountManageable {
 		}
 		try {
 			query = "call upgradeToProfessor(?, ?, ?, ?)";
+			stmt = con.prepareStatement(query);
 			stmt.setInt(1, professor.getTrainerID());
 			stmt.setInt(2, aux.get(0).getPokedexID());
 			stmt.setInt(3, aux.get(1).getPokedexID());
 			stmt.setInt(4, aux.get(2).getPokedexID());
-			stmt.executeUpdate();
+			int id = stmt.executeUpdate();
+			if (id >= 1) {
+				MyException er = new MyException("Trainer upgraded successfully");
+				throw er;
+			}
 		} catch (SQLException e) {
-			String error = "Error upgrading to professor";
+			String error = e.getMessage();
 			MyException er = new MyException(error);
 			throw er;
 		}
@@ -249,4 +248,35 @@ public class AccountManageableDBimplementation implements AccountManageable {
 		occ.closeConnection(stmt, con);
 	}
 
+	@Override
+	public void setLogin(Login log) throws MyException {
+		query = "select trainer_id from Trainer order by trainer_id desc limit 1";
+
+		con = occ.openConnection();
+		int id = -1;
+
+		try {
+			stmt = con.prepareStatement(query);
+			ResultSet rs = stmt.executeQuery();
+			if (rs.next()) {
+				id = rs.getInt("trainer_id");
+			}
+
+			query = "insert into Login(user_id, username, passwd) values (?, ?, ?)";
+			stmt = con.prepareStatement(query);
+			stmt.setInt(1, id);
+			stmt.setString(2, log.getUsername());
+			stmt.setString(3, log.getPassword());
+			id = stmt.executeUpdate();
+			if (id == 1) {
+				MyException message = new MyException("Trainer added successfully");
+				throw message;
+			}
+		} catch (SQLException e) {
+			String error = "Error setting the login information";
+			MyException er = new MyException(error);
+			throw er;
+		}
+
+	}
 }

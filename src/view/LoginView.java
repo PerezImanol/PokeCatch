@@ -64,6 +64,7 @@ public class LoginView extends JFrame implements ActionListener, FocusListener, 
 	 * Create the frame.
 	 */
 	public LoginView() {
+		setResizable(false);
 
 		setTitle("Log in to PokeCatch");
 		setIconImage(Toolkit.getDefaultToolkit().getImage(LoginView.class.getResource("/resources/descarga.png")));
@@ -71,8 +72,7 @@ public class LoginView extends JFrame implements ActionListener, FocusListener, 
 		setBounds(100, 100, 854, 607);
 		contentPane = new JPanel();
 		contentPane.setBackground(new Color(255, 255, 255));
-		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));	
-
+		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 
 		setContentPane(contentPane);
 		contentPane.setLayout(null);
@@ -166,7 +166,7 @@ public class LoginView extends JFrame implements ActionListener, FocusListener, 
 				t = logeable.getPerson(usernameField.getText(), password);
 				if (t instanceof Professor) {
 					Professor p = (Professor) t;
-					ProfessorView vProfessor = new ProfessorView(this, true, p);
+					ProfessorView vProfessor = new ProfessorView(LoginView.this, p);
 					vProfessor.setVisible(true);
 				} else if (t instanceof Trainer) {
 					System.out.println(t);

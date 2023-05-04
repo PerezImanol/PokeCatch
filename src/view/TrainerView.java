@@ -8,6 +8,8 @@ import javax.swing.JLabel;
 import javax.swing.JComboBox;
 import java.awt.Font;
 import java.awt.event.ActionListener;
+import java.awt.event.FocusEvent;
+import java.awt.event.FocusListener;
 import java.awt.event.ActionEvent;
 import javax.swing.SwingConstants;
 import javax.swing.JTextField;
@@ -15,13 +17,8 @@ import javax.swing.*;
 
 import com.toedter.calendar.JDateChooser;
 
-import classes.MyException;
-import classes.Pokemon;
-import classes.Trainer;
-import factories.AccountManageableFactory;
-import interfaces.AccountManageable;
 
-public class TrainerView extends JDialog implements ActionListener {
+public class TrainerView extends JDialog implements ActionListener, FocusListener{
 	private JTextField textUser;
 	private JTextField textPassword;
 	private JTextField textOrigin;
@@ -29,10 +26,10 @@ public class TrainerView extends JDialog implements ActionListener {
 	private JTextField textBadges;
 	private JTextField textPSalv;
 	private JTextField textPKRiv;
-	private JPanel panelModify;
 
 	public TrainerView() {
 		super();
+		setResizable(false);
 		setType(Type.POPUP);
 		setModalityType(ModalityType.APPLICATION_MODAL);
 		setTitle("Trainer View");
@@ -305,5 +302,17 @@ public class TrainerView extends JDialog implements ActionListener {
 	public void actionPerformed(ActionEvent e) {
 		// TODO Auto-generated method stub
 
+	}
+
+	@Override
+	public void focusGained(FocusEvent arg0) {
+		// TODO Auto-generated method stub
+		throw new UnsupportedOperationException("Unimplemented method 'focusGained'");
+	}
+
+	@Override
+	public void focusLost(FocusEvent arg0) {
+		// TODO Auto-generated method stub
+		throw new UnsupportedOperationException("Unimplemented method 'focusLost'");
 	}
 }
