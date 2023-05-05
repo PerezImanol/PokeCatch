@@ -17,8 +17,18 @@ import javax.swing.*;
 
 import com.toedter.calendar.JDateChooser;
 
+import classes.Trainer;
 
-public class TrainerView extends JDialog implements ActionListener, FocusListener{
+public class TrainerView extends JDialog implements ActionListener, FocusListener {
+	private JButton btnSave;
+	private JButton btnPok1;
+	private JButton btnPok2;
+	private JButton btnPok3;
+	private JButton btnPok4;
+	private JButton btnPok5;
+	private JButton btnPok6;
+	private JButton btnLanzarPB;
+	private JButton btnHuir;
 	private JTextField textUser;
 	private JTextField textPassword;
 	private JTextField textOrigin;
@@ -26,14 +36,22 @@ public class TrainerView extends JDialog implements ActionListener, FocusListene
 	private JTextField textBadges;
 	private JTextField textPSalv;
 	private JTextField textPKRiv;
+	private JTextArea textAreaTrainInfo;
+	private JTextArea textAreaPKInfo;
+	private JDateChooser ageCalender;
+	private JComboBox<String> comboBoxPC;
+	private JComboBox<String> comboBoxSelecPK;
 
-	public TrainerView() {
-		super();
+
+
+
+	public TrainerView(LoginView loginView, Trainer t) {
+		super(loginView);
 		setResizable(false);
-		setType(Type.POPUP);
-		setModalityType(ModalityType.APPLICATION_MODAL);
 		setTitle("Trainer View");
 		setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
+		loginView.dispose();
+
 		JPanel panel1 = new JPanel();
 		JPanel panel2 = new JPanel();
 		JPanel panel3 = new JPanel();
@@ -78,9 +96,9 @@ public class TrainerView extends JDialog implements ActionListener, FocusListene
 		lblUser.setBounds(27, 73, 76, 25);
 		panel1.add(lblUser);
 
-		JDateChooser dateChooser = new JDateChooser();
-		dateChooser.setBounds(219, 108, 96, 19);
-		panel1.add(dateChooser);
+		ageCalender = new JDateChooser();
+		ageCalender.setBounds(219, 108, 96, 19);
+		panel1.add(ageCalender);
 
 		JLabel lblPassword = new JLabel("PASSWORD");
 		lblPassword.setHorizontalAlignment(SwingConstants.LEFT);
@@ -106,13 +124,13 @@ public class TrainerView extends JDialog implements ActionListener, FocusListene
 		lblBadges.setBounds(218, 197, 110, 25);
 		panel1.add(lblBadges);
 
-		JButton btnSave = new JButton("SAVE");
+		btnSave = new JButton("SAVE");
 		btnSave.setFont(new Font("Tahoma", Font.PLAIN, 14));
 		btnSave.setBounds(129, 312, 85, 21);
 		panel1.add(btnSave);
 
-		JTextArea textAreaTrainInfo = new JTextArea();
-		textAreaTrainInfo.setBounds(429, 105, 197, 335);
+		textAreaTrainInfo = new JTextArea();
+		textAreaTrainInfo.setBounds(429, 78, 197, 335);
 		panel1.add(textAreaTrainInfo);
 
 		JLabel lblAge = new JLabel("AGE");
@@ -136,52 +154,45 @@ public class TrainerView extends JDialog implements ActionListener, FocusListene
 		lblPokemonInfo.setBounds(426, 64, 153, 13);
 		panel2.add(lblPokemonInfo);
 
-		JComboBox<String> comboBoxPC = new JComboBox<String>();
+		comboBoxPC = new JComboBox<String>();
 		comboBoxPC.setBounds(29, 87, 153, 31);
 		panel2.add(comboBoxPC);
 
-		JButton btnPok1 = new JButton("POK1");
+		btnPok1 = new JButton("POK1");
 		btnPok1.setFont(new Font("Tahoma", Font.PLAIN, 14));
 		btnPok1.setBounds(29, 171, 85, 21);
 		panel2.add(btnPok1);
 
-		JButton btnPok2 = new JButton("POK2");
+		btnPok2 = new JButton("POK2");
 		btnPok2.setFont(new Font("Tahoma", Font.PLAIN, 14));
 		btnPok2.setBounds(163, 171, 85, 21);
 		panel2.add(btnPok2);
 
-		JButton btnPok3 = new JButton("POK3");
+		btnPok3 = new JButton("POK3");
 		btnPok3.setFont(new Font("Tahoma", Font.PLAIN, 14));
 		btnPok3.setBounds(29, 228, 85, 21);
 		panel2.add(btnPok3);
 
-		JButton btnPok4 = new JButton("POK4");
+		btnPok4 = new JButton("POK4");
 		btnPok4.setFont(new Font("Tahoma", Font.PLAIN, 14));
 		btnPok4.setBounds(163, 228, 85, 21);
 		panel2.add(btnPok4);
 
-		JButton btnPok5 = new JButton("POK5");
+		btnPok5 = new JButton("POK5");
 		btnPok5.setFont(new Font("Tahoma", Font.PLAIN, 14));
 		btnPok5.setBounds(29, 282, 85, 21);
 		panel2.add(btnPok5);
 
-		JButton btnPok6 = new JButton("POK6");
+		btnPok6 = new JButton("POK6");
 		btnPok6.setFont(new Font("Tahoma", Font.PLAIN, 14));
 		btnPok6.setBounds(163, 282, 85, 21);
 		panel2.add(btnPok6);
 
-		JTextArea textAreaPKInfo = new JTextArea();
+		textAreaPKInfo = new JTextArea();
 		textAreaPKInfo.setEditable(false);
 		textAreaPKInfo.setBounds(407, 89, 172, 326);
 		panel2.add(textAreaPKInfo);
 
-		// Deshabilitar los botones al inicio
-		btnPok1.setEnabled(false);
-		btnPok2.setEnabled(false);
-		btnPok3.setEnabled(false);
-		btnPok4.setEnabled(false);
-		btnPok5.setEnabled(false);
-		btnPok6.setEnabled(false);
 
 		// Agregar ActionListener a la JComboBox
 		comboBoxPC.addActionListener(new ActionListener() {
@@ -211,7 +222,7 @@ public class TrainerView extends JDialog implements ActionListener, FocusListene
 		lblPKSalv.setBounds(432, 94, 86, 14);
 		panel3.add(lblPKSalv);
 
-		JComboBox comboBoxSelecPK = new JComboBox();
+		comboBoxSelecPK = new JComboBox<String>();
 		comboBoxSelecPK.setBounds(140, 118, 118, 22);
 		panel3.add(comboBoxSelecPK);
 
@@ -221,12 +232,12 @@ public class TrainerView extends JDialog implements ActionListener, FocusListene
 		panel3.add(textPSalv);
 		textPSalv.setColumns(10);
 
-		JButton btnLanzarPB = new JButton("LANZAR POKEBALL");
+		btnLanzarPB = new JButton("LANZAR POKEBALL");
 		btnLanzarPB.setBounds(140, 232, 152, 23);
 		btnLanzarPB.setEnabled(false); // Deshabilitar el botón inicialmente
 		panel3.add(btnLanzarPB);
 
-		JButton btnHuir = new JButton("HUIR");
+		btnHuir = new JButton("HUIR");
 		btnHuir.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 			}
@@ -257,34 +268,12 @@ public class TrainerView extends JDialog implements ActionListener, FocusListene
 		lblPKRiv.setBounds(378, 93, 84, 14);
 		panel4.add(lblPKRiv);
 
-		JComboBox comboBox = new JComboBox();
-		comboBox.setBounds(119, 118, 98, 22);
-		panel4.add(comboBox);
 
 		textPKRiv = new JTextField();
 		textPKRiv.setBounds(378, 119, 86, 20);
 		panel4.add(textPKRiv);
 		textPKRiv.setColumns(10);
 
-		JButton btnAtacar = new JButton("ATACAR");
-		btnAtacar.setBounds(181, 220, 89, 23);
-		btnAtacar.setEnabled(false); // Deshabilitar el botón inicialmente
-		panel4.add(btnAtacar);
-
-		JButton btnHuir_1 = new JButton("HUIR");
-		btnHuir_1.setBounds(330, 220, 89, 23);
-		btnHuir_1.setEnabled(false); // Deshabilitar el botón inicialmente
-		panel4.add(btnHuir_1);
-
-		// Agregar ActionListener a la JComboBox
-		comboBox.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				if (comboBox.getSelectedItem() != null) {
-					btnAtacar.setEnabled(true); // Habilitar el botón "ATACAR"
-					btnHuir_1.setEnabled(true); // Habilitar el botón "HUIR"
-				}
-			}
-		});
 
 		// Agregamos el objeto JTabbedPane a la ventana
 		getContentPane().add(pestanas);
@@ -292,10 +281,6 @@ public class TrainerView extends JDialog implements ActionListener, FocusListene
 		// Configuramos la ventana
 		setSize(682, 614);
 		setVisible(true);
-	}
-
-	public static void main(String[] args) {
-		new TrainerView();
 	}
 
 	@Override

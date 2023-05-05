@@ -163,15 +163,14 @@ public class LoginView extends JFrame implements ActionListener, FocusListener, 
 				Professor prof = (Professor) t;
 				ProfessorView vProfessor = new ProfessorView(LoginView.this, prof);
 				vProfessor.setVisible(true);
-				} else if (t instanceof Trainer ) {
-					/*Here should be the declaration of the Trainer view but it is not done yet 
-					 * TrainerView vTrainer = new TrainerView(this, true);
-				vTrainer.setVisible(true);*/
-				}
-				else if(t==null){
+				}else if(t==null){
 					errorMessage.setVisible(true);
 					usernameField.setText("");
 					passwordField.setText("");
+				} else {
+					TrainerView trainerView = new TrainerView(LoginView.this, t);
+					trainerView.setVisible(true);
+					
 				}
 			} catch (MyException e1) {
 

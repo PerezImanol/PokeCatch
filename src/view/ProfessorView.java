@@ -90,6 +90,10 @@ public class ProfessorView extends JDialog implements ActionListener {
 	private LinkedHashSet<Trainer> trainers;
 	private LinkedHashSet<PokemonExtra> pokemons;
 
+	/**
+	 * @param loginView
+	 * @param loggedProf
+	 */
 	public ProfessorView(LoginView loginView, Professor loggedProf) {
 		super(loginView);
 		requestFocus();
