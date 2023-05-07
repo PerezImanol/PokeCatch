@@ -4,10 +4,12 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
 
 import classes.Combat;
 import classes.MyException;
+import classes.Pokemon;
 import classes.PokemonExtra;
 import interfaces.DataBattleShowable;
 
@@ -17,6 +19,7 @@ public class DataBattleShowableDBimplementation implements DataBattleShowable {
 	private PreparedStatement stmt;
 	private OpenCloseConnection occ = new OpenCloseConnection();
 	private String query = null;
+	private ResultSet rte;
 
 	@Override
 	public LinkedHashSet<PokemonExtra> getPokemons() throws MyException {
@@ -76,6 +79,39 @@ public class DataBattleShowableDBimplementation implements DataBattleShowable {
 		occ.closeConnection(stmt, con);
 
 		return combat;
+	}
+
+	@Override
+	public LinkedHashMap<String, Pokemon> getPcPokemons(int trainer_id) throws MyException {
+		LinkedHashMap<String, Pokemon> aux = new LinkedHashMap<>();
+
+		query = "Select pokedex_id, region, pokemon_name, nickname, type1, type2, pokemon_lvl, location from Pokemon_static join Pokemon on pokemon_id=pokedex_id where trainer_id=? and location=false";
+		con = occ.openConnection();
+
+		try {
+			stmt = con.prepareStatement(query);
+			stmt.setInt(1, trainer_id);
+
+			ResultSet rte = stmt.executeQuery();
+			// Here we give values to the set storaging the trainers pokemon
+			while (rte.next()) {
+				Pokemon p = new Pokemon();
+				p.setPokedexID(rte.getInt("pokedex_id"));
+				p.setRegion(rte.getString("region"));
+				p.setName(rte.getString("pokemon_name"));
+				p.setNickname(rte.getString("nickname"));
+				p.setType1(rte.getString("type1"));
+				p.setType2(rte.getString("type2"));
+				p.setLevel(rte.getInt("pokemon_lvl"));
+				aux.put(p.getName(), p);
+			}
+		} catch (SQLException e) {
+			String error = "Error getting the trainer's pc pokemons";
+			MyException er = new MyException(error);
+			throw er;
+		}
+
+		return aux;
 	}
 
 }

@@ -10,14 +10,26 @@ import java.awt.Font;
 import java.awt.event.ActionListener;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
+import java.util.LinkedHashMap;
+import java.util.LinkedHashSet;
 import java.awt.event.ActionEvent;
 import javax.swing.SwingConstants;
+import java.util.Iterator;
 import javax.swing.JTextField;
 import javax.swing.*;
 
 import com.toedter.calendar.JDateChooser;
 
+import classes.MyException;
+import classes.Pokemon;
 import classes.Trainer;
+import factories.AccountManageableFactory;
+import factories.DataBattleFactory;
+import factories.SimulableFactory;
+import interfaces.AccountManageable;
+import interfaces.DataBattleShowable;
+import interfaces.Simulable;
+import java.awt.Color;
 
 public class TrainerView extends JDialog implements ActionListener, FocusListener {
 	private JButton btnSave;
@@ -41,19 +53,28 @@ public class TrainerView extends JDialog implements ActionListener, FocusListene
 	private JDateChooser ageCalender;
 	private JComboBox<String> comboBoxPC;
 	private JComboBox<String> comboBoxSelecPK;
-
-
-
+	private Trainer trainer;
+	private AccountManageable manageable= AccountManageableFactory.getAccountManageable();
+	private Simulable simulable = SimulableFactory.getSimulable();
+	private DataBattleShowable showable = DataBattleFactory.getDataBattleShowable();
 
 	public TrainerView(LoginView loginView, Trainer t) {
-		super(loginView);
+		super(loginView, true);
 		setResizable(false);
+		trainer = t;
 		setTitle("Trainer View");
 		setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
 		loginView.dispose();
 
-		JPanel panel1 = new JPanel();
-		JPanel panel2 = new JPanel();
+		try {
+			LinkedHashMap<String, Pokemon> pokemonsInPc = showable.getPcPokemons(trainer.getTrainerID());
+
+		} catch (MyException er ){
+			JOptionPane.showMessageDialog(null, er.getMessage(), "WARNING", JOptionPane.ERROR_MESSAGE);
+		}
+
+		JPanel panelInfo = new JPanel();
+		JPanel panelPC = new JPanel();
 		JPanel panel3 = new JPanel();
 		JPanel panel4 = new JPanel();
 
@@ -62,153 +83,157 @@ public class TrainerView extends JDialog implements ActionListener, FocusListene
 
 		// Pestaña1
 		// Creamos un panel y lo agregamos a la pestaña "BATTLES"
-		pestanas.addTab("INFO", panel1);
-		panel1.setLayout(null);
+		pestanas.addTab("INFO", panelInfo);
+		panelInfo.setLayout(null);
 
 		textUser = new JTextField();
 		textUser.setBounds(27, 108, 96, 19);
-		panel1.add(textUser);
+		panelInfo.add(textUser);
 		textUser.setColumns(10);
 
 		textPassword = new JTextField();
 		textPassword.setColumns(10);
 		textPassword.setBounds(27, 168, 96, 19);
-		panel1.add(textPassword);
+		panelInfo.add(textPassword);
 
 		textOrigin = new JTextField();
 		textOrigin.setBounds(27, 223, 96, 19);
-		panel1.add(textOrigin);
+		panelInfo.add(textOrigin);
 		textOrigin.setColumns(10);
 
 		textGender = new JTextField();
 		textGender.setColumns(10);
 		textGender.setBounds(219, 168, 96, 19);
-		panel1.add(textGender);
+		panelInfo.add(textGender);
 
 		textBadges = new JTextField();
 		textBadges.setColumns(10);
 		textBadges.setBounds(219, 223, 96, 19);
-		panel1.add(textBadges);
+		panelInfo.add(textBadges);
 
 		JLabel lblUser = new JLabel("USER");
 		lblUser.setHorizontalAlignment(SwingConstants.LEFT);
 		lblUser.setFont(new Font("Tahoma", Font.PLAIN, 14));
 		lblUser.setBounds(27, 73, 76, 25);
-		panel1.add(lblUser);
+		panelInfo.add(lblUser);
 
 		ageCalender = new JDateChooser();
 		ageCalender.setBounds(219, 108, 96, 19);
-		panel1.add(ageCalender);
+		panelInfo.add(ageCalender);
 
 		JLabel lblPassword = new JLabel("PASSWORD");
 		lblPassword.setHorizontalAlignment(SwingConstants.LEFT);
 		lblPassword.setFont(new Font("Tahoma", Font.PLAIN, 14));
 		lblPassword.setBounds(27, 133, 76, 25);
-		panel1.add(lblPassword);
+		panelInfo.add(lblPassword);
 
 		JLabel lblOriginCity = new JLabel("ORIGIN CITY");
 		lblOriginCity.setHorizontalAlignment(SwingConstants.LEFT);
 		lblOriginCity.setFont(new Font("Tahoma", Font.PLAIN, 14));
 		lblOriginCity.setBounds(27, 197, 110, 25);
-		panel1.add(lblOriginCity);
+		panelInfo.add(lblOriginCity);
 
 		JLabel lblGender = new JLabel("GENDER");
 		lblGender.setHorizontalAlignment(SwingConstants.LEFT);
 		lblGender.setFont(new Font("Tahoma", Font.PLAIN, 14));
 		lblGender.setBounds(219, 133, 76, 25);
-		panel1.add(lblGender);
+		panelInfo.add(lblGender);
 
 		JLabel lblBadges = new JLabel("BADGES");
 		lblBadges.setHorizontalAlignment(SwingConstants.LEFT);
 		lblBadges.setFont(new Font("Tahoma", Font.PLAIN, 14));
 		lblBadges.setBounds(218, 197, 110, 25);
-		panel1.add(lblBadges);
+		panelInfo.add(lblBadges);
 
 		btnSave = new JButton("SAVE");
 		btnSave.setFont(new Font("Tahoma", Font.PLAIN, 14));
 		btnSave.setBounds(129, 312, 85, 21);
-		panel1.add(btnSave);
+		panelInfo.add(btnSave);
 
 		textAreaTrainInfo = new JTextArea();
+		textAreaTrainInfo.setForeground(new Color(0, 0, 0));
+		textAreaTrainInfo.setFont(new Font("JetBrains Mono Medium", Font.PLAIN, 14));
+		textAreaTrainInfo.setLineWrap(true);
+		textAreaTrainInfo.setColumns(10);
+		textAreaTrainInfo.setEditable(false);
 		textAreaTrainInfo.setBounds(429, 78, 197, 335);
-		panel1.add(textAreaTrainInfo);
+		panelInfo.add(textAreaTrainInfo);
 
 		JLabel lblAge = new JLabel("AGE");
 		lblAge.setHorizontalAlignment(SwingConstants.LEFT);
 		lblAge.setFont(new Font("Tahoma", Font.PLAIN, 14));
 		lblAge.setBounds(219, 73, 76, 25);
-		panel1.add(lblAge);
+		panelInfo.add(lblAge);
 
 		// Pestaña2
-		pestanas.addTab("PC", panel2);
-		panel2.setLayout(null);
+		pestanas.addTab("PC", panelPC);
+		panelPC.setLayout(null);
 
 		JLabel lblPokePC = new JLabel("POKÉMON IN THE PC");
 		lblPokePC.setFont(new Font("Tahoma", Font.PLAIN, 14));
 		lblPokePC.setBounds(29, 64, 153, 13);
-		panel2.add(lblPokePC);
+		panelPC.add(lblPokePC);
 
 		JLabel lblPokemonInfo = new JLabel("POKÉMON INFO");
 		lblPokemonInfo.setHorizontalAlignment(SwingConstants.CENTER);
 		lblPokemonInfo.setFont(new Font("Tahoma", Font.PLAIN, 14));
 		lblPokemonInfo.setBounds(426, 64, 153, 13);
-		panel2.add(lblPokemonInfo);
+		panelPC.add(lblPokemonInfo);
 
 		comboBoxPC = new JComboBox<String>();
 		comboBoxPC.setBounds(29, 87, 153, 31);
-		panel2.add(comboBoxPC);
+		panelPC.add(comboBoxPC);
 
 		btnPok1 = new JButton("POK1");
 		btnPok1.setFont(new Font("Tahoma", Font.PLAIN, 14));
-		btnPok1.setBounds(29, 171, 85, 21);
-		panel2.add(btnPok1);
+		btnPok1.setBounds(29, 171, 114, 21);
+		btnPok1.addActionListener(this);
+		panelPC.add(btnPok1);
 
 		btnPok2 = new JButton("POK2");
 		btnPok2.setFont(new Font("Tahoma", Font.PLAIN, 14));
-		btnPok2.setBounds(163, 171, 85, 21);
-		panel2.add(btnPok2);
+		btnPok2.setBounds(201, 171, 124, 21);
+		btnPok2.addActionListener(this);
+		panelPC.add(btnPok2);
 
 		btnPok3 = new JButton("POK3");
 		btnPok3.setFont(new Font("Tahoma", Font.PLAIN, 14));
-		btnPok3.setBounds(29, 228, 85, 21);
-		panel2.add(btnPok3);
+		btnPok3.setBounds(29, 228, 114, 21);
+		btnPok3.addActionListener(this);
+		panelPC.add(btnPok3);
 
 		btnPok4 = new JButton("POK4");
 		btnPok4.setFont(new Font("Tahoma", Font.PLAIN, 14));
-		btnPok4.setBounds(163, 228, 85, 21);
-		panel2.add(btnPok4);
+		btnPok4.setBounds(201, 228, 124, 21);
+		btnPok4.addActionListener(this);
+		panelPC.add(btnPok4);
 
 		btnPok5 = new JButton("POK5");
 		btnPok5.setFont(new Font("Tahoma", Font.PLAIN, 14));
-		btnPok5.setBounds(29, 282, 85, 21);
-		panel2.add(btnPok5);
+		btnPok5.setBounds(29, 282, 114, 21);
+		btnPok5.addActionListener(this);
+		panelPC.add(btnPok5);
 
 		btnPok6 = new JButton("POK6");
 		btnPok6.setFont(new Font("Tahoma", Font.PLAIN, 14));
-		btnPok6.setBounds(163, 282, 85, 21);
-		panel2.add(btnPok6);
+		btnPok6.setBounds(201, 282, 124, 21);
+		btnPok6.addActionListener(this);
+		panelPC.add(btnPok6);
 
 		textAreaPKInfo = new JTextArea();
+		textAreaPKInfo.setLineWrap(true);
+		textAreaPKInfo.setColumns(10);
 		textAreaPKInfo.setEditable(false);
-		textAreaPKInfo.setBounds(407, 89, 172, 326);
-		panel2.add(textAreaPKInfo);
-
+		textAreaPKInfo.setBounds(407, 89, 206, 326);
+		panelPC.add(textAreaPKInfo);
+		
+		JButton btnShow = new JButton("SHOW");
+		btnShow.setFont(new Font("Dialog", Font.PLAIN, 14));
+		btnShow.setBounds(204, 90, 99, 21);
+		panelPC.add(btnShow);
 
 		// Agregar ActionListener a la JComboBox
-		comboBoxPC.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				// Verificar si se ha seleccionado un elemento
-				if (comboBoxPC.getSelectedIndex() != -1) {
-					// Habilitar los botones
-					btnPok1.setEnabled(true);
-					btnPok2.setEnabled(true);
-					btnPok3.setEnabled(true);
-					btnPok4.setEnabled(true);
-					btnPok5.setEnabled(true);
-					btnPok6.setEnabled(true);
-				}
-			}
-		});
+		comboBoxPC.addActionListener(this);
 
 		// Pestaña3
 		pestanas.addTab("CAPTURE", panel3);
@@ -268,15 +293,15 @@ public class TrainerView extends JDialog implements ActionListener, FocusListene
 		lblPKRiv.setBounds(378, 93, 84, 14);
 		panel4.add(lblPKRiv);
 
-
 		textPKRiv = new JTextField();
 		textPKRiv.setBounds(378, 119, 86, 20);
 		panel4.add(textPKRiv);
 		textPKRiv.setColumns(10);
 
-
 		// Agregamos el objeto JTabbedPane a la ventana
 		getContentPane().add(pestanas);
+
+		setPokemonButtons();
 
 		// Configuramos la ventana
 		setSize(682, 614);
@@ -285,8 +310,21 @@ public class TrainerView extends JDialog implements ActionListener, FocusListene
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
-		// TODO Auto-generated method stub
 
+		if(e.getSource().equals(btnPok1) || e.getSource().equals(btnPok2) || e.getSource().equals(btnPok3) 
+		||e.getSource().equals(btnPok4) || e.getSource().equals(btnPok5) || e.getSource().equals(btnPok6)){
+
+			JButton aux = (JButton) e.getSource();
+
+			for (Pokemon p : trainer.getTeam()){
+				if (p.getName().equals(aux.getText())){
+					textAreaPKInfo.setText(p.toString());
+				}
+			}
+			if (aux.getText() == "")
+				textAreaPKInfo.setText("");
+		}
+		
 	}
 
 	@Override
@@ -299,5 +337,19 @@ public class TrainerView extends JDialog implements ActionListener, FocusListene
 	public void focusLost(FocusEvent arg0) {
 		// TODO Auto-generated method stub
 		throw new UnsupportedOperationException("Unimplemented method 'focusLost'");
+	}
+
+	private void setPokemonButtons(){
+		LinkedHashSet<Pokemon> t = trainer. getTeam();
+		Pokemon team [] = new Pokemon[6];
+		t.toArray(team);
+
+			btnPok1.setText(team[0] == null ? "" : team[0].getName());
+			btnPok2.setText(team[1] == null ? "" : team[1].getName());
+			btnPok3.setText(team[2] == null ? "" : team[2].getName());
+			btnPok4.setText(team[3] == null ? "" : team[3].getName());
+			btnPok5.setText(team[4] == null ? "" : team[4].getName());
+			btnPok6.setText(team[5] == null ? "" : team[5].getName());
+
 	}
 }

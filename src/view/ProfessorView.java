@@ -102,7 +102,6 @@ public class ProfessorView extends JDialog implements ActionListener {
 		setIconImage(Toolkit.getDefaultToolkit().getImage(ProfessorView.class.getResource("/resources/descarga.png")));
 		setTitle("Professor View");
 		setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
-
 		loginView.dispose();
 
 		try {
@@ -339,7 +338,7 @@ public class ProfessorView extends JDialog implements ActionListener {
 
 		addValidateBtn = new JButton("VALIDATE");
 		addValidateBtn.addActionListener(this);
-		addValidateBtn.setBounds(151, 362, 86, 23);
+		addValidateBtn.setBounds(151, 362, 101, 23);
 		panelModify.add(addValidateBtn);
 
 		JLabel ageLbl = new JLabel("AGE");
@@ -378,6 +377,7 @@ public class ProfessorView extends JDialog implements ActionListener {
 		pokeballAdderBtn.setEnabled(false);
 
 		infotoaddField = new JTextArea();
+		infotoaddField.setLineWrap(true);
 		infotoaddField.setEditable(false);
 		infotoaddField.setColumns(10);
 		infotoaddField.setBackground(Color.GRAY);
@@ -387,7 +387,7 @@ public class ProfessorView extends JDialog implements ActionListener {
 
 		addTrainerButton = new JButton("ADD");
 		addTrainerButton.addActionListener(this);
-		addTrainerButton.setBounds(519, 362, 86, 23);
+		addTrainerButton.setBounds(504, 362, 101, 23);
 		addTrainerButton.setVisible(false);
 		panelModify.add(addTrainerButton);
 		// Agregar ActionListener al botón btnNewButton_3
