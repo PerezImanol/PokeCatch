@@ -19,7 +19,6 @@ public class DataBattleShowableDBimplementation implements DataBattleShowable {
 	private PreparedStatement stmt;
 	private OpenCloseConnection occ = new OpenCloseConnection();
 	private String query = null;
-	private ResultSet rte;
 
 	@Override
 	public LinkedHashSet<PokemonExtra> getPokemons() throws MyException {

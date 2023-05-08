@@ -136,7 +136,11 @@ public class SimulableDBimplementation implements Simulable {
 			stmt.setBoolean(1, !pokemon2.isTeam());
 			stmt.setInt(2, trainer.getTrainerID());
 			stmt.setInt(3, pokemon2.getPokedexID());
-			stmt.executeUpdate();
+			int flag = stmt.executeUpdate();
+			if (flag > 0){
+				MyException message = new MyException("Pokemons switched successfully");
+				throw message;
+			}
 		} catch (SQLException e) {
 			String error = "Error swithing positions";
 			MyException er = new MyException(error);

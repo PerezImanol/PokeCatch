@@ -1,22 +1,25 @@
 package view;
 
-import javax.swing.JDialog;
-import javax.swing.JPanel;
-import javax.swing.JTabbedPane;
-import javax.swing.JButton;
-import javax.swing.JLabel;
-import javax.swing.JComboBox;
+import java.awt.Color;
 import java.awt.Font;
+import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
+import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
-import java.awt.event.ActionEvent;
-import javax.swing.SwingConstants;
-import java.util.Iterator;
+
+import javax.swing.JButton;
+import javax.swing.JComboBox;
+import javax.swing.JDialog;
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.JTabbedPane;
+import javax.swing.JTextArea;
 import javax.swing.JTextField;
-import javax.swing.*;
+import javax.swing.SwingConstants;
 
 import com.toedter.calendar.JDateChooser;
 
@@ -29,9 +32,10 @@ import factories.SimulableFactory;
 import interfaces.AccountManageable;
 import interfaces.DataBattleShowable;
 import interfaces.Simulable;
-import java.awt.Color;
 
 public class TrainerView extends JDialog implements ActionListener, FocusListener {
+	private JLabel lblPokePC;
+	private JLabel lblPokemonInfo;
 	private JButton btnSave;
 	private JButton btnPok1;
 	private JButton btnPok2;
@@ -41,8 +45,10 @@ public class TrainerView extends JDialog implements ActionListener, FocusListene
 	private JButton btnPok6;
 	private JButton btnLanzarPB;
 	private JButton btnHuir;
-	private JTextField textUser;
-	private JTextField textPassword;
+	private JButton btnShow;
+	private JButton btnUpdate;
+	private JTextField textUserID;
+	private JTextField textName;
 	private JTextField textOrigin;
 	private JTextField textGender;
 	private JTextField textBadges;
@@ -53,10 +59,18 @@ public class TrainerView extends JDialog implements ActionListener, FocusListene
 	private JDateChooser ageCalender;
 	private JComboBox<String> comboBoxPC;
 	private JComboBox<String> comboBoxSelecPK;
+	private JComboBox<String> teamPokemonToSwitch;
+	private JComboBox<String> pcPokemonToSwitch;
+	private JPanel panelPC;
+	private JButton btnSwitch;
 	private Trainer trainer;
-	private AccountManageable manageable= AccountManageableFactory.getAccountManageable();
+	private AccountManageable manageable = AccountManageableFactory.getAccountManageable();
 	private Simulable simulable = SimulableFactory.getSimulable();
 	private DataBattleShowable showable = DataBattleFactory.getDataBattleShowable();
+	private LinkedHashMap<String, Pokemon> pc;
+	private LinkedHashSet<Pokemon> team;
+	private JButton backButton;
+	private JPanel panelInfo;
 
 	public TrainerView(LoginView loginView, Trainer t) {
 		super(loginView, true);
@@ -66,15 +80,8 @@ public class TrainerView extends JDialog implements ActionListener, FocusListene
 		setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
 		loginView.dispose();
 
-		try {
-			LinkedHashMap<String, Pokemon> pokemonsInPc = showable.getPcPokemons(trainer.getTrainerID());
-
-		} catch (MyException er ){
-			JOptionPane.showMessageDialog(null, er.getMessage(), "WARNING", JOptionPane.ERROR_MESSAGE);
-		}
-
-		JPanel panelInfo = new JPanel();
-		JPanel panelPC = new JPanel();
+		panelInfo = new JPanel();
+		panelPC = new JPanel();
 		JPanel panel3 = new JPanel();
 		JPanel panel4 = new JPanel();
 
@@ -86,15 +93,16 @@ public class TrainerView extends JDialog implements ActionListener, FocusListene
 		pestanas.addTab("INFO", panelInfo);
 		panelInfo.setLayout(null);
 
-		textUser = new JTextField();
-		textUser.setBounds(27, 108, 96, 19);
-		panelInfo.add(textUser);
-		textUser.setColumns(10);
+		textUserID = new JTextField();
+		textUserID.setEditable(false);
+		textUserID.setBounds(27, 108, 96, 19);
+		panelInfo.add(textUserID);
+		textUserID.setColumns(10);
 
-		textPassword = new JTextField();
-		textPassword.setColumns(10);
-		textPassword.setBounds(27, 168, 96, 19);
-		panelInfo.add(textPassword);
+		textName = new JTextField();
+		textName.setColumns(10);
+		textName.setBounds(27, 168, 96, 19);
+		panelInfo.add(textName);
 
 		textOrigin = new JTextField();
 		textOrigin.setBounds(27, 223, 96, 19);
@@ -107,25 +115,27 @@ public class TrainerView extends JDialog implements ActionListener, FocusListene
 		panelInfo.add(textGender);
 
 		textBadges = new JTextField();
+		textBadges.setEditable(false);
 		textBadges.setColumns(10);
 		textBadges.setBounds(219, 223, 96, 19);
 		panelInfo.add(textBadges);
 
-		JLabel lblUser = new JLabel("USER");
-		lblUser.setHorizontalAlignment(SwingConstants.LEFT);
-		lblUser.setFont(new Font("Tahoma", Font.PLAIN, 14));
-		lblUser.setBounds(27, 73, 76, 25);
-		panelInfo.add(lblUser);
+		JLabel lblUserID = new JLabel("USER ID");
+		lblUserID.setHorizontalAlignment(SwingConstants.LEFT);
+		lblUserID.setFont(new Font("Tahoma", Font.PLAIN, 14));
+		lblUserID.setBounds(27, 73, 96, 25);
+		panelInfo.add(lblUserID);
 
 		ageCalender = new JDateChooser();
+		ageCalender.getCalendarButton();
 		ageCalender.setBounds(219, 108, 96, 19);
 		panelInfo.add(ageCalender);
 
-		JLabel lblPassword = new JLabel("PASSWORD");
-		lblPassword.setHorizontalAlignment(SwingConstants.LEFT);
-		lblPassword.setFont(new Font("Tahoma", Font.PLAIN, 14));
-		lblPassword.setBounds(27, 133, 76, 25);
-		panelInfo.add(lblPassword);
+		JLabel lblName = new JLabel("NAME");
+		lblName.setHorizontalAlignment(SwingConstants.LEFT);
+		lblName.setFont(new Font("Tahoma", Font.PLAIN, 14));
+		lblName.setBounds(27, 133, 96, 25);
+		panelInfo.add(lblName);
 
 		JLabel lblOriginCity = new JLabel("ORIGIN CITY");
 		lblOriginCity.setHorizontalAlignment(SwingConstants.LEFT);
@@ -146,6 +156,7 @@ public class TrainerView extends JDialog implements ActionListener, FocusListene
 		panelInfo.add(lblBadges);
 
 		btnSave = new JButton("SAVE");
+		btnSave.addActionListener(this);
 		btnSave.setFont(new Font("Tahoma", Font.PLAIN, 14));
 		btnSave.setBounds(129, 312, 85, 21);
 		panelInfo.add(btnSave);
@@ -165,19 +176,26 @@ public class TrainerView extends JDialog implements ActionListener, FocusListene
 		lblAge.setBounds(219, 73, 76, 25);
 		panelInfo.add(lblAge);
 
+		btnUpdate = new JButton("UPDATE");
+		btnUpdate.addActionListener(this);
+		btnUpdate.setFont(new Font("Dialog", Font.PLAIN, 14));
+		btnUpdate.setBounds(454, 450, 148, 21);
+		btnUpdate.setVisible(false);
+		panelInfo.add(btnUpdate);
+
 		// Pestaña2
 		pestanas.addTab("PC", panelPC);
 		panelPC.setLayout(null);
 
-		JLabel lblPokePC = new JLabel("POKÉMON IN THE PC");
+		lblPokePC = new JLabel("POKÉMON IN THE PC");
 		lblPokePC.setFont(new Font("Tahoma", Font.PLAIN, 14));
-		lblPokePC.setBounds(29, 64, 153, 13);
+		lblPokePC.setBounds(29, 56, 153, 21);
 		panelPC.add(lblPokePC);
 
-		JLabel lblPokemonInfo = new JLabel("POKÉMON INFO");
+		lblPokemonInfo = new JLabel("POKÉMON INFO");
 		lblPokemonInfo.setHorizontalAlignment(SwingConstants.CENTER);
 		lblPokemonInfo.setFont(new Font("Tahoma", Font.PLAIN, 14));
-		lblPokemonInfo.setBounds(426, 64, 153, 13);
+		lblPokemonInfo.setBounds(426, 56, 153, 21);
 		panelPC.add(lblPokemonInfo);
 
 		comboBoxPC = new JComboBox<String>();
@@ -226,11 +244,38 @@ public class TrainerView extends JDialog implements ActionListener, FocusListene
 		textAreaPKInfo.setEditable(false);
 		textAreaPKInfo.setBounds(407, 89, 206, 326);
 		panelPC.add(textAreaPKInfo);
-		
-		JButton btnShow = new JButton("SHOW");
+
+		btnShow = new JButton("SHOW");
+		btnShow.addActionListener(this);
 		btnShow.setFont(new Font("Dialog", Font.PLAIN, 14));
 		btnShow.setBounds(204, 90, 99, 21);
 		panelPC.add(btnShow);
+
+		teamPokemonToSwitch = new JComboBox<String>();
+		teamPokemonToSwitch.setSelectedIndex(-1);
+		teamPokemonToSwitch.setBounds(150, 239, 153, 31);
+		teamPokemonToSwitch.setVisible(false);
+		panelPC.add(teamPokemonToSwitch);
+
+		pcPokemonToSwitch = new JComboBox<String>();
+		pcPokemonToSwitch.setSelectedIndex(-1);
+		pcPokemonToSwitch.setBounds(398, 239, 153, 31);
+		pcPokemonToSwitch.setVisible(false);
+		panelPC.add(pcPokemonToSwitch);
+
+		btnSwitch = new JButton("SWITCH MENU");
+		btnSwitch.addActionListener(this);
+		btnSwitch.setFont(new Font("Dialog", Font.PLAIN, 14));
+		btnSwitch.setBounds(105, 341, 153, 21);
+		panelPC.add(btnSwitch);
+
+		backButton = new JButton("BACK");
+		backButton.setVerticalAlignment(SwingConstants.BOTTOM);
+		backButton.setFont(new Font("Dialog", Font.PLAIN, 14));
+		backButton.setBounds(41, 457, 114, 21);
+		backButton.addActionListener(this);
+		backButton.setVisible(false);
+		panelPC.add(backButton);
 
 		// Agregar ActionListener a la JComboBox
 		comboBoxPC.addActionListener(this);
@@ -271,14 +316,7 @@ public class TrainerView extends JDialog implements ActionListener, FocusListene
 		btnHuir.setEnabled(false); // Deshabilitar el botón inicialmente
 		panel3.add(btnHuir);
 
-		comboBoxSelecPK.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				if (comboBoxSelecPK.getSelectedIndex() != -1) { // Si se selecciona una opción
-					btnLanzarPB.setEnabled(true); // Habilitar el botón de lanzar pokeball
-					btnHuir.setEnabled(true); // Habilitar el botón de huir
-				}
-			}
-		});
+		comboBoxSelecPK.addActionListener(this);
 
 		// Pestaña4
 		// Pestaña4
@@ -300,8 +338,8 @@ public class TrainerView extends JDialog implements ActionListener, FocusListene
 
 		// Agregamos el objeto JTabbedPane a la ventana
 		getContentPane().add(pestanas);
-
-		setPokemonButtons();
+		setPokemonButtonsAndComboBox();
+		setPersonalInfo();
 
 		// Configuramos la ventana
 		setSize(682, 614);
@@ -311,20 +349,90 @@ public class TrainerView extends JDialog implements ActionListener, FocusListene
 	@Override
 	public void actionPerformed(ActionEvent e) {
 
-		if(e.getSource().equals(btnPok1) || e.getSource().equals(btnPok2) || e.getSource().equals(btnPok3) 
-		||e.getSource().equals(btnPok4) || e.getSource().equals(btnPok5) || e.getSource().equals(btnPok6)){
+		if (e.getSource().equals(btnPok1) || e.getSource().equals(btnPok2) || e.getSource().equals(btnPok3)
+				|| e.getSource().equals(btnPok4) || e.getSource().equals(btnPok5) || e.getSource().equals(btnPok6)) {
 
 			JButton aux = (JButton) e.getSource();
 
-			for (Pokemon p : trainer.getTeam()){
-				if (p.getName().equals(aux.getText())){
+			for (Pokemon p : trainer.getTeam()) {
+				if (p.getName().equals(aux.getText())) {
 					textAreaPKInfo.setText(p.toString());
 				}
 			}
 			if (aux.getText() == "")
 				textAreaPKInfo.setText("");
 		}
-		
+
+		if (e.getSource().equals(btnShow)) {
+			textAreaPKInfo.setText(
+					comboBoxPC.getSelectedIndex() != -1 ? pc.get(comboBoxPC.getSelectedItem()).toString() : " ");
+		}
+
+		if (e.getSource().equals(btnSwitch)) {
+			if (btnSwitch.getText().equalsIgnoreCase("SWITCH MENU")) {
+				toggleSwitchMode(true);
+
+				teamPokemonToSwitch.removeAllItems();
+				pcPokemonToSwitch.removeAllItems();
+
+				for (Pokemon p : team) {
+					teamPokemonToSwitch.addItem(p.getName());
+				}
+				for (String name : pc.keySet()) {
+					pcPokemonToSwitch.addItem(name);
+				}
+
+				teamPokemonToSwitch.setSelectedIndex(-1);
+				pcPokemonToSwitch.setSelectedIndex(-1);
+
+			} else if (btnSwitch.getText().equalsIgnoreCase("SWITCH")) {
+				if (teamPokemonToSwitch.getSelectedIndex() != -1 && pcPokemonToSwitch.getSelectedIndex() != -1) {
+					if (JOptionPane.showOptionDialog(panelPC, "Are you sure you want to switch these pokemon?",
+							"Confirm switch", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE, null,
+							new Object[] { "YES", "NO" }, JOptionPane.YES_OPTION) == 0) {
+						Iterator<Pokemon> it = team.iterator();
+						boolean found = false;
+						while (it.hasNext() && !found) {
+							Pokemon p = it.next();
+							if (teamPokemonToSwitch.getSelectedItem().equals(p.getName())) {
+								try {
+									simulable.switchPosition(trainer, p, pc.get(pcPokemonToSwitch.getSelectedItem()));
+								} catch (Exception er) {
+									JOptionPane.showMessageDialog(null, er.getMessage(), "WARNING",
+											JOptionPane.INFORMATION_MESSAGE);
+								} finally {
+									switchInternally(p, pc.get(pcPokemonToSwitch.getSelectedItem()));
+								}
+								found = true;
+							}
+						}
+					}
+				} else {
+					JOptionPane.showMessageDialog(null, "Select 2 pokemons first", "WARNING",
+							JOptionPane.INFORMATION_MESSAGE);
+				}
+			}
+		}
+		if (e.getSource().equals(backButton)) {
+			toggleSwitchMode(false);
+			trainer.setTeam(team);
+			setPokemonButtonsAndComboBox();
+		}
+
+		if (e.getSource().equals(btnSave)) {
+			updateTrainer();
+			textAreaTrainInfo.setText(trainer.getTrainerInfo());
+			btnUpdate.setVisible(true);
+		}
+		if (e.getSource().equals(btnUpdate)) {
+			try {
+				manageable.modifyTrainer(trainer);
+			} catch (MyException er) {
+				JOptionPane.showMessageDialog(null, er.getMessage(), "WARNING", JOptionPane.INFORMATION_MESSAGE);
+			} finally {
+				btnUpdate.setVisible(false);
+			}
+		}
 	}
 
 	@Override
@@ -339,17 +447,83 @@ public class TrainerView extends JDialog implements ActionListener, FocusListene
 		throw new UnsupportedOperationException("Unimplemented method 'focusLost'");
 	}
 
-	private void setPokemonButtons(){
-		LinkedHashSet<Pokemon> t = trainer. getTeam();
-		Pokemon team [] = new Pokemon[6];
-		t.toArray(team);
+	private void setPokemonButtonsAndComboBox() {
+		team = trainer.getTeam();
+		try {
+			pc = showable.getPcPokemons(trainer.getTrainerID());
+		} catch (MyException er) {
+			JOptionPane.showMessageDialog(null, er.getMessage(), "WARNING", JOptionPane.ERROR_MESSAGE);
+		}
 
-			btnPok1.setText(team[0] == null ? "" : team[0].getName());
-			btnPok2.setText(team[1] == null ? "" : team[1].getName());
-			btnPok3.setText(team[2] == null ? "" : team[2].getName());
-			btnPok4.setText(team[3] == null ? "" : team[3].getName());
-			btnPok5.setText(team[4] == null ? "" : team[4].getName());
-			btnPok6.setText(team[5] == null ? "" : team[5].getName());
+		Pokemon teamStatic[] = new Pokemon[6];
+		team.toArray(teamStatic);
+
+		btnPok1.setText(teamStatic[0] == null ? "" : teamStatic[0].getName());
+		btnPok2.setText(teamStatic[1] == null ? "" : teamStatic[1].getName());
+		btnPok3.setText(teamStatic[2] == null ? "" : teamStatic[2].getName());
+		btnPok4.setText(teamStatic[3] == null ? "" : teamStatic[3].getName());
+		btnPok5.setText(teamStatic[4] == null ? "" : teamStatic[4].getName());
+		btnPok6.setText(teamStatic[5] == null ? "" : teamStatic[5].getName());
+
+		comboBoxPC.removeAllItems();
+
+		for (String name : pc.keySet()) {
+			comboBoxPC.addItem(name);
+		}
+		comboBoxPC.setSelectedIndex(-1);
+	}
+
+	private void toggleSwitchMode(Boolean flag) {
+		if (flag) {
+			btnSwitch.setBounds(265, 299, 153, 21);
+			btnSwitch.setText("SWITCH");
+		} else {
+			btnSwitch.setBounds(105, 341, 153, 21);
+			btnSwitch.setText("SWITCH MENU");
+		}
+
+		teamPokemonToSwitch.setVisible(flag);
+		pcPokemonToSwitch.setVisible(flag);
+		backButton.setVisible(flag);
+
+		lblPokePC.setVisible(!flag);
+		lblPokemonInfo.setVisible(!flag);
+		comboBoxPC.setVisible(!flag);
+		btnShow.setVisible(!flag);
+		textAreaPKInfo.setVisible(!flag);
+		btnPok1.setVisible(!flag);
+		btnPok2.setVisible(!flag);
+		btnPok3.setVisible(!flag);
+		btnPok4.setVisible(!flag);
+		btnPok5.setVisible(!flag);
+		btnPok6.setVisible(!flag);
+	}
+
+	private void switchInternally(Pokemon teamPokemon, Pokemon pcPokemon) {
+		team.remove(teamPokemon);
+		team.add(pcPokemon);
+
+		pc.remove(pcPokemon.getName());
+		pc.put(teamPokemon.getName(), teamPokemon);
+	}
+
+	private void setPersonalInfo() {
+		textUserID.setText(String.valueOf(trainer.getTrainerID()));
+		textName.setText(trainer.getName());
+		textOrigin.setText(trainer.getOriginCity());
+		ageCalender.setDate(trainer.getBirthdate());
+		textGender.setText(trainer.getGender());
+		textBadges.setText(String.valueOf(trainer.getBadges()));
+	}
+
+	private void updateTrainer() {
+		java.sql.Date date = new java.sql.Date(ageCalender.getDate().toInstant().toEpochMilli());
+
+		trainer.setName(textName.getText());
+		trainer.setBirthdate(date);
+		trainer.setGender(textGender.getText());
+		trainer.setOriginCity(textOrigin.getText());
+		trainer.setBadges(Integer.parseInt(textBadges.getText()));
 
 	}
 }

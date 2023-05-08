@@ -39,7 +39,7 @@ public class AccountManageableDBimplementation implements AccountManageable {
 			stmt.executeUpdate();
 
 		} catch (SQLException e) {
-			String error = "Error inserting data to the database";
+			String error = "Error adding new trainer";
 			MyException er = new MyException(error);
 			throw er;
 		}
@@ -57,7 +57,7 @@ public class AccountManageableDBimplementation implements AccountManageable {
 			stmt.setInt(1, trainerID);
 			stmt.executeUpdate();
 		} catch (SQLException e) {
-			String error = "Error executing deleting from database";
+			String error = "Error deleting trainer";
 			MyException er = new MyException(error);
 			throw er;
 		}
