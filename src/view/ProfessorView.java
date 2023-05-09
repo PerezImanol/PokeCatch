@@ -73,19 +73,19 @@ public class ProfessorView extends JDialog implements ActionListener {
 	private JComboBox<String> fireComboBox;
 	private JComboBox<String> grassComboBox;
 	private JComboBox<String> trainerDelete;
-	private AccountManageable manageable = AccountManageableFactory.getAccountManageable();
-	private DataBattleShowable showable = DataBattleFactory.getDataBattleShowable();
-	private Trainer t;
-	private JPanel panelBattle;
-	private JPanel paneDelete;
-	private JPanel panelModify;
-	private JPanel panelAscend;
 	private JTable table;
 	private JTable table2;
 	private DefaultTableModel tableModel;
 	private DefaultTableModel tableModel2;
-	private JScrollPane scrollPane2;
+	private JPanel panelBattle;
+	private JPanel paneDelete;
+	private JPanel panelModify;
+	private JPanel panelAscend;
 	private JScrollPane scrollPane;
+	private JScrollPane scrollPane2;
+	private AccountManageable manageable = AccountManageableFactory.getAccountManageable();
+	private DataBattleShowable showable = DataBattleFactory.getDataBattleShowable();
+	private Trainer t;
 	private Professor prof;
 	private LinkedHashSet<Trainer> trainers;
 	private LinkedHashSet<PokemonExtra> pokemons;
@@ -106,10 +106,6 @@ public class ProfessorView extends JDialog implements ActionListener {
 
 		try {
 			pokemons = showable.getPokemons();
-		} catch (MyException er) {
-			JOptionPane.showMessageDialog(null, er.getMessage(), "WARNING", JOptionPane.ERROR_MESSAGE);
-		}
-		try {
 			trainers = manageable.getTrainers();
 		} catch (MyException er) {
 			JOptionPane.showMessageDialog(null, er.getMessage(), "WARNING", JOptionPane.ERROR_MESSAGE);
@@ -463,20 +459,15 @@ public class ProfessorView extends JDialog implements ActionListener {
 		grassComboBox.setEnabled(false);
 		upgradeButton.setEnabled(false);
 
-		// Habilitar elementos cuando se seleccione una opción en comboBox_1_1
-
-		// Agregamos el objeto JTabbedPane a la ventana
 		getContentPane().add(pestanas);
-		// Configuramos la ventana
-
 		setSize(682, 614);
-
-		updateTrainersAndComboBoxes(""); // Using "" because I want all trainers to be added and none to be removed
+		// Using @param name = null because I want all
+		// trainers to be added and none to be removed
+		setComboBoxes();
 	}
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
-
 		/*
 		 * This first if control if something has been chosen on the trainers conboBox
 		 * and by using the name identifies the trainer and sets it to the t variable
@@ -489,10 +480,8 @@ public class ProfessorView extends JDialog implements ActionListener {
 			String selectedTrainer = (String) trainersComboBox.getSelectedItem();
 			try {
 				for (Trainer element : manageable.getTrainers()) {
-					if (element.getName().equals(selectedTrainer)) {
+					if (element.getName().equals(selectedTrainer))
 						t = element;
-
-					}
 				}
 			} catch (MyException e1) {
 				JOptionPane.showMessageDialog(null, e1.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
@@ -515,18 +504,10 @@ public class ProfessorView extends JDialog implements ActionListener {
 				table.setVisible(true);
 				table2.setVisible(false);
 				tableModel.setRowCount(0);
-				try {
-					for (Trainer element : manageable.getTrainers()) {
-						if (element.getName().equals(trainers)) {
-							t = element;
-
-						}
-					}
-				} catch (MyException e1) {
-					JOptionPane.showMessageDialog(null, e1.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
-
+				for (Trainer element : trainers) {
+					if (element.getName().equals(trainersComboBox.getSelectedItem()))
+						t = element;
 				}
-
 				for (Pokemon element : t.getTeam()) {
 					Object[] row = new Object[7];
 					row[0] = element.getPokedexID();
@@ -548,16 +529,11 @@ public class ProfessorView extends JDialog implements ActionListener {
 				table.setVisible(false);
 				table2.setVisible(true);
 				tableModel2.setRowCount(0);
-				try {
-					for (Trainer element : manageable.getTrainers()) {
-						if (element.getName().equals(trainers)) {
-							t = element;
 
-						}
+				for (Trainer element : trainers) {
+					if (element.getName().equals(trainersComboBox.getSelectedItem())) {
+						t = element;
 					}
-				} catch (MyException e1) {
-					JOptionPane.showMessageDialog(null, e1.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
-
 				}
 
 				for (Combat element : t.getCombatHistory()) {
@@ -607,7 +583,8 @@ public class ProfessorView extends JDialog implements ActionListener {
 				} catch (MyException e1) {
 					JOptionPane.showMessageDialog(null, e1.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
 				} finally {
-					updateTrainersAndComboBoxes(t.getName());
+					deleteTrainer(t.getName());
+					setComboBoxes();
 				}
 			}
 		}
@@ -653,9 +630,19 @@ public class ProfessorView extends JDialog implements ActionListener {
 		}
 
 		if (e.getSource().equals(addValidateBtn)) {
-			Trainer aux = buildTrainer();
-
-			showTrainerInfo(aux);
+			try {
+				Trainer flag = trainerExists(addCheckField.getText());
+				if (flag == null) {
+					Trainer aux = buildTrainer();
+					showTrainerInfo(aux);
+				} else {
+					JOptionPane.showMessageDialog(null, "Trainer already exists", "WARNING",
+							JOptionPane.INFORMATION_MESSAGE);
+				}
+			} catch (NumberFormatException er) {
+				JOptionPane.showMessageDialog(null, "Badges field cannot contain characters, only numbers", "WARNING",
+						JOptionPane.INFORMATION_MESSAGE);
+			}
 		}
 
 		if (e.getSource().equals(addTrainerButton)) {
@@ -671,30 +658,19 @@ public class ProfessorView extends JDialog implements ActionListener {
 			} catch (MyException er) {
 				JOptionPane.showMessageDialog(null, er.getMessage(), "Message", JOptionPane.INFORMATION_MESSAGE);
 			} finally {
-				updateTrainersAndComboBoxes(t.getName());
+				trainers.add(t);
+				setComboBoxes();
 			}
 		}
 
 		if (e.getSource().equals(ascentTrainerCB)) {
-			try {
-				String selectedOption = (String) ascentTrainerCB.getSelectedItem();
 
-				if (!selectedOption.equals(null) || !selectedOption.equals("")) {
-					upgradeRegionField.setEnabled(true);
-					waterComboBox.setEnabled(true);
-					fireComboBox.setEnabled(true);
-					grassComboBox.setEnabled(true);
-					upgradeButton.setEnabled(true);
-				}
-			} catch (NullPointerException er) {
-				// I dont know why, but everytime you delete a trainer, this action performed
-				// method triggers, so as much as I would want
-				// to show a message, it would always trigger and make no sense. You can try if
-				// you want , the popup window is below to
-				// uncomment if you want to try
-
-				// JOptionPane.showMessageDialog(null, "No trainer selected to ascend"
-				// "WARNING", JOptionPane.ERROR_MESSAGE);
+			if (ascentTrainerCB.getSelectedIndex() != -1) {
+				upgradeRegionField.setEnabled(true);
+				waterComboBox.setEnabled(true);
+				fireComboBox.setEnabled(true);
+				grassComboBox.setEnabled(true);
+				upgradeButton.setEnabled(true);
 			}
 		}
 
@@ -725,7 +701,7 @@ public class ProfessorView extends JDialog implements ActionListener {
 		}
 	}
 
-	private void updateTrainersAndComboBoxes(String name) {
+	private void setComboBoxes() {
 		Iterator<Trainer> it = trainers.iterator();
 
 		// Delete everything from the combo boxes
@@ -734,20 +710,17 @@ public class ProfessorView extends JDialog implements ActionListener {
 		ascentTrainerCB.removeAllItems();
 
 		// Set the box to a default position
-		trainersComboBox.addItem("");
-		trainerDelete.addItem("");
-		ascentTrainerCB.addItem("");
+		trainersComboBox.setSelectedIndex(-1);
+		trainerDelete.setSelectedIndex(-1);
+		ascentTrainerCB.setSelectedIndex(-1);
 
 		while (it.hasNext()) {
 			Trainer t = it.next();
-			if (!t.getName().equalsIgnoreCase(name)) {
-				trainerDelete.addItem(t.getName());
-				trainersComboBox.addItem(t.getName());
-				ascentTrainerCB.addItem(t.getName());
-			} else {
-				it.remove();
-			}
+			trainerDelete.addItem(t.getName());
+			trainersComboBox.addItem(t.getName());
+			ascentTrainerCB.addItem(t.getName());
 		}
+
 	}
 
 	private Trainer trainerExists(String name) {
@@ -787,7 +760,7 @@ public class ProfessorView extends JDialog implements ActionListener {
 		infotoaddField.setText(aux.getTrainerInfo());
 	}
 
-	private Trainer buildTrainer() {
+	private Trainer buildTrainer() throws NumberFormatException {
 		Trainer aux = new Trainer();
 		java.sql.Date date = new java.sql.Date(addCalender.getDate().toInstant().toEpochMilli());
 		aux.setName(addCheckField.getText());
@@ -796,6 +769,7 @@ public class ProfessorView extends JDialog implements ActionListener {
 			if (a.getName().equalsIgnoreCase(aux.getName()))
 				aux.setTrainerID(a.getTrainerID());
 		}
+
 		aux.setName(addCheckField.getText());
 		aux.setBirthdate(date);
 		aux.setGender(addGenderField.getText());
@@ -808,11 +782,13 @@ public class ProfessorView extends JDialog implements ActionListener {
 	}
 
 	public void setLogin(Login log) {
-		Trainer trainer = buildTrainer();
-
 		try {
+			Trainer trainer = buildTrainer();
 			manageable.addTrainer(trainer);
 			manageable.setLogin(log);
+		} catch (NumberFormatException er) {
+			JOptionPane.showMessageDialog(null, "Badges field cannot contain characters, only numbers", "WARNING",
+					JOptionPane.INFORMATION_MESSAGE);
 		} catch (MyException e) {
 			JOptionPane.showMessageDialog(null, e.getMessage(), "WARNING", JOptionPane.INFORMATION_MESSAGE);
 		}
@@ -830,4 +806,18 @@ public class ProfessorView extends JDialog implements ActionListener {
 		}
 		return aux;
 	}
+
+	private void deleteTrainer(String name) {
+		Iterator<Trainer> it = trainers.iterator();
+		boolean flag = false;
+
+		while (it.hasNext() && !flag) {
+			Trainer aux = it.next();
+			if (aux.getName().equals(name)) {
+				it.remove();
+				flag = true;
+			}
+		}
+	}
+
 }

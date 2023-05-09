@@ -437,13 +437,11 @@ public class TrainerView extends JDialog implements ActionListener, FocusListene
 
 	@Override
 	public void focusGained(FocusEvent arg0) {
-		// TODO Auto-generated method stub
 		throw new UnsupportedOperationException("Unimplemented method 'focusGained'");
 	}
 
 	@Override
 	public void focusLost(FocusEvent arg0) {
-		// TODO Auto-generated method stub
 		throw new UnsupportedOperationException("Unimplemented method 'focusLost'");
 	}
 
