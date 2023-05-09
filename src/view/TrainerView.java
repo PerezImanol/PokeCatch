@@ -32,6 +32,8 @@ import factories.SimulableFactory;
 import interfaces.AccountManageable;
 import interfaces.DataBattleShowable;
 import interfaces.Simulable;
+import javax.swing.JEditorPane;
+import javax.swing.ImageIcon;
 
 public class TrainerView extends JDialog implements ActionListener, FocusListener {
 	private JLabel lblPokePC;
@@ -81,9 +83,10 @@ public class TrainerView extends JDialog implements ActionListener, FocusListene
 		loginView.dispose();
 
 		panelInfo = new JPanel();
+		panelInfo.setBackground(new Color(192, 192, 192));
 		panelPC = new JPanel();
-		JPanel panel3 = new JPanel();
-		JPanel panel4 = new JPanel();
+		JPanel panelCapture = new JPanel();
+		JPanel panelSimulation = new JPanel();
 
 		// Creamos el objeto JTabbedPane y le agregamos las pestañas
 		JTabbedPane pestanas = new JTabbedPane();
@@ -182,6 +185,11 @@ public class TrainerView extends JDialog implements ActionListener, FocusListene
 		btnUpdate.setBounds(454, 450, 148, 21);
 		btnUpdate.setVisible(false);
 		panelInfo.add(btnUpdate);
+		
+		JLabel lblFondoLabo = new JLabel("");
+		lblFondoLabo.setIcon(new ImageIcon(TrainerView.class.getResource("/resources/labo.png")));
+		lblFondoLabo.setBounds(0, 0, 663, 550);
+		panelInfo.add(lblFondoLabo);
 
 		// Pestaña2
 		pestanas.addTab("PC", panelPC);
@@ -276,36 +284,41 @@ public class TrainerView extends JDialog implements ActionListener, FocusListene
 		backButton.addActionListener(this);
 		backButton.setVisible(false);
 		panelPC.add(backButton);
+		
+		JLabel lblNewLabel = new JLabel("");
+		lblNewLabel.setIcon(new ImageIcon(TrainerView.class.getResource("/resources/enfesinescala.png")));
+		lblNewLabel.setBounds(-203, 0, 866, 550);
+		panelPC.add(lblNewLabel);
 
 		// Agregar ActionListener a la JComboBox
 		comboBoxPC.addActionListener(this);
 
 		// Pestaña3
-		pestanas.addTab("CAPTURE", panel3);
-		panel3.setLayout(null);
+		pestanas.addTab("CAPTURE", panelCapture);
+		panelCapture.setLayout(null);
 
 		JLabel lblSelecPKCap = new JLabel("Seleccione Pokémon");
 		lblSelecPKCap.setBounds(21, 122, 109, 14);
-		panel3.add(lblSelecPKCap);
+		panelCapture.add(lblSelecPKCap);
 
 		JLabel lblPKSalv = new JLabel("Pokémon salvaje");
 		lblPKSalv.setBounds(432, 94, 86, 14);
-		panel3.add(lblPKSalv);
+		panelCapture.add(lblPKSalv);
 
 		comboBoxSelecPK = new JComboBox<String>();
 		comboBoxSelecPK.setBounds(140, 118, 118, 22);
-		panel3.add(comboBoxSelecPK);
+		panelCapture.add(comboBoxSelecPK);
 
 		textPSalv = new JTextField();
 		textPSalv.setEditable(false);
 		textPSalv.setBounds(432, 119, 86, 20);
-		panel3.add(textPSalv);
+		panelCapture.add(textPSalv);
 		textPSalv.setColumns(10);
 
 		btnLanzarPB = new JButton("LANZAR POKEBALL");
 		btnLanzarPB.setBounds(140, 232, 152, 23);
 		btnLanzarPB.setEnabled(false); // Deshabilitar el botón inicialmente
-		panel3.add(btnLanzarPB);
+		panelCapture.add(btnLanzarPB);
 
 		btnHuir = new JButton("HUIR");
 		btnHuir.addActionListener(new ActionListener() {
@@ -314,26 +327,26 @@ public class TrainerView extends JDialog implements ActionListener, FocusListene
 		});
 		btnHuir.setBounds(400, 232, 86, 23);
 		btnHuir.setEnabled(false); // Deshabilitar el botón inicialmente
-		panel3.add(btnHuir);
+		panelCapture.add(btnHuir);
 
 		comboBoxSelecPK.addActionListener(this);
 
 		// Pestaña4
 		// Pestaña4
-		pestanas.addTab("SIMULATION", panel4);
-		panel4.setLayout(null);
+		pestanas.addTab("SIMULATION", panelSimulation);
+		panelSimulation.setLayout(null);
 
 		JLabel lblSelecPKSim = new JLabel("Selecione Pokémon");
 		lblSelecPKSim.setBounds(119, 93, 98, 14);
-		panel4.add(lblSelecPKSim);
+		panelSimulation.add(lblSelecPKSim);
 
 		JLabel lblPKRiv = new JLabel("Pokémon Rival");
 		lblPKRiv.setBounds(378, 93, 84, 14);
-		panel4.add(lblPKRiv);
+		panelSimulation.add(lblPKRiv);
 
 		textPKRiv = new JTextField();
 		textPKRiv.setBounds(378, 119, 86, 20);
-		panel4.add(textPKRiv);
+		panelSimulation.add(textPKRiv);
 		textPKRiv.setColumns(10);
 
 		// Agregamos el objeto JTabbedPane a la ventana

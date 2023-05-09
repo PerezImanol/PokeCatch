@@ -89,6 +89,10 @@ public class ProfessorView extends JDialog implements ActionListener {
 	private Professor prof;
 	private LinkedHashSet<Trainer> trainers;
 	private LinkedHashSet<PokemonExtra> pokemons;
+	private JLabel lblNewLabel_1;
+	private JLabel lblNewLabel_2;
+	private JLabel lblNewLabel_3;
+	private JLabel lblNewLabel;
 
 	/**
 	 * @param loginView
@@ -117,8 +121,11 @@ public class ProfessorView extends JDialog implements ActionListener {
 
 		panelBattle = new JPanel();
 		paneDelete = new JPanel();
+		paneDelete.setBackground(new Color(63, 204, 220));
 		panelModify = new JPanel();
+		panelModify.setBackground(new Color(63, 204, 220));
 		panelAscend = new JPanel();
+		panelAscend.setBackground(new Color(63, 204, 220));
 		JTabbedPane pestanas = new JTabbedPane();
 
 		trainersComboBox = new JComboBox<String>();
@@ -140,7 +147,7 @@ public class ProfessorView extends JDialog implements ActionListener {
 		panelAscend.add(ascentTrainerCB);
 
 		// 1.Battles View
-		panelBattle.setBackground(new Color(255, 255, 255));
+		panelBattle.setBackground(new Color(192, 192, 192));
 		pestanas.addTab("BATTLES", panelBattle);
 
 		panelBattle.setLayout(null);
@@ -185,7 +192,7 @@ public class ProfessorView extends JDialog implements ActionListener {
 		JLabel professorImageLabel = new JLabel("");
 		professorImageLabel
 				.setIcon(new ImageIcon(ProfessorView.class.getResource("/resources/For_best_wishes_oak.jpg")));
-		professorImageLabel.setBounds(463, 97, 188, 341);
+		professorImageLabel.setBounds(465, 105, 188, 341);
 		panelBattle.add(professorImageLabel);
 
 		JLabel welcomeProfessorLabel = new JLabel("Welcome Professor !!");
@@ -231,6 +238,11 @@ public class ProfessorView extends JDialog implements ActionListener {
 		 */
 		table2.setBackground(new Color(239, 205, 124));
 		scrollPane2.setViewportView(table2);
+		
+		lblNewLabel = new JLabel("");
+		lblNewLabel.setIcon(new ImageIcon(ProfessorView.class.getResource("/resources/fondo1sinescala.png")));
+		lblNewLabel.setBounds(0, 0, 663, 550);
+		panelBattle.add(lblNewLabel);
 		table2.setVisible(false);
 		scrollPane2.setVisible(false);
 
@@ -272,6 +284,11 @@ public class ProfessorView extends JDialog implements ActionListener {
 		deletePIcture.setIcon(new ImageIcon(ProfessorView.class.getResource("/resources/Ash_Ketchum_Journeys.png")));
 		deletePIcture.setBounds(410, 11, 216, 491);
 		paneDelete.add(deletePIcture);
+		
+		lblNewLabel_1 = new JLabel("");
+		lblNewLabel_1.setIcon(new ImageIcon("C:\\Users\\Daniel\\Desktop\\Cosas Twitch\\icons\\nano.png"));
+		lblNewLabel_1.setBounds(0, 0, 663, 550);
+		paneDelete.add(lblNewLabel_1);
 		pestanas.addTab("ADD/MODIFY", panelModify);
 		panelModify.setLayout(null);
 
@@ -390,6 +407,11 @@ public class ProfessorView extends JDialog implements ActionListener {
 		addTrainerButton.setBounds(504, 362, 101, 23);
 		addTrainerButton.setVisible(false);
 		panelModify.add(addTrainerButton);
+		
+		lblNewLabel_2 = new JLabel("");
+		lblNewLabel_2.setIcon(new ImageIcon("C:\\Users\\Daniel\\Desktop\\imagenes trabajo\\paisaje2.jpg"));
+		lblNewLabel_2.setBounds(-139, -72, 891, 672);
+		panelModify.add(lblNewLabel_2);
 		// Agregar ActionListener al botón btnNewButton_3
 		addCheckBtn.addActionListener(this);
 
@@ -452,7 +474,7 @@ public class ProfessorView extends JDialog implements ActionListener {
 
 		upgradeButton = new JButton("UPGRADE");
 		upgradeButton.addActionListener(this);
-		upgradeButton.setBounds(374, 144, 122, 69);
+		upgradeButton.setBounds(268, 308, 122, 69);
 		panelAscend.add(upgradeButton);
 		upgradeButton.setEnabled(false);
 
@@ -462,6 +484,11 @@ public class ProfessorView extends JDialog implements ActionListener {
 		fireComboBox.setEnabled(false);
 		grassComboBox.setEnabled(false);
 		upgradeButton.setEnabled(false);
+		
+		lblNewLabel_3 = new JLabel("");
+		lblNewLabel_3.setIcon(new ImageIcon(ProfessorView.class.getResource("/resources/ashcampeon.png")));
+		lblNewLabel_3.setBounds(-257, -12, 1006, 675);
+		panelAscend.add(lblNewLabel_3);
 
 		// Habilitar elementos cuando se seleccione una opción en comboBox_1_1
 
