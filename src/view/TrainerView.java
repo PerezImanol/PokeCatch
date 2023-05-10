@@ -10,6 +10,7 @@ import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
 
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JDialog;
@@ -25,6 +26,7 @@ import com.toedter.calendar.JDateChooser;
 
 import classes.MyException;
 import classes.Pokemon;
+import classes.PokemonExtra;
 import classes.Trainer;
 import factories.AccountManageableFactory;
 import factories.DataBattleFactory;
@@ -65,12 +67,19 @@ public class TrainerView extends JDialog implements ActionListener, FocusListene
 	private JButton btnSwitch;
 	private Trainer trainer;
 	private AccountManageable manageable = AccountManageableFactory.getAccountManageable();
-	private Simulable simulable = SimulableFactory.getSimulable();
 	private DataBattleShowable showable = DataBattleFactory.getDataBattleShowable();
 	private LinkedHashMap<String, Pokemon> pc;
 	private LinkedHashSet<Pokemon> team;
 	private JButton backButton;
 	private JPanel panelInfo;
+	private Simulable simulable = SimulableFactory.getSimulable();
+	private DataBattleShowable dbs = DataBattleFactory.getDataBattleShowable();
+	private AccountManageable acc = AccountManageableFactory.getAccountManageable();
+	private JComboBox<String> comboPokemon = new JComboBox();
+	private JLabel lbl_PokemonName;
+	private JButton btn_Escape;
+	private JLabel lblRandomLvl;
+	private JButton btn_ThrowPokeball;
 
 	public TrainerView(LoginView loginView, Trainer t) {
 		super(loginView, true);
@@ -280,61 +289,153 @@ public class TrainerView extends JDialog implements ActionListener, FocusListene
 		// Agregar ActionListener a la JComboBox
 		comboBoxPC.addActionListener(this);
 
+
+		
+
+
+
+
+
+
+		// Pestaña3
 		// Pestaña3
 		pestanas.addTab("CAPTURE", panel3);
 		panel3.setLayout(null);
 
-		JLabel lblSelecPKCap = new JLabel("Seleccione Pokémon");
-		lblSelecPKCap.setBounds(21, 122, 109, 14);
-		panel3.add(lblSelecPKCap);
+		JLabel lb_Lvl = new JLabel("Lvl.");
+		lb_Lvl.setForeground(new Color(255, 0, 0));
+		lb_Lvl.setFont(new Font("Pokemon Fire Red", Font.BOLD, 25));
+		lb_Lvl.setBounds(350, 137, 45, 23);
+		panel3.add(lb_Lvl);
 
-		JLabel lblPKSalv = new JLabel("Pokémon salvaje");
-		lblPKSalv.setBounds(432, 94, 86, 14);
-		panel3.add(lblPKSalv);
+		JLabel lbl_PokeballNumber = new JLabel(getPokeballNum());
+		lbl_PokeballNumber.setBounds(358, 414, 45, 23);
+		panel3.add(lbl_PokeballNumber);
 
-		comboBoxSelecPK = new JComboBox<String>();
-		comboBoxSelecPK.setBounds(140, 118, 118, 22);
-		panel3.add(comboBoxSelecPK);
+		lblRandomLvl = new JLabel(randomLvl());
+		lblRandomLvl.setForeground(new Color(255, 0, 0));
+		lblRandomLvl.setFont(new Font("Pokemon Fire Red", Font.PLAIN, 30));
+		lblRandomLvl.setBounds(405, 135, 51, 23);
+		panel3.add(lblRandomLvl);
 
-		textPSalv = new JTextField();
-		textPSalv.setEditable(false);
-		textPSalv.setBounds(432, 119, 86, 20);
-		panel3.add(textPSalv);
-		textPSalv.setColumns(10);
+		lbl_PokemonName = new JLabel("");
+		lbl_PokemonName.setForeground(new Color(0, 0, 0));
+		lbl_PokemonName.setFont(new Font("Pokemon Fire Red", Font.PLAIN, 30));
+		lbl_PokemonName.setText(randomPokemon());
+		lbl_PokemonName.setBounds(214, 117, 163, 58);
+		panel3.add(lbl_PokemonName);
 
-		btnLanzarPB = new JButton("LANZAR POKEBALL");
-		btnLanzarPB.setBounds(140, 232, 152, 23);
-		btnLanzarPB.setEnabled(false); // Deshabilitar el botón inicialmente
-		panel3.add(btnLanzarPB);
+		JLabel lblNewLabel_6 = new JLabel("X");
+		lblNewLabel_6.setFont(new Font("Pokemon Fire Red", Font.PLAIN, 25));
+		lblNewLabel_6.setBounds(336, 391, 33, 70);
+		panel3.add(lblNewLabel_6);
 
-		btnHuir = new JButton("HUIR");
-		btnHuir.addActionListener(new ActionListener() {
+		JLabel lbl_Sprite = new JLabel("");
+		lbl_Sprite.setIcon(new ImageIcon(TrainerView.class.getResource("/resources/bulbasur.gif")));
+		lbl_Sprite.setBounds(251, 175, 152, 165);
+		panel3.add(lbl_Sprite);
+
+		JLabel lbl_WildPokémonEncounter = new JLabel("Wild Pokémon encounter!");
+		lbl_WildPokémonEncounter.setForeground(new Color(0, 0, 0));
+		lbl_WildPokémonEncounter.setFont(new Font("Pokemon Fire Red", Font.PLAIN, 40));
+		lbl_WildPokémonEncounter.setBounds(194, 62, 310, 63);
+		panel3.add(lbl_WildPokémonEncounter);
+
+		btn_ThrowPokeball = new JButton("THROW POKEBALL");
+		btn_ThrowPokeball.setFont(new Font("Pokemon Fire Red", Font.PLAIN, 15));
+		btn_ThrowPokeball.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 			}
 		});
-		btnHuir.setBounds(400, 232, 86, 23);
-		btnHuir.setEnabled(false); // Deshabilitar el botón inicialmente
-		panel3.add(btnHuir);
 
-		comboBoxSelecPK.addActionListener(this);
+		JLabel lblNewLabel_3 = new JLabel("");
+		lblNewLabel_3.setIcon(new ImageIcon(
+				TrainerView.class.getResource("/resources/584-5843757_pokemon-dialog-box-pokemon-text-box-png.png")));
+		lblNewLabel_3.setBounds(157, 26, 362, 200);
+		panel3.add(lblNewLabel_3);
+		btn_ThrowPokeball.setBounds(251, 471, 152, 23);
+		panel3.add(btn_ThrowPokeball);
 
-		// Pestaña4
+		btn_Escape = new JButton("Run away!");
+		btn_Escape.setFont(new Font("Pokemon Fire Red", Font.PLAIN, 15));
+		btn_Escape.addActionListener(this);
+		btn_Escape.setBounds(567, 498, 86, 23);
+		panel3.add(btn_Escape);
+
+		JLabel lbl_Pokeball = new JLabel("");
+		lbl_Pokeball.setIcon(new ImageIcon(TrainerView.class.getResource("/resources/Poké_Ball_icon.svg (1).png")));
+		lbl_Pokeball.setBounds(256, 391, 70, 70);
+		panel3.add(lbl_Pokeball);
+
+		JLabel lbl_Background_1 = new JLabel("");
+		lbl_Background_1.setIcon(new ImageIcon(
+				TrainerView.class.getResource("/resources/DVMT-6OXcAE2rZY.jpg.afab972f972bd7fbd4253bc7aa1cf27f.jpg")));
+		lbl_Background_1.setBounds(-11, -48, 791, 608);
+		panel3.add(lbl_Background_1);
+		
+
 		// Pestaña4
 		pestanas.addTab("SIMULATION", panel4);
 		panel4.setLayout(null);
 
-		JLabel lblSelecPKSim = new JLabel("Selecione Pokémon");
-		lblSelecPKSim.setBounds(119, 93, 98, 14);
+		JLabel lbl_TrainerAgainstName = new JLabel("");
+		lbl_TrainerAgainstName.setBounds(424, 306, 99, 23);
+		panel4.add(lbl_TrainerAgainstName);
+
+		JLabel lbl_YourName = new JLabel("");
+		lbl_YourName.setBounds(125, 267, 89, 23);
+		panel4.add(lbl_YourName);
+
+		JLabel lblSelecPKSim = new JLabel("Choose a trainer to battle against");
+		lblSelecPKSim.setForeground(new Color(255, 0, 128));
+		lblSelecPKSim.setFont(new Font("Pokemon Fire Red", Font.PLAIN, 35));
+		lblSelecPKSim.setBounds(23, 33, 377, 32);
 		panel4.add(lblSelecPKSim);
 
-		JLabel lblPKRiv = new JLabel("Pokémon Rival");
-		lblPKRiv.setBounds(378, 93, 84, 14);
-		panel4.add(lblPKRiv);
+		comboPokemon.setBackground(new Color(192, 192, 192));
+		comboPokemon.setBounds(74, 75, 235, 32);
+		addTrainer();
+		comboPokemon.setSelectedIndex(-1);
+		comboPokemon.addActionListener(this);
+		panel4.add(comboPokemon);
 
-		textPKRiv = new JTextField();
-		textPKRiv.setBounds(378, 119, 86, 20);
-		panel4.add(textPKRiv);
-		textPKRiv.setColumns(10);
+		JButton btnAtacar = new JButton("FIGHT");
+		btnAtacar.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+			}
+		});
+		btnAtacar.setFont(new Font("Pokemon Fire Red", Font.PLAIN, 15));
+		btnAtacar.setBounds(265, 426, 89, 23);
+		btnAtacar.setEnabled(false); // Deshabilitar el botón inicialmente
+		panel4.add(btnAtacar);
+
+		JLabel lblNewLabel = new JLabel("");
+		lblNewLabel.setIcon(new ImageIcon(TrainerView.class.getResource("/resources/goldTrainer.png")));
+		lblNewLabel.setBounds(92, 277, 152, 128);
+		panel4.add(lblNewLabel);
+
+		JLabel lblNewLabel_1 = new JLabel("");
+		lblNewLabel_1.setIcon(new ImageIcon(TrainerView.class.getResource("/resources/8K8b (1).gif")));
+		lblNewLabel_1.setBounds(328, 23, 257, 273);
+		panel4.add(lblNewLabel_1);
+
+		JLabel lblNewLabel_2 = new JLabel("VS");
+		lblNewLabel_2.setForeground(new Color(204, 0, 0));
+		lblNewLabel_2.setFont(new Font("Pokemon Fire Red", Font.PLAIN, 50));
+		lblNewLabel_2.setBounds(287, 239, 40, 32);
+		panel4.add(lblNewLabel_2);
+
+		JLabel lbl_Setting = new JLabel("");
+		lbl_Setting.setIcon(new ImageIcon(TrainerView.class
+				.getResource("/resources/d6rqxyw-baf81cc2-f50f-4ab4-8265-c2831654c3f2-2124573794 (1).png")));
+		lbl_Setting.setBounds(102, 61, 740, 457);
+		panel4.add(lbl_Setting);
+
+		JLabel lbl_Background = new JLabel("");
+		lbl_Background.setIcon(new ImageIcon(
+				TrainerView.class.getResource("/resources/DVMT-6OXcAE2rZY.jpg.afab972f972bd7fbd4253bc7aa1cf27f.jpg")));
+		lbl_Background.setBounds(-95, -63, 832, 658);
+		panel4.add(lbl_Background);
 
 		// Agregamos el objeto JTabbedPane a la ventana
 		getContentPane().add(pestanas);
@@ -344,6 +445,7 @@ public class TrainerView extends JDialog implements ActionListener, FocusListene
 		// Configuramos la ventana
 		setSize(682, 614);
 		setVisible(true);
+
 	}
 
 	@Override
@@ -523,5 +625,63 @@ public class TrainerView extends JDialog implements ActionListener, FocusListene
 		trainer.setOriginCity(textOrigin.getText());
 		trainer.setBadges(Integer.parseInt(textBadges.getText()));
 
+	}
+
+	private String getPokeballNum() {
+		int pokeball = 0;
+		try {
+			LinkedHashSet<Trainer> trainers = acc.getTrainers();
+
+			for (Trainer p : trainers) {
+				pokeball = p.getPokeballs();
+			}
+		} catch (MyException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return Integer.toString(pokeball);
+	}
+
+	private String randomLvl() {
+		int lvl = (int) (Math.random() * (100 - 1) + 1);
+
+		return Integer.toString(lvl);
+	}
+
+	public void addTrainer() {
+
+		try {
+			LinkedHashSet<Trainer> trainers = acc.getTrainers();
+
+			for (Trainer p : trainers) {
+				String name = p.getName();
+				comboPokemon.addItem(name);
+			}
+		} catch (MyException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+
+	public String randomPokemon() {
+		String pokemonName = null;
+		try {
+			LinkedHashSet<PokemonExtra> pokemons = dbs.getPokemons();
+			int rdm = (int) (Math.random() * (pokemons.size() - 1) + 1);
+			int i = 1;
+
+			for (PokemonExtra pokemonExtra : pokemons) {
+
+				if (i == rdm) {
+					pokemonName = pokemonExtra.getName();
+				}
+
+				i++;
+			}
+		} catch (MyException e) {
+			JOptionPane.showMessageDialog(null, e.getMessage(), "WARNING", JOptionPane.ERROR_MESSAGE);
+		}
+
+		return pokemonName;
 	}
 }
