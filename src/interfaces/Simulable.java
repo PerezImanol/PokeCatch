@@ -18,5 +18,6 @@ public interface Simulable {
     public void changePosition (Trainer trainer, Pokemon pokemons) throws MyException;
     //switch positon of one pokemon in the team with one pokemon in the computer
     public void switchPosition (Trainer trainer, Pokemon pokemon1, Pokemon pokemon2) throws MyException;
-    
+    //given all the team pokemon ID's of both trainers returns the result of the fight in a boolean value
+    public int getWinner(int p11,int p12, int p13, int p14, int p15, int p16, int p21, int p22, int p23, int p24, int p25, int p26) throws MyException;
 }

@@ -137,7 +137,7 @@ public class SimulableDBimplementation implements Simulable {
 			stmt.setInt(2, trainer.getTrainerID());
 			stmt.setInt(3, pokemon2.getPokedexID());
 			int flag = stmt.executeUpdate();
-			if (flag > 0){
+			if (flag > 0) {
 				MyException message = new MyException("Pokemons switched successfully");
 				throw message;
 			}
@@ -148,5 +148,47 @@ public class SimulableDBimplementation implements Simulable {
 		}
 
 		occ.closeConnection(stmt, con);
+	}
+
+	@Override
+	public int getWinner(int p11, int p12, int p13, int p14, int p15, int p16, int p21, int p22,
+			int p23, int p24, int p25, int p26) throws MyException {
+
+		int winner = 0;
+		ResultSet rs = null;
+		final String callWinnerFunction = "SELECT getWinner(?,?,?,?,?,?,?,?,?,?,?,?)";
+		con = occ.openConnection();
+
+		try {
+			stmt = con.prepareStatement(callWinnerFunction);
+			stmt.setInt(1, p11);
+			stmt.setInt(1, p12);
+			stmt.setInt(1, p13);
+			stmt.setInt(1, p14);
+			stmt.setInt(1, p15);
+			stmt.setInt(1, p16);
+			stmt.setInt(1, p21);
+			stmt.setInt(1, p22);
+			stmt.setInt(1, p23);
+			stmt.setInt(1, p24);
+			stmt.setInt(1, p25);
+			stmt.setInt(1, p26);
+
+			rs = stmt.executeQuery();
+
+			if(rs.next()){
+				winner = rs.getInt("winner");
+			}
+			
+
+		} catch (SQLException e) {
+			String error = "Error getting a winner";
+			MyException er = new MyException(error);
+			throw er;
+		}
+
+
+		return winner;
+
 	}
 }

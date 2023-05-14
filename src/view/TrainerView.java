@@ -80,6 +80,7 @@ public class TrainerView extends JDialog implements ActionListener, FocusListene
 	private JButton btn_Escape;
 	private JLabel lblRandomLvl;
 	private JButton btn_ThrowPokeball;
+	private JLabel lbl_PokeballNumber;
 
 	public TrainerView(LoginView loginView, Trainer t) {
 		super(loginView, true);
@@ -91,8 +92,8 @@ public class TrainerView extends JDialog implements ActionListener, FocusListene
 
 		panelInfo = new JPanel();
 		panelPC = new JPanel();
-		JPanel panel3 = new JPanel();
-		JPanel panel4 = new JPanel();
+		JPanel panelCapture = new JPanel();
+		JPanel panelSimulation = new JPanel();
 
 		// Creamos el objeto JTabbedPane y le agregamos las pestañas
 		JTabbedPane pestanas = new JTabbedPane();
@@ -299,47 +300,48 @@ public class TrainerView extends JDialog implements ActionListener, FocusListene
 
 		// Pestaña3
 		// Pestaña3
-		pestanas.addTab("CAPTURE", panel3);
-		panel3.setLayout(null);
+		pestanas.addTab("CAPTURE", panelCapture);
+		panelCapture.setLayout(null);
 
 		JLabel lb_Lvl = new JLabel("Lvl.");
 		lb_Lvl.setForeground(new Color(255, 0, 0));
 		lb_Lvl.setFont(new Font("Pokemon Fire Red", Font.BOLD, 25));
 		lb_Lvl.setBounds(350, 137, 45, 23);
-		panel3.add(lb_Lvl);
+		panelCapture.add(lb_Lvl);
 
-		JLabel lbl_PokeballNumber = new JLabel(getPokeballNum());
+		lbl_PokeballNumber = new JLabel();
+		lbl_PokeballNumber.setText(Integer.toString(trainer.getPokeballs()));
 		lbl_PokeballNumber.setBounds(358, 414, 45, 23);
-		panel3.add(lbl_PokeballNumber);
+		panelCapture.add(lbl_PokeballNumber);
 
 		lblRandomLvl = new JLabel(randomLvl());
 		lblRandomLvl.setForeground(new Color(255, 0, 0));
 		lblRandomLvl.setFont(new Font("Pokemon Fire Red", Font.PLAIN, 30));
 		lblRandomLvl.setBounds(405, 135, 51, 23);
-		panel3.add(lblRandomLvl);
+		panelCapture.add(lblRandomLvl);
 
 		lbl_PokemonName = new JLabel("");
 		lbl_PokemonName.setForeground(new Color(0, 0, 0));
 		lbl_PokemonName.setFont(new Font("Pokemon Fire Red", Font.PLAIN, 30));
 		lbl_PokemonName.setText(randomPokemon());
 		lbl_PokemonName.setBounds(214, 117, 163, 58);
-		panel3.add(lbl_PokemonName);
+		panelCapture.add(lbl_PokemonName);
 
 		JLabel lblNewLabel_6 = new JLabel("X");
 		lblNewLabel_6.setFont(new Font("Pokemon Fire Red", Font.PLAIN, 25));
 		lblNewLabel_6.setBounds(336, 391, 33, 70);
-		panel3.add(lblNewLabel_6);
+		panelCapture.add(lblNewLabel_6);
 
 		JLabel lbl_Sprite = new JLabel("");
 		lbl_Sprite.setIcon(new ImageIcon(TrainerView.class.getResource("/resources/bulbasur.gif")));
 		lbl_Sprite.setBounds(251, 175, 152, 165);
-		panel3.add(lbl_Sprite);
+		panelCapture.add(lbl_Sprite);
 
 		JLabel lbl_WildPokémonEncounter = new JLabel("Wild Pokémon encounter!");
 		lbl_WildPokémonEncounter.setForeground(new Color(0, 0, 0));
 		lbl_WildPokémonEncounter.setFont(new Font("Pokemon Fire Red", Font.PLAIN, 40));
 		lbl_WildPokémonEncounter.setBounds(194, 62, 310, 63);
-		panel3.add(lbl_WildPokémonEncounter);
+		panelCapture.add(lbl_WildPokémonEncounter);
 
 		btn_ThrowPokeball = new JButton("THROW POKEBALL");
 		btn_ThrowPokeball.setFont(new Font("Pokemon Fire Red", Font.PLAIN, 15));
@@ -352,52 +354,52 @@ public class TrainerView extends JDialog implements ActionListener, FocusListene
 		lblNewLabel_3.setIcon(new ImageIcon(
 				TrainerView.class.getResource("/resources/584-5843757_pokemon-dialog-box-pokemon-text-box-png.png")));
 		lblNewLabel_3.setBounds(157, 26, 362, 200);
-		panel3.add(lblNewLabel_3);
+		panelCapture.add(lblNewLabel_3);
 		btn_ThrowPokeball.setBounds(251, 471, 152, 23);
-		panel3.add(btn_ThrowPokeball);
+		panelCapture.add(btn_ThrowPokeball);
 
 		btn_Escape = new JButton("Run away!");
 		btn_Escape.setFont(new Font("Pokemon Fire Red", Font.PLAIN, 15));
 		btn_Escape.addActionListener(this);
 		btn_Escape.setBounds(567, 498, 86, 23);
-		panel3.add(btn_Escape);
+		panelCapture.add(btn_Escape);
 
 		JLabel lbl_Pokeball = new JLabel("");
 		lbl_Pokeball.setIcon(new ImageIcon(TrainerView.class.getResource("/resources/Poké_Ball_icon.svg (1).png")));
 		lbl_Pokeball.setBounds(256, 391, 70, 70);
-		panel3.add(lbl_Pokeball);
+		panelCapture.add(lbl_Pokeball);
 
 		JLabel lbl_Background_1 = new JLabel("");
 		lbl_Background_1.setIcon(new ImageIcon(
 				TrainerView.class.getResource("/resources/DVMT-6OXcAE2rZY.jpg.afab972f972bd7fbd4253bc7aa1cf27f.jpg")));
 		lbl_Background_1.setBounds(-11, -48, 791, 608);
-		panel3.add(lbl_Background_1);
+		panelCapture.add(lbl_Background_1);
 		
 
 		// Pestaña4
-		pestanas.addTab("SIMULATION", panel4);
-		panel4.setLayout(null);
+		pestanas.addTab("SIMULATION", panelSimulation);
+		panelSimulation.setLayout(null);
 
 		JLabel lbl_TrainerAgainstName = new JLabel("");
 		lbl_TrainerAgainstName.setBounds(424, 306, 99, 23);
-		panel4.add(lbl_TrainerAgainstName);
+		panelSimulation.add(lbl_TrainerAgainstName);
 
 		JLabel lbl_YourName = new JLabel("");
 		lbl_YourName.setBounds(125, 267, 89, 23);
-		panel4.add(lbl_YourName);
+		panelSimulation.add(lbl_YourName);
 
 		JLabel lblSelecPKSim = new JLabel("Choose a trainer to battle against");
 		lblSelecPKSim.setForeground(new Color(255, 0, 128));
 		lblSelecPKSim.setFont(new Font("Pokemon Fire Red", Font.PLAIN, 35));
 		lblSelecPKSim.setBounds(23, 33, 377, 32);
-		panel4.add(lblSelecPKSim);
+		panelSimulation.add(lblSelecPKSim);
 
 		comboPokemon.setBackground(new Color(192, 192, 192));
 		comboPokemon.setBounds(74, 75, 235, 32);
 		addTrainer();
 		comboPokemon.setSelectedIndex(-1);
 		comboPokemon.addActionListener(this);
-		panel4.add(comboPokemon);
+		panelSimulation.add(comboPokemon);
 
 		JButton btnAtacar = new JButton("FIGHT");
 		btnAtacar.addActionListener(new ActionListener() {
@@ -407,35 +409,35 @@ public class TrainerView extends JDialog implements ActionListener, FocusListene
 		btnAtacar.setFont(new Font("Pokemon Fire Red", Font.PLAIN, 15));
 		btnAtacar.setBounds(265, 426, 89, 23);
 		btnAtacar.setEnabled(false); // Deshabilitar el botón inicialmente
-		panel4.add(btnAtacar);
+		panelSimulation.add(btnAtacar);
 
 		JLabel lblNewLabel = new JLabel("");
 		lblNewLabel.setIcon(new ImageIcon(TrainerView.class.getResource("/resources/goldTrainer.png")));
 		lblNewLabel.setBounds(92, 277, 152, 128);
-		panel4.add(lblNewLabel);
+		panelSimulation.add(lblNewLabel);
 
 		JLabel lblNewLabel_1 = new JLabel("");
 		lblNewLabel_1.setIcon(new ImageIcon(TrainerView.class.getResource("/resources/8K8b (1).gif")));
 		lblNewLabel_1.setBounds(328, 23, 257, 273);
-		panel4.add(lblNewLabel_1);
+		panelSimulation.add(lblNewLabel_1);
 
 		JLabel lblNewLabel_2 = new JLabel("VS");
 		lblNewLabel_2.setForeground(new Color(204, 0, 0));
 		lblNewLabel_2.setFont(new Font("Pokemon Fire Red", Font.PLAIN, 50));
 		lblNewLabel_2.setBounds(287, 239, 40, 32);
-		panel4.add(lblNewLabel_2);
+		panelSimulation.add(lblNewLabel_2);
 
 		JLabel lbl_Setting = new JLabel("");
 		lbl_Setting.setIcon(new ImageIcon(TrainerView.class
 				.getResource("/resources/d6rqxyw-baf81cc2-f50f-4ab4-8265-c2831654c3f2-2124573794 (1).png")));
 		lbl_Setting.setBounds(102, 61, 740, 457);
-		panel4.add(lbl_Setting);
+		panelSimulation.add(lbl_Setting);
 
 		JLabel lbl_Background = new JLabel("");
 		lbl_Background.setIcon(new ImageIcon(
 				TrainerView.class.getResource("/resources/DVMT-6OXcAE2rZY.jpg.afab972f972bd7fbd4253bc7aa1cf27f.jpg")));
 		lbl_Background.setBounds(-95, -63, 832, 658);
-		panel4.add(lbl_Background);
+		panelSimulation.add(lbl_Background);
 
 		// Agregamos el objeto JTabbedPane a la ventana
 		getContentPane().add(pestanas);
@@ -450,7 +452,29 @@ public class TrainerView extends JDialog implements ActionListener, FocusListene
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
+		
+		if(e.getSource() == btn_ThrowPokeball){
+			int randomNumber = (int) (Math.random() * (100 - 1) + 1);
+			int lblNumber = Integer.parseInt(lblRandomLvl.getText());
+			int pokeballNo = trainer.getPokeballs();
 
+			//Captures pokemon
+			if(randomNumber >= lblNumber){
+				
+
+			}else {
+				trainer.setPokeballs(pokeballNo-1);
+				lbl_PokeballNumber.setText(Integer.toString(pokeballNo-1));
+			}
+			
+			
+		}
+
+		if(e.getSource() == btn_Escape) {
+			lblRandomLvl.setText(randomLvl());
+			lbl_PokemonName.setText(randomPokemon());
+		}
+		
 		if (e.getSource().equals(btnPok1) || e.getSource().equals(btnPok2) || e.getSource().equals(btnPok3)
 				|| e.getSource().equals(btnPok4) || e.getSource().equals(btnPok5) || e.getSource().equals(btnPok6)) {
 
@@ -627,20 +651,6 @@ public class TrainerView extends JDialog implements ActionListener, FocusListene
 
 	}
 
-	private String getPokeballNum() {
-		int pokeball = 0;
-		try {
-			LinkedHashSet<Trainer> trainers = acc.getTrainers();
-
-			for (Trainer p : trainers) {
-				pokeball = p.getPokeballs();
-			}
-		} catch (MyException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		return Integer.toString(pokeball);
-	}
 
 	private String randomLvl() {
 		int lvl = (int) (Math.random() * (100 - 1) + 1);
