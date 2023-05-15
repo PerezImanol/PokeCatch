@@ -15,6 +15,16 @@ public class Combat {
 	private int trainer2;
 	private int winnerTrainerID;
 
+	public Combat(){
+		super();
+	}
+	public Combat(int id1, int id2, int winner){
+		super();
+		this.trainer1 = id1;
+		this.trainer2 = id2;
+		this.winnerTrainerID = winner;
+	}
+
 	public int getTrainer1() {
 		return trainer1;
 	}

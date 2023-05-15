@@ -237,7 +237,7 @@ public class AccountManageableDBimplementation implements AccountManageable {
 	public void givePokeballs(Trainer trainer) throws MyException {
 
 		// Define the SQL query to update the pokeball amount for a trainer
-		query = "UPDATE Trainer SET pokeballs = ? WHERE trainer_id = ?";
+		query = "UPDATE Trainer SET pokeball = ? WHERE trainer_id = ?";
 
 		// Open a connection to the database
 		con = occ.openConnection();
@@ -256,7 +256,7 @@ public class AccountManageableDBimplementation implements AccountManageable {
 		} catch (SQLException e) {
 			// If an SQL error occurs, catch the exception and throw a custom exception
 			// MyException with a custom error message
-			String error = "Error updating the pokeball amount";
+			String error = "Error updating the pokeball count";
 			MyException er = new MyException(error);
 			throw er;
 		}

@@ -45,7 +45,6 @@ public class LogeableDBimplementation implements Logeable {
 			if (professor) {
 				t = getProfessor(id);
 			} else {
-
 				t = getTrainer(id);
 			}
 		}
@@ -55,10 +54,12 @@ public class LogeableDBimplementation implements Logeable {
 	}
 
 	/**
-	 *  This is the method in charge of getting the id of the person that is logging in 
+	 * This is the method in charge of getting the id of the person that is logging
+	 * in
+	 * 
 	 * @param username
 	 * @param password
-	 * @return 
+	 * @return
 	 * @throws MyException
 	 */
 	private int isUser(String username, String password) throws MyException {
@@ -85,9 +86,10 @@ public class LogeableDBimplementation implements Logeable {
 	}
 
 	/**
-	 *  This method is used to identify if the user is a professor or not
+	 * This method is used to identify if the user is a professor or not
+	 * 
 	 * @param id
-	 * @return 
+	 * @return
 	 * @throws MyException
 	 */
 	private boolean isProfessor(int id) throws MyException {
@@ -120,7 +122,8 @@ public class LogeableDBimplementation implements Logeable {
 	}
 
 	/**
-	 *  This method gives all the information of the Trainer with the id that it gets
+	 * This method gives all the information of the Trainer with the id that it gets
+	 * 
 	 * @param id
 	 * @return
 	 * @throws MyException
@@ -210,7 +213,8 @@ public class LogeableDBimplementation implements Logeable {
 	}
 
 	/**
-	 *  This method does the same thing as getTrainer but for the professor
+	 * This method does the same thing as getTrainer but for the professor
+	 * 
 	 * @param id
 	 * @return
 	 * @throws MyException

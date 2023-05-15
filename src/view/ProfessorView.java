@@ -186,9 +186,8 @@ public class ProfessorView extends JDialog implements ActionListener {
 		// The JLabel under this comment has no text because the picture of Oak is on
 		// this Label
 		JLabel professorImageLabel = new JLabel("");
-		professorImageLabel
-				.setIcon(new ImageIcon(ProfessorView.class.getResource("/resources/oak.png")));
-		professorImageLabel.setBounds(483, 192, 188, 341);
+		professorImageLabel.setIcon(new ImageIcon(ProfessorView.class.getResource("/resources/oak.png")));
+		professorImageLabel.setBounds(667, 178, 188, 341);
 		panelBattle.add(professorImageLabel);
 
 		JLabel welcomeProfessorLabel = new JLabel("Welcome Professor !!");
@@ -203,7 +202,7 @@ public class ProfessorView extends JDialog implements ActionListener {
 		 * ones fore Combat history
 		 */
 		scrollPane = new JScrollPane();
-		scrollPane.setBounds(10, 350, 432, 118);
+		scrollPane.setBounds(10, 350, 432, 169);
 		panelBattle.add(scrollPane);
 
 		tableModel = new DefaultTableModel();
@@ -234,7 +233,7 @@ public class ProfessorView extends JDialog implements ActionListener {
 		 */
 		table2.setBackground(new Color(239, 205, 124));
 		scrollPane2.setViewportView(table2);
-		
+
 		lblFondoLabo = new JLabel("");
 		lblFondoLabo.setIcon(new ImageIcon(ProfessorView.class.getResource("/resources/labo.png")));
 		lblFondoLabo.setBounds(0, 0, 1061, 543);
@@ -280,7 +279,7 @@ public class ProfessorView extends JDialog implements ActionListener {
 		deletePIcture.setIcon(new ImageIcon(ProfessorView.class.getResource("/resources/brocks-removebg-preview.png")));
 		deletePIcture.setBounds(313, 11, 505, 532);
 		paneDelete.add(deletePIcture);
-		
+
 		lblNewLabel_1 = new JLabel("");
 		lblNewLabel_1.setIcon(new ImageIcon(ProfessorView.class.getResource("/resources/fondo2.png")));
 		lblNewLabel_1.setBounds(0, 0, 1061, 543);
@@ -403,12 +402,12 @@ public class ProfessorView extends JDialog implements ActionListener {
 		addTrainerButton.setBounds(504, 362, 101, 23);
 		addTrainerButton.setVisible(false);
 		panelModify.add(addTrainerButton);
-		
+
 		JLabel lblNewLabel = new JLabel("");
 		lblNewLabel.setIcon(new ImageIcon(ProfessorView.class.getResource("/resources/joven.png")));
 		lblNewLabel.setBounds(728, 125, 290, 346);
 		panelModify.add(lblNewLabel);
-		
+
 		lblNewLabel_2 = new JLabel("");
 		lblNewLabel_2.setIcon(new ImageIcon(ProfessorView.class.getResource("/resources/fondo3.png")));
 		lblNewLabel_2.setBounds(0, 0, 1061, 543);
@@ -490,7 +489,7 @@ public class ProfessorView extends JDialog implements ActionListener {
 		fireComboBox.setEnabled(false);
 		grassComboBox.setEnabled(false);
 		upgradeButton.setEnabled(false);
-		
+
 		lblNewLabel_3 = new JLabel("");
 		lblNewLabel_3.setIcon(new ImageIcon(ProfessorView.class.getResource("/resources/descarga.png")));
 		lblNewLabel_3.setBounds(0, 0, 1061, 543);
@@ -670,14 +669,8 @@ public class ProfessorView extends JDialog implements ActionListener {
 
 		if (e.getSource().equals(addValidateBtn)) {
 			try {
-				Trainer flag = trainerExists(addCheckField.getText());
-				if (flag == null) {
 					Trainer aux = buildTrainer();
 					showTrainerInfo(aux);
-				} else {
-					JOptionPane.showMessageDialog(null, "Trainer already exists", "WARNING",
-							JOptionPane.INFORMATION_MESSAGE);
-				}
 			} catch (NumberFormatException er) {
 				JOptionPane.showMessageDialog(null, "Badges field cannot contain characters, only numbers", "WARNING",
 						JOptionPane.INFORMATION_MESSAGE);

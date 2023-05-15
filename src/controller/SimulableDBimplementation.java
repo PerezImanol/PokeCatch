@@ -19,7 +19,7 @@ public class SimulableDBimplementation implements Simulable {
 	private OpenCloseConnection occ = new OpenCloseConnection();
 
 	@Override
-	public void addCaughtPokemons(Pokemon pokemon, int trainerID) throws MyException {
+	public void addCaughtPokemon(Pokemon pokemon, int trainerID) throws MyException {
 		final String queryCatch = "INSERT INTO Pokemon(pokemon_id, trainer_id, pokemon_lvl, nickname, location) VALUES( ?, ?, ?, ?, ?)";
 
 		con = occ.openConnection();
@@ -44,8 +44,8 @@ public class SimulableDBimplementation implements Simulable {
 
 	@Override
 	public void updateCombatHistory(Combat combat) throws MyException {
-		final String insertBattleData = "INSERT VALUES INTO Combat(trainer_id1, trainer_id2, winner) VALUES (?, ?, ?)";
-
+		if (combat != null) {
+		final String insertBattleData = "insert into Combat(trainer_id1, trainer_id2, winner) values(?, ?, ?)";
 		con = occ.openConnection();
 
 		try {
@@ -62,6 +62,7 @@ public class SimulableDBimplementation implements Simulable {
 		}
 
 		occ.closeConnection(stmt, con);
+	}
 	}
 
 	@Override
@@ -155,7 +156,7 @@ public class SimulableDBimplementation implements Simulable {
 
 		int winner = 0;
 		ResultSet rs = null;
-		final String callWinnerFunction = "SELECT getWinner(?,?,?,?,?,?,?,?,?,?,?,?)";
+		final String callWinnerFunction = "select getWinner(?,?,?,?,?,?,?,?,?,?,?,?) as winner";
 		con = occ.openConnection();
 
 		try {
@@ -169,15 +170,11 @@ public class SimulableDBimplementation implements Simulable {
 			if(rs.next()){
 				winner = rs.getInt("winner");
 			}
-			
-
 		} catch (SQLException e) {
 			String error = "Error getting a winner";
 			MyException er = new MyException(error);
 			throw er;
 		}
-
-
 		return winner;
 
 	}
