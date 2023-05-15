@@ -81,6 +81,8 @@ public class TrainerView extends JDialog implements ActionListener, FocusListene
 	private JLabel lblRandomLvl;
 	private JButton btn_ThrowPokeball;
 	private JLabel lbl_PokeballNumber;
+	private JButton btnAtacar;
+	LinkedHashSet<PokemonExtra> dbPokemons;
 
 	public TrainerView(LoginView loginView, Trainer t) {
 		super(loginView, true);
@@ -89,6 +91,13 @@ public class TrainerView extends JDialog implements ActionListener, FocusListene
 		setTitle("Trainer View");
 		setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
 		loginView.dispose();
+
+		try {
+			dbPokemons = dbs.getPokemons();
+		} catch (MyException e) {
+			JOptionPane.showMessageDialog(null, e.getMessage(), "WARNING", JOptionPane.ERROR_MESSAGE);
+
+		}
 
 		panelInfo = new JPanel();
 		panelPC = new JPanel();
@@ -290,14 +299,6 @@ public class TrainerView extends JDialog implements ActionListener, FocusListene
 		// Agregar ActionListener a la JComboBox
 		comboBoxPC.addActionListener(this);
 
-
-		
-
-
-
-
-
-
 		// Pestaña3
 		// Pestaña3
 		pestanas.addTab("CAPTURE", panelCapture);
@@ -345,10 +346,7 @@ public class TrainerView extends JDialog implements ActionListener, FocusListene
 
 		btn_ThrowPokeball = new JButton("THROW POKEBALL");
 		btn_ThrowPokeball.setFont(new Font("Pokemon Fire Red", Font.PLAIN, 15));
-		btn_ThrowPokeball.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-			}
-		});
+		btn_ThrowPokeball.addActionListener(this);
 
 		JLabel lblNewLabel_3 = new JLabel("");
 		lblNewLabel_3.setIcon(new ImageIcon(
@@ -374,7 +372,6 @@ public class TrainerView extends JDialog implements ActionListener, FocusListene
 				TrainerView.class.getResource("/resources/DVMT-6OXcAE2rZY.jpg.afab972f972bd7fbd4253bc7aa1cf27f.jpg")));
 		lbl_Background_1.setBounds(-11, -48, 791, 608);
 		panelCapture.add(lbl_Background_1);
-		
 
 		// Pestaña4
 		pestanas.addTab("SIMULATION", panelSimulation);
@@ -401,7 +398,7 @@ public class TrainerView extends JDialog implements ActionListener, FocusListene
 		comboPokemon.addActionListener(this);
 		panelSimulation.add(comboPokemon);
 
-		JButton btnAtacar = new JButton("FIGHT");
+		btnAtacar = new JButton("FIGHT");
 		btnAtacar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 			}
@@ -452,29 +449,35 @@ public class TrainerView extends JDialog implements ActionListener, FocusListene
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
-		
-		if(e.getSource() == btn_ThrowPokeball){
+
+		if (e.getSource() == btn_ThrowPokeball) {
 			int randomNumber = (int) (Math.random() * (100 - 1) + 1);
 			int lblNumber = Integer.parseInt(lblRandomLvl.getText());
 			int pokeballNo = trainer.getPokeballs();
 
-			//Captures pokemon
-			if(randomNumber >= lblNumber){
-				
+			System.out.println(randomNumber);
 
-			}else {
-				trainer.setPokeballs(pokeballNo-1);
-				lbl_PokeballNumber.setText(Integer.toString(pokeballNo-1));
+			// Captures pokemon
+			if (randomNumber >= lblNumber) {
+				if ((team.size() < 6)) {
+
+					getPokemonObj(lbl_PokemonName.getText(), true, lblNumber);
+				} else {
+					getPokemonObj(lbl_PokemonName.getText(), false, lblNumber);
+				}
+
+			} else {
+				trainer.setPokeballs(pokeballNo - 1);
+				lbl_PokeballNumber.setText(Integer.toString(pokeballNo - 1));
+
 			}
-			
-			
 		}
 
-		if(e.getSource() == btn_Escape) {
+		if (e.getSource() == btn_Escape) {
 			lblRandomLvl.setText(randomLvl());
 			lbl_PokemonName.setText(randomPokemon());
 		}
-		
+
 		if (e.getSource().equals(btnPok1) || e.getSource().equals(btnPok2) || e.getSource().equals(btnPok3)
 				|| e.getSource().equals(btnPok4) || e.getSource().equals(btnPok5) || e.getSource().equals(btnPok6)) {
 
@@ -559,6 +562,24 @@ public class TrainerView extends JDialog implements ActionListener, FocusListene
 				btnUpdate.setVisible(false);
 			}
 		}
+	}
+
+	public void getPokemonObj(String pokemonName, boolean b, int lblNumber) {
+		PokemonExtra add = new PokemonExtra();
+
+		for (PokemonExtra p : dbPokemons) {
+			if (p.getName() == pokemonName) {
+				add.setLevel(lblNumber);;
+				add.setName(pokemonName);
+				add.setNickname(pokemonName);
+				add.setPokedexID(p.getPokedexID());
+				add.setRegion(p.getRegion());
+				add.setTeam(b);
+				add.setType1(p.getType1());
+				add.setType2(p.getType2());
+			}
+		}
+
 	}
 
 	@Override
@@ -650,7 +671,6 @@ public class TrainerView extends JDialog implements ActionListener, FocusListene
 		trainer.setBadges(Integer.parseInt(textBadges.getText()));
 
 	}
-
 
 	private String randomLvl() {
 		int lvl = (int) (Math.random() * (100 - 1) + 1);

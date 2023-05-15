@@ -151,8 +151,7 @@ public class SimulableDBimplementation implements Simulable {
 	}
 
 	@Override
-	public int getWinner(int p11, int p12, int p13, int p14, int p15, int p16, int p21, int p22,
-			int p23, int p24, int p25, int p26) throws MyException {
+	public int getWinner(int pokemons[]) throws MyException {
 
 		int winner = 0;
 		ResultSet rs = null;
@@ -161,18 +160,9 @@ public class SimulableDBimplementation implements Simulable {
 
 		try {
 			stmt = con.prepareStatement(callWinnerFunction);
-			stmt.setInt(1, p11);
-			stmt.setInt(1, p12);
-			stmt.setInt(1, p13);
-			stmt.setInt(1, p14);
-			stmt.setInt(1, p15);
-			stmt.setInt(1, p16);
-			stmt.setInt(1, p21);
-			stmt.setInt(1, p22);
-			stmt.setInt(1, p23);
-			stmt.setInt(1, p24);
-			stmt.setInt(1, p25);
-			stmt.setInt(1, p26);
+			for (int i = 0 ; i < pokemons.length ; i++){
+				stmt.setInt(i+1, pokemons[i]);
+			}
 
 			rs = stmt.executeQuery();
 
