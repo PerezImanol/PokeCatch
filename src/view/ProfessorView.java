@@ -89,6 +89,10 @@ public class ProfessorView extends JDialog implements ActionListener {
 	private Professor prof;
 	private LinkedHashSet<Trainer> trainers;
 	private LinkedHashSet<PokemonExtra> pokemons;
+	private JLabel lblNewLabel_1;
+	private JLabel lblNewLabel_2;
+	private JLabel lblNewLabel_3;
+	private JLabel lblFondoLabo;
 
 	/**
 	 * @param loginView
@@ -113,8 +117,11 @@ public class ProfessorView extends JDialog implements ActionListener {
 
 		panelBattle = new JPanel();
 		paneDelete = new JPanel();
+		paneDelete.setBackground(new Color(63, 204, 220));
 		panelModify = new JPanel();
+		panelModify.setBackground(new Color(63, 204, 220));
 		panelAscend = new JPanel();
+		panelAscend.setBackground(new Color(63, 204, 220));
 		JTabbedPane pestanas = new JTabbedPane();
 
 		trainersComboBox = new JComboBox<String>();
@@ -136,7 +143,7 @@ public class ProfessorView extends JDialog implements ActionListener {
 		panelAscend.add(ascentTrainerCB);
 
 		// 1.Battles View
-		panelBattle.setBackground(new Color(255, 255, 255));
+		panelBattle.setBackground(new Color(192, 192, 192));
 		pestanas.addTab("BATTLES", panelBattle);
 
 		panelBattle.setLayout(null);
@@ -169,7 +176,7 @@ public class ProfessorView extends JDialog implements ActionListener {
 		resulttextField = new JTextArea(2, 30);
 		resulttextField.setBackground(new Color(200, 243, 249));
 		resulttextField.setEditable(false);
-		resulttextField.setBounds(162, 171, 280, 82);
+		resulttextField.setBounds(162, 138, 280, 175);
 		panelBattle.add(resulttextField);
 
 		informationButton.setEnabled(false);
@@ -180,8 +187,8 @@ public class ProfessorView extends JDialog implements ActionListener {
 		// this Label
 		JLabel professorImageLabel = new JLabel("");
 		professorImageLabel
-				.setIcon(new ImageIcon(ProfessorView.class.getResource("/resources/For_best_wishes_oak.jpg")));
-		professorImageLabel.setBounds(463, 97, 188, 341);
+				.setIcon(new ImageIcon(ProfessorView.class.getResource("/resources/oak.png")));
+		professorImageLabel.setBounds(483, 192, 188, 341);
 		panelBattle.add(professorImageLabel);
 
 		JLabel welcomeProfessorLabel = new JLabel("Welcome Professor !!");
@@ -227,6 +234,11 @@ public class ProfessorView extends JDialog implements ActionListener {
 		 */
 		table2.setBackground(new Color(239, 205, 124));
 		scrollPane2.setViewportView(table2);
+		
+		lblFondoLabo = new JLabel("");
+		lblFondoLabo.setIcon(new ImageIcon(ProfessorView.class.getResource("/resources/labo.png")));
+		lblFondoLabo.setBounds(0, 0, 1061, 543);
+		panelBattle.add(lblFondoLabo);
 		table2.setVisible(false);
 		scrollPane2.setVisible(false);
 
@@ -259,15 +271,20 @@ public class ProfessorView extends JDialog implements ActionListener {
 		// shown
 		deleteTrainerTextArea = new JTextArea();
 		deleteTrainerTextArea.setBackground(SystemColor.inactiveCaption);
-		deleteTrainerTextArea.setBounds(79, 270, 285, 82);
+		deleteTrainerTextArea.setBounds(79, 270, 375, 172);
 		paneDelete.add(deleteTrainerTextArea);
 		deleteTrainerTextArea.setColumns(10);
 
 		// Pestaña3
 		JLabel deletePIcture = new JLabel("");
-		deletePIcture.setIcon(new ImageIcon(ProfessorView.class.getResource("/resources/Ash_Ketchum_Journeys.png")));
-		deletePIcture.setBounds(410, 11, 216, 491);
+		deletePIcture.setIcon(new ImageIcon(ProfessorView.class.getResource("/resources/brocks-removebg-preview.png")));
+		deletePIcture.setBounds(313, 11, 505, 532);
 		paneDelete.add(deletePIcture);
+		
+		lblNewLabel_1 = new JLabel("");
+		lblNewLabel_1.setIcon(new ImageIcon(ProfessorView.class.getResource("/resources/fondo2.png")));
+		lblNewLabel_1.setBounds(0, 0, 1061, 543);
+		paneDelete.add(lblNewLabel_1);
 		pestanas.addTab("ADD/MODIFY", panelModify);
 		panelModify.setLayout(null);
 
@@ -386,6 +403,16 @@ public class ProfessorView extends JDialog implements ActionListener {
 		addTrainerButton.setBounds(504, 362, 101, 23);
 		addTrainerButton.setVisible(false);
 		panelModify.add(addTrainerButton);
+		
+		JLabel lblNewLabel = new JLabel("");
+		lblNewLabel.setIcon(new ImageIcon(ProfessorView.class.getResource("/resources/joven.png")));
+		lblNewLabel.setBounds(728, 125, 290, 346);
+		panelModify.add(lblNewLabel);
+		
+		lblNewLabel_2 = new JLabel("");
+		lblNewLabel_2.setIcon(new ImageIcon(ProfessorView.class.getResource("/resources/fondo3.png")));
+		lblNewLabel_2.setBounds(0, 0, 1061, 543);
+		panelModify.add(lblNewLabel_2);
 		// Agregar ActionListener al botón btnNewButton_3
 		addCheckBtn.addActionListener(this);
 
@@ -394,24 +421,29 @@ public class ProfessorView extends JDialog implements ActionListener {
 		panelAscend.setLayout(null);
 
 		JLabel leafLbl = new JLabel("GRASS INITIAL");
+		leafLbl.setFont(new Font("Tahoma", Font.BOLD, 14));
 		leafLbl.setHorizontalAlignment(SwingConstants.CENTER);
 		leafLbl.setBounds(179, 232, 139, 14);
 		panelAscend.add(leafLbl);
 
 		JLabel fireLbl = new JLabel("FIRE INITIAL");
+		fireLbl.setFont(new Font("Tahoma", Font.BOLD, 14));
 		fireLbl.setHorizontalAlignment(SwingConstants.CENTER);
 		fireLbl.setBounds(179, 199, 139, 14);
 		panelAscend.add(fireLbl);
 
 		JLabel waterLbl = new JLabel("WATER INITIAL");
+		waterLbl.setFont(new Font("Tahoma", Font.BOLD, 14));
 		waterLbl.setHorizontalAlignment(SwingConstants.CENTER);
 		waterLbl.setBounds(179, 166, 139, 14);
 		panelAscend.add(waterLbl);
 
-		JLabel lblNewLabel_4 = new JLabel("Select Trainner");
-		lblNewLabel_4.setFont(new Font("Tahoma", Font.PLAIN, 14));
+		JLabel lblNewLabel_4 = new JLabel("Select Trainer");
+		lblNewLabel_4.setForeground(Color.BLACK);
+		lblNewLabel_4.setBackground(new Color(255, 255, 255));
+		lblNewLabel_4.setFont(new Font("Tahoma", Font.BOLD, 14));
 		lblNewLabel_4.setHorizontalAlignment(SwingConstants.CENTER);
-		lblNewLabel_4.setBounds(243, 58, 147, 14);
+		lblNewLabel_4.setBounds(243, 58, 147, 25);
 		panelAscend.add(lblNewLabel_4);
 
 		upgradeRegionField = new JTextField();
@@ -448,7 +480,7 @@ public class ProfessorView extends JDialog implements ActionListener {
 
 		upgradeButton = new JButton("UPGRADE");
 		upgradeButton.addActionListener(this);
-		upgradeButton.setBounds(374, 144, 122, 69);
+		upgradeButton.setBounds(268, 308, 122, 69);
 		panelAscend.add(upgradeButton);
 		upgradeButton.setEnabled(false);
 
@@ -458,12 +490,19 @@ public class ProfessorView extends JDialog implements ActionListener {
 		fireComboBox.setEnabled(false);
 		grassComboBox.setEnabled(false);
 		upgradeButton.setEnabled(false);
+		
+		lblNewLabel_3 = new JLabel("");
+		lblNewLabel_3.setIcon(new ImageIcon(ProfessorView.class.getResource("/resources/descarga.png")));
+		lblNewLabel_3.setBounds(0, 0, 1061, 543);
+		panelAscend.add(lblNewLabel_3);
 
 		getContentPane().add(pestanas);
-		setSize(682, 614);
 		// Using @param name = null because I want all
 		// trainers to be added and none to be removed
 		setComboBoxes();
+		// Configuramos la ventana
+
+		setSize(1080, 607);
 	}
 
 	@Override

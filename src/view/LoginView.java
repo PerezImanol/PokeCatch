@@ -55,7 +55,7 @@ public class LoginView extends JFrame implements ActionListener, FocusListener, 
 		// This sets the little icon of the view
 		setIconImage(Toolkit.getDefaultToolkit().getImage(LoginView.class.getResource("/resources/descarga.png")));
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 854, 607);
+		setBounds(100, 100, 1080, 607);
 		contentPane = new JPanel();
 		contentPane.setBackground(new Color(255, 255, 255));
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
