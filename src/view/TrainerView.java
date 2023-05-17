@@ -266,7 +266,7 @@ public class TrainerView extends JDialog implements ActionListener, FocusListene
 		textAreaPKInfo.setLineWrap(true);
 		textAreaPKInfo.setColumns(10);
 		textAreaPKInfo.setEditable(false);
-		textAreaPKInfo.setBounds(48, 24, 556, 416);
+		textAreaPKInfo.setBounds(48, 25, 556, 422);
 		panelPC.add(textAreaPKInfo);
 
 		btnShow = new JButton("SHOW");
@@ -441,7 +441,7 @@ public class TrainerView extends JDialog implements ActionListener, FocusListene
 
 		// Configuramos la ventana
 		setSize(1080, 607);
-		setVisible(true);
+		
 
 	}
 

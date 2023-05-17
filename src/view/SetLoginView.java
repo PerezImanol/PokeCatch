@@ -66,6 +66,7 @@ public class SetLoginView extends JDialog implements ActionListener {
 		setLoginUsernameField.setBounds(178, 30, 239, 19);
 		getContentPane().add(setLoginUsernameField);
 		setLoginUsernameField.setColumns(10);
+		
 
 		// Create the PASSWORD label and text field
 		JLabel setPasswordlbl = new JLabel("PASSWORD");
