@@ -216,7 +216,7 @@ public class LoginView extends JFrame implements ActionListener, FocusListener, 
 		}
 		if (e.getSource().equals(passwordField)) {
 			if (e.getKeyCode() == KeyEvent.VK_ENTER) {
-				continueButton.requestFocus();
+				continueButton.doClick();
 			}
 		}
 	}
