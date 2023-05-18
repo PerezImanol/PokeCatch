@@ -56,11 +56,9 @@ public class TrainerView extends JDialog implements ActionListener, FocusListene
 	private JTextField textOrigin;
 	private JTextField textGender;
 	private JTextField textBadges;
-	private JTextField textPSalv;
 	private JTextArea textAreaTrainInfo;
 	private JDateChooser ageCalender;
 	private JComboBox<String> comboBoxPC;
-	private JComboBox<String> comboBoxSelecPK;
 	private JComboBox<String> teamPokemonToSwitch;
 	private JComboBox<String> pcPokemonToSwitch;
 	private JPanel panelPC;
@@ -74,24 +72,19 @@ public class TrainerView extends JDialog implements ActionListener, FocusListene
 	private JPanel panelInfo;
 	private Simulable simulable = SimulableFactory.getSimulable();
 	private DataBattleShowable dbs = DataBattleFactory.getDataBattleShowable();
-	private AccountManageable acc = AccountManageableFactory.getAccountManageable();
-	private JComboBox<String> comboPokemon = new JComboBox();
+	private JComboBox<String> comboPokemon;
 	private JLabel lbl_PokemonName;
 	private JButton btn_Escape;
 	private JLabel lblRandomLvl;
 	private JButton btn_ThrowPokeball;
 	private JLabel lbl_PokeballNumber;
-	private JButton btnAtacar;
 	private LinkedHashSet<PokemonExtra> dbPokemons;
 	private LinkedHashSet<Trainer> trainers;
-	private JLabel lblOpponentSprite;
 	private JLabel lblOpponentSprite_1;
 	private JLabel lblBattle;
-	private JTable tablePokemon;
 	private DefaultTableModel tableModel2;
 	private JScrollPane scrollPane;
 	private JTable table;
-	//private ArrayList<> showed = new ArrayList();
 
 	TrainerView(LoginView loginView, Trainer t) {
 		super(loginView, true);
@@ -411,6 +404,8 @@ public class TrainerView extends JDialog implements ActionListener, FocusListene
 		btnFight.setBounds(463, 422, 152, 81);
 		btnFight.setVisible(false);
 		btnFight.addActionListener(this);
+
+		comboPokemon = new JComboBox<String>();
 		comboPokemon.setOpaque(false);
 		comboPokemon.setBorder(null);
 		comboPokemon.setForeground(new Color(237, 51, 59));
@@ -448,8 +443,6 @@ public class TrainerView extends JDialog implements ActionListener, FocusListene
 		lblTrainer.setIcon(new ImageIcon(TrainerView.class.getResource("/resources/goldTrainer.png")));
 		lblTrainer.setBounds(463, 221, 152, 128);
 		panelSimulation.add(lblTrainer);
-
-		JLabel lblOpponentSprite = new JLabel();
 
 		JLabel lbl_Setting = new JLabel("");
 		lbl_Setting.setIcon(new ImageIcon(TrainerView.class

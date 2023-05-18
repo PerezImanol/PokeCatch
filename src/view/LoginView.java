@@ -21,13 +21,11 @@ import java.awt.Font;
 import javax.swing.JTextField;
 import javax.swing.JButton;
 import javax.swing.JPasswordField;
-import javax.swing.border.LineBorder;
 
 import classes.MyException;
 import classes.Professor;
 import classes.Trainer;
 
-import java.awt.SystemColor;
 import javax.swing.SwingConstants;
 
 public class LoginView extends JFrame implements ActionListener, FocusListener, KeyListener {
