@@ -206,7 +206,7 @@ public class ProfessorView extends JDialog implements ActionListener {
 		panelBattle.add(scrollPane);
 
 		tableModel = new DefaultTableModel();
-		String[] tableHeaders = { "PokedexID", "Region", "Name", "Nickname", "type1", "type2", "level" };
+		String[] tableHeaders = { "PokedexID", "Name", "Nickname", "Region", "type1", "type2", "level" };
 		tableModel.setColumnIdentifiers(tableHeaders);
 		table = new JTable(tableModel);
 		table.setEnabled(false);
