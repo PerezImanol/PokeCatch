@@ -466,7 +466,9 @@ public class TrainerView extends JDialog implements ActionListener, FocusListene
 		setPersonalInfo();
 
 		// Configuramos la ventana
-		setSize(1057, 576);
+		setSize(1080, 607);
+		
+
 
 	}
 

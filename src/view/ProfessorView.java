@@ -138,7 +138,7 @@ public class ProfessorView extends JDialog implements ActionListener {
 		trainerDelete.addActionListener(this);
 
 		ascentTrainerCB = new JComboBox<String>();
-		ascentTrainerCB.setBounds(10, 52, 222, 31);
+		ascentTrainerCB.setBounds(404, 91, 222, 31);
 		ascentTrainerCB.addActionListener(this);
 		panelAscend.add(ascentTrainerCB);
 
@@ -422,19 +422,19 @@ public class ProfessorView extends JDialog implements ActionListener {
 		JLabel leafLbl = new JLabel("GRASS INITIAL");
 		leafLbl.setFont(new Font("Tahoma", Font.BOLD, 14));
 		leafLbl.setHorizontalAlignment(SwingConstants.CENTER);
-		leafLbl.setBounds(179, 232, 139, 14);
+		leafLbl.setBounds(317, 244, 139, 14);
 		panelAscend.add(leafLbl);
 
 		JLabel fireLbl = new JLabel("FIRE INITIAL");
 		fireLbl.setFont(new Font("Tahoma", Font.BOLD, 14));
 		fireLbl.setHorizontalAlignment(SwingConstants.CENTER);
-		fireLbl.setBounds(179, 199, 139, 14);
+		fireLbl.setBounds(454, 206, 139, 14);
 		panelAscend.add(fireLbl);
 
 		JLabel waterLbl = new JLabel("WATER INITIAL");
 		waterLbl.setFont(new Font("Tahoma", Font.BOLD, 14));
 		waterLbl.setHorizontalAlignment(SwingConstants.CENTER);
-		waterLbl.setBounds(179, 166, 139, 14);
+		waterLbl.setBounds(610, 244, 139, 14);
 		panelAscend.add(waterLbl);
 
 		JLabel lblNewLabel_4 = new JLabel("Select Trainer");
@@ -442,19 +442,19 @@ public class ProfessorView extends JDialog implements ActionListener {
 		lblNewLabel_4.setBackground(new Color(255, 255, 255));
 		lblNewLabel_4.setFont(new Font("Tahoma", Font.BOLD, 14));
 		lblNewLabel_4.setHorizontalAlignment(SwingConstants.CENTER);
-		lblNewLabel_4.setBounds(243, 58, 147, 25);
+		lblNewLabel_4.setBounds(446, 56, 147, 25);
 		panelAscend.add(lblNewLabel_4);
 
 		upgradeRegionField = new JTextField();
 		upgradeRegionField.setHorizontalAlignment(SwingConstants.CENTER);
 		upgradeRegionField.setText("REGION");
-		upgradeRegionField.setBounds(27, 131, 139, 20);
+		upgradeRegionField.setBounds(454, 166, 139, 20);
 		panelAscend.add(upgradeRegionField);
 		upgradeRegionField.setColumns(10);
 		upgradeRegionField.setEnabled(false);
 
 		waterComboBox = new JComboBox<String>();
-		waterComboBox.setBounds(27, 162, 139, 22);
+		waterComboBox.setBounds(600, 268, 139, 22);
 		panelAscend.add(waterComboBox);
 		for (Pokemon p : getPokemonsForType("Water")) {
 			waterComboBox.addItem(p.getName());
@@ -462,7 +462,7 @@ public class ProfessorView extends JDialog implements ActionListener {
 		waterComboBox.setEnabled(false);
 
 		fireComboBox = new JComboBox<String>();
-		fireComboBox.setBounds(27, 195, 139, 22);
+		fireComboBox.setBounds(454, 230, 139, 22);
 		panelAscend.add(fireComboBox);
 		for (Pokemon p : getPokemonsForType("Fire")) {
 			fireComboBox.addItem(p.getName());
@@ -470,7 +470,7 @@ public class ProfessorView extends JDialog implements ActionListener {
 		fireComboBox.setEnabled(false);
 
 		grassComboBox = new JComboBox<String>();
-		grassComboBox.setBounds(27, 228, 139, 22);
+		grassComboBox.setBounds(317, 268, 139, 22);
 		panelAscend.add(grassComboBox);
 		for (Pokemon p : getPokemonsForType("Grass")) {
 			grassComboBox.addItem(p.getName());
@@ -479,7 +479,7 @@ public class ProfessorView extends JDialog implements ActionListener {
 
 		upgradeButton = new JButton("UPGRADE");
 		upgradeButton.addActionListener(this);
-		upgradeButton.setBounds(268, 308, 122, 69);
+		upgradeButton.setBounds(687, 393, 122, 69);
 		panelAscend.add(upgradeButton);
 		upgradeButton.setEnabled(false);
 
@@ -491,7 +491,7 @@ public class ProfessorView extends JDialog implements ActionListener {
 		upgradeButton.setEnabled(false);
 
 		lblNewLabel_3 = new JLabel("");
-		lblNewLabel_3.setIcon(new ImageIcon(ProfessorView.class.getResource("/resources/descarga.png")));
+		lblNewLabel_3.setIcon(new ImageIcon(ProfessorView.class.getResource("/resources/ashfin.png")));
 		lblNewLabel_3.setBounds(0, 0, 1061, 543);
 		panelAscend.add(lblNewLabel_3);
 
