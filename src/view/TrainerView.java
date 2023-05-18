@@ -422,7 +422,7 @@ public class TrainerView extends JDialog implements ActionListener, FocusListene
 		lblBattle = new JLabel("Battle!");
 		lblBattle.setForeground(new Color(255, 255, 255));
 		lblBattle.setFont(new Font("Pokemon Fire Red", Font.BOLD, 70));
-		lblBattle.setBounds(105, 62, 161, 56);
+		lblBattle.setBounds(105, 62, 240, 56);
 		panelSimulation.add(lblBattle);
 		panelSimulation.add(comboPokemon);
 

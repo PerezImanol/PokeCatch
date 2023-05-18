@@ -331,6 +331,7 @@ public class AccountManageableDBimplementation implements AccountManageable {
 	 */
 	@Override
 	public void upgradeToProfessor(Professor professor) throws MyException {
+		int id;
 		// SQL query to insert new Professor into database
 		query = "insert into Professor (professor_id, region) values (?, ?)";
 
@@ -368,14 +369,10 @@ public class AccountManageableDBimplementation implements AccountManageable {
 			stmt.setInt(3, aux.get(1).getPokedexID());
 			stmt.setInt(4, aux.get(2).getPokedexID());
 			// Execute the SQL statement
-			int id = stmt.executeUpdate();
+			id = stmt.executeUpdate();
 			// If the update affects at least one row, create a new MyException with a
 			// success message
-			if (id >= 1) {
-				MyException er = new MyException("Trainer upgraded successfully");
-				// Throw the exception
-				throw er;
-			}
+
 		} catch (SQLException e) {
 			// If there's an exception, create a new MyException with the error message from
 			// the exception
@@ -387,6 +384,12 @@ public class AccountManageableDBimplementation implements AccountManageable {
 
 		// Close the database connection
 		occ.closeConnection(stmt, con);
+		
+		if (id == 0) {
+			MyException er = new MyException("Trainer upgraded successfully");
+			// Throw the exception
+			throw er;
+		}
 	}
 
 	/**

@@ -728,7 +728,7 @@ public class ProfessorView extends JDialog implements ActionListener {
 			try {
 				manageable.upgradeToProfessor(prof);
 			} catch (MyException er) {
-				JOptionPane.showMessageDialog(null, er.getMessage(), "WARNING", JOptionPane.ERROR_MESSAGE);
+				JOptionPane.showMessageDialog(null, er.getMessage(), "WARNING", JOptionPane.INFORMATION_MESSAGE);
 			}
 		}
 	}

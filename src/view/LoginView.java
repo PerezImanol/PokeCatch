@@ -27,6 +27,10 @@ import classes.Professor;
 import classes.Trainer;
 
 import javax.swing.SwingConstants;
+import javax.swing.border.BevelBorder;
+import javax.swing.border.EtchedBorder;
+import javax.swing.border.SoftBevelBorder;
+import javax.swing.border.LineBorder;
 
 public class LoginView extends JFrame implements ActionListener, FocusListener, KeyListener {
 
@@ -77,7 +81,7 @@ public class LoginView extends JFrame implements ActionListener, FocusListener, 
 		// Here we have the two field where the user will write
 		usernameField = new JTextField();
 		usernameField.setHorizontalAlignment(SwingConstants.CENTER);
-		usernameField.setBorder(null);
+		usernameField.setBorder(new SoftBevelBorder(BevelBorder.LOWERED, null, null, null, null));
 		usernameField.setFont(new Font("Noto Sans CJK HK", Font.PLAIN, 20));
 		usernameField.setForeground(new Color(0, 0, 0));
 		usernameField.setBackground(new Color(255, 255, 255));
@@ -89,7 +93,7 @@ public class LoginView extends JFrame implements ActionListener, FocusListener, 
 
 		passwordField = new JPasswordField();
 		passwordField.setHorizontalAlignment(SwingConstants.CENTER);
-		passwordField.setBorder(null);
+		passwordField.setBorder(new SoftBevelBorder(BevelBorder.LOWERED, null, null, null, null));
 		passwordField.setFont(new Font("Noto Sans CJK HK", Font.BOLD, 20));
 		passwordField.setBackground(new Color(255, 255, 255));
 		passwordField.setBounds(377, 360, 290, 42);
@@ -100,15 +104,16 @@ public class LoginView extends JFrame implements ActionListener, FocusListener, 
 		// This are the two buttons one that continues and the other that disposes the
 		// view
 		continueButton = new JButton("");
+		continueButton.setEnabled(false);
+		continueButton.setForeground(new Color(255, 255, 255));
 		continueButton.setOpaque(false);
 		continueButton.setBackground(new Color(255, 255, 255));
 		continueButton.setBorder(null);
 		continueButton.setIcon(new ImageIcon(LoginView.class.getResource("/resources/Continue.png")));
-		continueButton.setFont(new Font("Tahoma", Font.BOLD, 11));
-		continueButton.setBounds(263, 427, 200, 100);
-		contentPane.add(continueButton);
-		continueButton.setEnabled(false);
+		continueButton.setFont(new Font("Tahoma", Font.BOLD, 14));
+		continueButton.setBounds(215, 427, 200, 100);
 		continueButton.addActionListener(this);
+		contentPane.add(continueButton);
 
 		goBackButton = new JButton("");
 		goBackButton.setOpaque(false);
