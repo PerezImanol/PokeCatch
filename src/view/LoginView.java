@@ -28,9 +28,7 @@ import classes.Trainer;
 
 import javax.swing.SwingConstants;
 import javax.swing.border.BevelBorder;
-import javax.swing.border.EtchedBorder;
 import javax.swing.border.SoftBevelBorder;
-import javax.swing.border.LineBorder;
 
 public class LoginView extends JFrame implements ActionListener, FocusListener, KeyListener {
 
