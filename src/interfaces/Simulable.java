@@ -7,6 +7,13 @@ import classes.MyException;
 import classes.Pokemon;
 import classes.Trainer;
 
+    /**
+
+    The Simulable interface defines the operations that can be performed on a Trainer in a Pokémon simulation.
+    @author PerezImanol
+    @version 1.0
+    */
+
 public interface Simulable {
     /**
 

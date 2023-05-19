@@ -12,6 +12,14 @@ import classes.Pokemon;
 import classes.Trainer;
 import interfaces.Simulable;
 
+	/**
+    This class implements the Simulable interface to provide methods for managing a Trainer's actions in a Pokémon simulation.
+    The class establishes a connection with a database using the OpenCloseConnection class and provides methods to add caught Pokémon,
+    update combat history, retrieve a trainer's team of Pokémon, and perform various actions related to Pokémon battles.
+    @author PerezImanol
+    @version 1.0
+    */
+
 public class SimulableDBimplementation implements Simulable {
 
 	private Connection con;
