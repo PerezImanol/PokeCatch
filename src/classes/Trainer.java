@@ -98,6 +98,10 @@ public class Trainer {
 		team.add(p);
 	}
 
+	public void addToTeam(Pokemon p){
+		team.add(p);
+	}
+
 	public String getTrainerInfo() {
 		String trainerInfo = "---------------------------------Trainer Info--------------------------------------\n"
 				+ "This trainers ID is " + trainerID + " and his/her name is " + name + " \n" + " Was born on the  "

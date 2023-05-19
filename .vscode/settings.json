@@ -1,0 +1,21 @@
+{
+    "java.project.referencedLibraries": [
+        "lib/**/*.jar",
+        "c:\\Users\\imape\\Downloads\\mysql-connector-java-8.0.15.jar",
+        "c:\\Users\\imape\\Downloads\\jcalendar-1.4.jar"
+    ],
+    "sqltools.connections": [
+        {
+            "mysqlOptions": {
+                "authProtocol": "default"
+            },
+            "previewLimit": 50,
+            "server": "localhost",
+            "port": 3306,
+            "driver": "MySQL",
+            "name": "MySQL 5.7",
+            "database": "PokeCatch",
+            "username": "root"
+        }
+    ]
+}
